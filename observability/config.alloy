@@ -1,0 +1,53 @@
+loki.source.api "http" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port    = 9999
+  }
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint { url = "http://loki:3100/loki/api/v1/push" }
+}
+
+otelcol.receiver.otlp "ingest" {
+  grpc { endpoint = "0.0.0.0:4317" }
+  http { endpoint = "0.0.0.0:4318" }
+  output {
+    traces  = [otelcol.processor.batch.default.input]
+    logs    = [otelcol.processor.batch.default.input]
+    metrics = [otelcol.processor.batch.default.input]
+  }
+}
+
+otelcol.processor.batch "default" {
+  output {
+    traces  = [otelcol.exporter.otlp.tempo.input]
+    logs    = [otelcol.exporter.loki.to_loki.input]
+    metrics = [otelcol.exporter.otlphttp.prom.input]
+  }
+}
+
+otelcol.exporter.loki "to_loki" {
+  forward_to = [loki.process.from_otlp.receiver]
+}
+
+loki.process "from_otlp" {
+  stage.static_labels {
+    values = { source = "otlp" }
+  }
+  forward_to = [loki.write.local.receiver]
+}
+
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "tempo:4317"
+    tls { insecure = true }
+  }
+}
+
+otelcol.exporter.otlphttp "prom" {
+  client {
+    endpoint = "http://prometheus:9090/api/v1/otlp"
+  }
+}

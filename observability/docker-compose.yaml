@@ -1,0 +1,158 @@
+services:
+  # ===== Observability Stack =====
+  
+  loki:
+    image: grafana/loki:latest
+    container_name: archetype-loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    ports: ["3100:3100"]
+    volumes:
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - loki-data:/loki
+    networks: [archetype-network]
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: archetype-tempo
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    ports:
+      - "3200:3200"   # Tempo API (Grafana)
+    volumes:
+      - ./tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    networks: [archetype-network]
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: archetype-prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+      - "--web.enable-otlp-receiver"
+    ports: ["9090:9090"]
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      - prometheus-data:/prometheus
+    networks: [archetype-network]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: archetype-grafana
+    ports: ["3000:3000"]
+    depends_on: [loki, tempo, prometheus]
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks: [archetype-network]
+
+  # Alloy collects OTLP data and Docker logs
+  alloy:
+    image: grafana/alloy:latest
+    container_name: archetype-alloy
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy
+      - /etc/alloy/config.alloy
+    ports:
+      - "12345:12345"  # Alloy UI/metrics
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+      - "9999:9999"    # Loki Push for logs
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy:ro
+      - alloy-data:/var/lib/alloy
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TZ=America/Santiago
+    depends_on: [loki, tempo]
+    networks: [archetype-network]
+
+  # ===== Databases =====
+  
+  postgres:
+    image: postgres:16-alpine
+    container_name: archetype-postgres
+    environment:
+      POSTGRES_DB: archetype
+      POSTGRES_USER: archetype
+      POSTGRES_PASSWORD: archetype
+    ports: ["5432:5432"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U archetype"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [archetype-network]
+
+  mongodb:
+    image: mongo:7
+    container_name: archetype-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: archetype
+      MONGO_INITDB_ROOT_PASSWORD: archetype
+      MONGO_INITDB_DATABASE: archetype
+    ports: ["27017:27017"]
+    volumes:
+      - mongodb-data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/init.js:ro
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/archetype --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [archetype-network]
+
+  redis:
+    image: redis:7-alpine
+    container_name: archetype-redis
+    command: redis-server --requirepass archetype
+    ports: ["6379:6379"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [archetype-network]
+
+  # ===== Message Broker =====
+  
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: archetype-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: archetype
+      RABBITMQ_DEFAULT_PASS: archetype
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [archetype-network]
+
+volumes:
+  loki-data:
+  tempo-data:
+  prometheus-data:
+  grafana-data:
+  alloy-data:
+  postgres-data:
+  mongodb-data:
+  redis-data:
+  rabbitmq-data:
+
+networks:
+  archetype-network:
+    driver: bridge

@@ -1,0 +1,218 @@
+import org.gradle.util.internal.VersionNumber
+
+plugins {
+    id 'groovy'
+    id 'java'
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.pitest)
+    alias(libs.plugins.spotless)
+    id 'jacoco'
+}
+
+// ===== Project Configuration =====
+ext {
+    mainPackage = 'com.archetype'
+    appName = 'archetype'
+
+    // Azure repository configuration
+    azure = {
+        maven {
+            url = 'https://devops.consalud.net/Consalud/NuevoCore/_packaging/NuevoCore/maven/v1'
+            name = 'NuevoCore'
+            credentials {
+                username = findProperty('consaludAzureUser')
+                password = findProperty('consaludAzurePAT')
+            }
+        }
+    }
+}
+
+group = "${mainPackage}"
+version = '0.0.1-SNAPSHOT'
+description = 'Archetype is a skeleton that serves as a template for new projects.'
+
+// ===== Gradle Wrapper Configuration =====
+wrapper {
+    gradleVersion = libs.versions.gradle.get()
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+// ===== Java Configuration =====
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInteger())
+        sourceCompatibility = JavaLanguageVersion.of(libs.versions.java.get().toInteger())
+    }
+
+    compileJava {
+        options.release = libs.versions.java.get().toInteger()
+        options.encoding = 'UTF-8'
+        options.compilerArgs += [
+                '-parameters',
+                '-Amapstruct.defaultComponentModel=spring',
+                '-Amapstruct.suppressGeneratorTimestamp=true'
+        ]
+    }
+}
+
+tasks.compileJava.dependsOn spotlessApply
+
+// ===== Build Logging =====
+gradle.taskGraph.whenReady { taskGraph ->
+    println '==== Verbose task execution list in execution order ===='
+    taskGraph.allTasks.each { task ->
+        println "  - ${task.path}"
+    }
+}
+
+// ===== Repositories =====
+repositories {
+    mavenCentral()
+    azure
+}
+
+// ===== Dependency Resolution Strategy =====
+configurations.configureEach {
+    resolutionStrategy.eachDependency { dep ->
+        // Force minimum commons-lang3 version for security
+        if (dep.requested.group == 'org.apache.commons' && dep.requested.name == 'commons-lang3') {
+            def rv = dep.requested.version
+            def minVersion = libs.versions.commons.lang3.get()
+            if (rv == null || VersionNumber.parse(rv) < VersionNumber.parse(minVersion)) {
+                dep.useVersion minVersion
+                dep.because "Force minimum commons-lang3 version to ${minVersion}"
+            }
+        }
+    }
+}
+
+// ===== Custom Configurations =====
+configurations {
+    compileOnly.extendsFrom annotationProcessor
+
+    // Agent configurations (non-transitive for single JAR files)
+    agents {
+        transitive = false
+    }
+    mockitoAgent {
+        transitive = false
+    }
+}
+
+// ===== Dependency Management (BOMs) =====
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.modulith:spring-modulith-bom:${libs.versions.spring.modulith.get()}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${libs.versions.spring.cloud.get()}"
+        mavenBom "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:${libs.versions.opentelemetry.bom.get()}"
+    }
+}
+
+// ===== Dependencies =====
+dependencies {
+    // --- Spring Boot Core ---
+    implementation libs.spring.boot.starter.web
+    implementation libs.spring.boot.starter.actuator
+    developmentOnly libs.spring.boot.devtools
+
+    // --- Security ---
+    implementation libs.spring.boot.starter.security
+    implementation libs.spring.boot.starter.oauth2.client
+    implementation libs.spring.boot.starter.oauth2.resource.server
+    implementation libs.spring.security.oauth2.jose
+
+    // --- Data Access ---
+    implementation libs.spring.boot.starter.data.jpa
+    implementation libs.spring.boot.starter.data.mongodb
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation libs.flyway.core
+    runtimeOnly libs.postgresql
+
+    // --- Messaging ---
+    implementation libs.spring.boot.starter.amqp
+
+    // --- Cloud & Configuration ---
+    implementation libs.spring.cloud.starter.config
+    implementation libs.spring.cloud.starter.openfeign
+
+    // --- Modulith ---
+    implementation libs.spring.modulith.starter.core
+    runtimeOnly libs.spring.modulith.actuator
+    runtimeOnly libs.spring.modulith.observability
+
+    // --- API Documentation ---
+    implementation libs.springdoc.openapi.starter.webmvc.ui
+
+    // --- Observability & Monitoring ---
+    implementation libs.logged
+    implementation libs.logstash.logback.encoder
+    implementation libs.loki.logback.appender
+    implementation libs.loki.protobuf
+    implementation libs.opentelemetry.spring.boot.starter
+    runtimeOnly libs.micrometer.registry.otlp
+    runtimeOnly libs.micrometer.registry.prometheus
+
+    // --- Code Generation & Processing ---
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    compileOnly libs.mapstruct
+    annotationProcessor libs.mapstruct.processor
+    implementation libs.lombok.mapstruct.binding
+
+    // --- Runtime Agents ---
+    agents libs.opentelemetry.javaagent
+    agents libs.aspectj.weaver
+    mockitoAgent libs.byte.buddy.agent
+}
+
+// ===== Spring Boot Configuration =====
+springBoot.mainClass = "${mainPackage}.ArchetypeApplication"
+
+jar.enabled = false
+bootJar.archiveFileName = "${appName}.jar"
+
+// ===== Agent Staging Task =====
+def agentsOut = layout.buildDirectory.dir("agents")
+
+tasks.register("stageAgents", Copy) {
+    from({ configurations.agents.resolve() }) {
+        eachFile { f ->
+            if (f.name.startsWith("aspectjweaver")) {
+                f.name = "aspectjweaver.jar"
+            }
+            if (f.name.startsWith("opentelemetry")) {
+                f.name = "opentelemetry.jar"
+            }
+        }
+        includeEmptyDirs = false
+    }
+    into(agentsOut)
+}
+
+processResources.finalizedBy stageAgents
+
+// ===== Boot Run Configuration =====
+bootRun {
+    dependsOn(stageAgents)
+    jvmArgs += [
+        "-Dfile.encoding=UTF-8",
+        "-Dconsole.encoding=UTF-8"
+    ]
+    doFirst {
+        def dir = agentsOut.get().asFile
+        def aj = new File(dir, "aspectjweaver.jar")
+
+        if (!aj.exists()) {
+            throw new GradleException("Can't find the AspectJ weaver agent.")
+        }
+        jvmArgs += "-javaagent:${aj.absolutePath}"
+    }
+}
+
+// ===== Test Configurations =====
+apply from: 'gradle/test.gradle'
+apply from: 'gradle/integrationTest.gradle'
+apply from: 'gradle/architectureTest.gradle'
+apply from: 'gradle/spockTest.gradle'

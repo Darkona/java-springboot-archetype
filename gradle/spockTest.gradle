@@ -1,0 +1,68 @@
+// ===== Spock Test Configuration =====
+
+sourceSets {
+    spockTest {
+        java.srcDir 'src/spockTest/java'
+        groovy.srcDir 'src/spockTest/groovy'
+        resources.srcDir 'src/spockTest/resources'
+        // Include main output and normal test classpath for Groovy/Spock dependencies
+        compileClasspath += sourceSets.main.output + sourceSets.test.compileClasspath
+        runtimeClasspath += output + compileClasspath + sourceSets.test.runtimeClasspath
+    }
+}
+
+configurations {
+    spockTest.extendsFrom testImplementation
+    spockTestRuntimeOnly.extendsFrom testRuntimeOnly
+    spockTestCompileOnly.extendsFrom testCompileOnly
+    spockTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+    spockTestDevelopmentOnly.extendsFrom testDevelopmentOnly
+}
+
+java {
+    compileSpockTestJava {
+        options.release = libs.versions.java.get().toInteger()
+        options.encoding = 'UTF-8'
+        options.compilerArgs += [
+                "-parameters",
+                '-Amapstruct.defaultComponentModel=spring',
+                '-Amapstruct.suppressGeneratorTimestamp=true'
+        ]
+    }
+}
+
+dependencies {
+    // --- Groovy & Spock Framework ---
+    spockTestImplementation libs.groovy
+    spockTestImplementation libs.spock.core
+    spockTestImplementation libs.spock.spring
+
+    // --- Test Runtime ---
+    spockTestRuntimeOnly libs.junit.platform.launcher
+    spockTestRuntimeOnly libs.lombok
+}
+
+// ===== Spock Test Task =====
+tasks.register('spockTest', Test) {
+    description = "Run Spock tests"
+    testClassesDirs = sourceSets.spockTest.output.classesDirs
+    classpath = sourceSets.spockTest.runtimeClasspath
+    useJUnitPlatform()
+    jvmArgs += [
+        "-Dfile.encoding=UTF-8",
+        "-Dconsole.encoding=UTF-8"
+    ]
+    systemProperty "spring.profiles.active", "spockTest"
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/tests/spock")
+        junitXml.required = true
+        junitXml.outputLocation = layout.buildDirectory.dir("reports/tests/spock/xml")
+    }
+}
+
+tasks.named('processSpockTestResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.check.dependsOn.add(tasks.named("spockTest"))

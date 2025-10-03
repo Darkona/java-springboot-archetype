@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Archetype
+
+  cloud:
+    config:
+      enabled: false
+
+  config:
+    # .env file outside of the project directory
+    # contains ENVIRONMENT=local
+    import: optional:file:../local-config/.env[.properties]
+
+  profiles:
+    active: ${APP_PROFILE:default}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/olimpo
+          jwk-set-uri: http://localhost:8081/realms/olimpo/protocol/openid-connect/certs
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    info:
+      access: read_only
+    metrics:
+      access: read_only
+    env:
+      access: read_only
+    configprops:
+      access: read_only
+    beans:
+      access: read_only
+    mappings:
+      access: read_only
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    operations-sorter: method
+    tags-sorter: alpha
+  packages-to-scan: com.archetype

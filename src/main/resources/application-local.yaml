@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: Archetype-Local
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+  output:
+    ansi:
+      enabled: ALWAYS
+  data:
+
+
+logged:
+  color: true
+
+logging:
+  pattern:
+    console: "%cyan(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %30.30(-- %logger{30}) - %msg%n"
+
+otel:
+  metrics.exporter: none
+  logs.exporter: none
+  traces.exporter: none
+  sdk.disabled: true
+  javaagent.enabled: false
+  instrumentation.common.default-enabled: false

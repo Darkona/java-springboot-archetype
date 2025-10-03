@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "https://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+
+    <weaver>
+        <!-- only weave classes in our application-specific packages and logged library -->
+        <include within="com.archetype..*"/>
+        <include within="io.github.darkona.logged..*"/>
+    </weaver>
+
+    <aspects>
+        <!-- weave in logged's weaving aspect -->
+        <aspect name="io.github.darkona.logged.weaving.WeavedAspect"/>
+    </aspects>
+
+</aspectj>

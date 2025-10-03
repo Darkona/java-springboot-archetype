@@ -1,0 +1,138 @@
+[versions]
+# Java & Gradle
+java = "21"
+gradle = "9.1.0"
+
+# Spring Framework
+spring-boot = "3.5.5"
+spring-cloud = "2025.0.0"
+spring-modulith = "1.4.1"
+spring-dependency-management = "1.1.7"
+
+# Security & OAuth
+spring-security-oauth2-jose = "6.4.3"
+
+# Data & Persistence
+postgresql = "42.7.5"
+
+# Code Generation & Processing
+lombok = "1.18.36"
+mapstruct = "1.6.3"
+lombok-mapstruct-binding = "0.2.0"
+
+# Testing
+junit-platform = "1.12.2"
+archunit = "1.1.0"
+testcontainers = "1.18.3"
+spock = "2.4-M6-groovy-4.0"
+groovy = "5.0.1"
+mockito = "5.20.0"
+byte-buddy = "1.17.7"
+
+# Observability & Monitoring
+opentelemetry-bom = "2.20.1"
+opentelemetry-agent = "2.19.0"
+micrometer-otlp = "1.14.5"
+micrometer-prometheus = "1.14.5"
+logstash-logback-encoder = "8.1"
+logged = "1.5.0"
+loki-logback-appender = "2.0.0"
+loki-protobuf = "0.0.2_pb4.31.0"
+
+# API Documentation
+springdoc = "2.8.13"
+
+# Agents
+aspectj-weaver = "1.9.24"
+
+# Plugins
+pitest = "1.19.0-rc.1"
+spotless = "7.2.1"
+jacoco = "0.8.12"
+
+# Mutation Testing
+waarts = "0.6.5"
+
+# Build Tools
+commons-lang3 = "3.19.0"
+
+[libraries]
+# Spring Boot Starters
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client" }
+spring-boot-starter-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
+spring-boot-starter-amqp = { module = "org.springframework.boot:spring-boot-starter-amqp" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+
+# Spring Security
+spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
+spring-security-test = { module = "org.springframework.security:spring-security-test" }
+
+# Spring Cloud
+spring-cloud-starter-config = { module = "org.springframework.cloud:spring-cloud-starter-config" }
+spring-cloud-starter-openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign" }
+
+# Spring Modulith
+spring-modulith-starter-core = { module = "org.springframework.modulith:spring-modulith-starter-core" }
+spring-modulith-actuator = { module = "org.springframework.modulith:spring-modulith-actuator" }
+spring-modulith-observability = { module = "org.springframework.modulith:spring-modulith-observability" }
+spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test" }
+
+# Data & Persistence
+flyway-core = { module = "org.flywaydb:flyway-core" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+
+# Code Generation
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding" }
+
+# API Documentation
+springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+
+# Observability & Monitoring
+logged = { module = "io.github.darkona:logged", version.ref = "logged" }
+logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash-logback-encoder" }
+loki-logback-appender = { module = "com.github.loki4j:loki-logback-appender", version.ref = "loki-logback-appender" }
+loki-protobuf = { module = "com.github.loki4j:loki-protobuf", version.ref = "loki-protobuf" }
+micrometer-registry-otlp = { module = "io.micrometer:micrometer-registry-otlp" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+opentelemetry-spring-boot-starter = { module = "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter" }
+
+# Testing - Core
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+# Testing - ArchUnit
+archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit" }
+archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "archunit" }
+
+# Testing - Testcontainers
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
+testcontainers-rabbitmq = { module = "org.testcontainers:rabbitmq" }
+testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "testcontainers" }
+
+# Testing - Spock
+groovy = { module = "org.apache.groovy:groovy", version.ref = "groovy" }
+spock-core = { module = "org.spockframework:spock-core", version.ref = "spock" }
+spock-spring = { module = "org.spockframework:spock-spring", version.ref = "spock" }
+
+# Mutation Testing
+pitest-waarts-plugin = { module = "io.github.wmaarts:pitest-mutation-testing-elements-plugin", version.ref = "waarts" }
+
+# Agents
+opentelemetry-javaagent = { module = "io.opentelemetry.javaagent:opentelemetry-javaagent", version.ref = "opentelemetry-agent" }
+aspectj-weaver = { module = "org.aspectj:aspectjweaver", version.ref = "aspectj-weaver" }
+byte-buddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "byte-buddy" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+pitest = { id = "info.solidsoft.pitest", version.ref = "pitest" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

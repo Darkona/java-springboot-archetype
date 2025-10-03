@@ -1,0 +1,93 @@
+// ===== Unit Test Configuration =====
+
+configurations {
+    testCompileOnly.extendsFrom testAnnotationProcessor
+    mockitoAgent
+}
+
+java {
+    compileTestJava {
+        options.release = libs.versions.java.get().toInteger()
+        options.encoding = 'UTF-8'
+        options.compilerArgs += [
+                "-parameters",
+                '-Amapstruct.defaultComponentModel=spring',
+                '-Amapstruct.suppressGeneratorTimestamp=true'
+        ]
+    }
+}
+
+dependencies {
+    // --- Annotation Processors ---
+    testAnnotationProcessor libs.lombok
+    testAnnotationProcessor libs.mapstruct.processor
+
+    // --- Compile-Only Dependencies ---
+    testCompileOnly libs.mapstruct
+
+    // --- Test Frameworks ---
+    testImplementation libs.spring.boot.starter.test
+    testImplementation libs.spring.modulith.starter.test
+    testImplementation libs.spring.security.test
+    testRuntimeOnly libs.junit.platform.launcher
+
+    // --- Mutation Testing ---
+    pitest libs.pitest.waarts.plugin
+}
+
+// ===== PITest (Mutation Testing) Configuration =====
+pitest {
+    junit5PluginVersion.set('1.2.3')
+    targetClasses.set([
+        "${mainPackage}.layer.*",
+        "${mainPackage}.hexagonal.*",
+        "${mainPackage}.onion.*",
+        "${mainPackage}.mvc.*",
+        "${mainPackage}.cqrs.*",
+        "${mainPackage}.clients.*"
+    ])
+    targetTests.set([
+        "${mainPackage}.layer.*",
+        "${mainPackage}.hexagonal.*",
+        "${mainPackage}.onion.*",
+        "${mainPackage}.mvc.*",
+        "${mainPackage}.cqrs.*"
+    ])
+    threads.set(8)
+    jvmArgs.set(['-Xmx1024m'])
+    timestampedReports.set(false)
+    mutators.set(['STRONGER', 'CONSTRUCTOR_CALLS'])
+    verbose.set(false)
+    failWhenNoMutations.set(false)
+    avoidCallsTo.set(['org.apache.logging', 'org.slf4j'])
+    excludedTestClasses.set(['**.*IntegrationTest', '**.*IT'])
+    outputFormats.set(['HTML', 'XML', 'HTML2', 'JSON'])
+    reportDir.set(layout.buildDirectory.dir("reports/pitest").get().asFile)
+}
+
+// ===== JaCoCo (Code Coverage) Configuration =====
+jacocoTestReport {
+    reports {
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/jacoco/test/html")
+    }
+}
+
+// ===== Test Task Configuration =====
+test {
+    useJUnitPlatform()
+    jvmArgs += [
+        "-javaagent:${configurations.mockitoAgent.singleFile.absolutePath}",
+        "-Dfile.encoding=UTF-8",
+        "-Dconsole.encoding=UTF-8"
+    ]
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/tests/unit")
+        junitXml.required = true
+        junitXml.outputLocation = layout.buildDirectory.dir("reports/tests/unit/xml")
+    }
+    finalizedBy jacocoTestReport
+}

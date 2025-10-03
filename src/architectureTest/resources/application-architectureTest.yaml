@@ -1,0 +1,22 @@
+# Architecture test configuration - disable datasource and flyway auto-configuration
+# so architecture (module / ArchUnit / modulith) tests don't attempt to start real DBs.
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+
+# Keep actuator light-weight for architecture tests
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# Ensure the architectureTest profile is recognized (tests already activate it)
+# Additional properties to reduce noise
+logging:
+  level:
+    org.springframework: INFO

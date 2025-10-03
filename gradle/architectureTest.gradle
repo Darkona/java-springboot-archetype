@@ -1,0 +1,69 @@
+// ===== Architecture Test Configuration =====
+
+sourceSets {
+    architectureTest {
+        java.srcDir 'src/architectureTest/java'
+        resources.srcDir 'src/architectureTest/resources'
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    architectureTest
+
+    architectureTestImplementation.extendsFrom testImplementation
+    architectureTestRuntimeOnly.extendsFrom testRuntimeOnly
+    architectureTestCompileOnly.extendsFrom testCompileOnly
+    architectureTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+    architectureTestDevelopmentOnly.extendsFrom testDevelopmentOnly
+}
+
+java {
+    compileArchitectureTestJava {
+        options.release = libs.versions.java.get().toInteger()
+        options.encoding = 'UTF-8'
+        options.compilerArgs += [
+                "-parameters",
+                '-Amapstruct.defaultComponentModel=spring',
+                '-Amapstruct.suppressGeneratorTimestamp=true'
+        ]
+    }
+}
+
+dependencies {
+    // --- Test Runtime ---
+    architectureTestRuntimeOnly libs.junit.platform.launcher
+
+    // --- Annotation Processors ---
+    architectureTestCompileOnly libs.lombok
+
+    // --- ArchUnit for Architecture Testing ---
+    architectureTestImplementation libs.archunit
+    architectureTestImplementation libs.archunit.junit5
+}
+
+// ===== Architecture Test Task =====
+tasks.register('architectureTest', Test) {
+    description = "Run architecture tests"
+    testClassesDirs = sourceSets.architectureTest.output.classesDirs
+    classpath = sourceSets.architectureTest.runtimeClasspath
+    useJUnitPlatform()
+    jvmArgs += [
+        "-Dfile.encoding=UTF-8",
+        "-Dconsole.encoding=UTF-8"
+    ]
+    systemProperty "spring.profiles.active", "architectureTest"
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/tests/architecture")
+        junitXml.required = true
+        junitXml.outputLocation = layout.buildDirectory.dir("reports/tests/architecture/xml")
+    }
+}
+
+tasks.named('processArchitectureTestResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.check.dependsOn.add(tasks.named("architectureTest"))

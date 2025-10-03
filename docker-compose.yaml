@@ -1,0 +1,17 @@
+services:
+  skelletor:
+    build:
+      context: .
+      dockerfile: skelletor.dockerfile
+    container_name: skelletor
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=container
+      - ENVIRONMENT=container
+    networks:
+      - platform
+
+networks:
+  platform:
+    driver: bridge

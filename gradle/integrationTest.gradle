@@ -1,0 +1,71 @@
+// ===== Integration Test Configuration =====
+
+sourceSets {
+    integrationTest {
+        java.srcDir 'src/integrationTest/java'
+        resources.srcDir 'src/integrationTest/resources'
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+    integrationTestCompileOnly.extendsFrom testCompileOnly
+    integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+    integrationTestDevelopmentOnly.extendsFrom testDevelopmentOnly
+}
+
+java {
+    compileIntegrationTestJava {
+        options.release = libs.versions.java.get().toInteger()
+        options.encoding = 'UTF-8'
+        options.compilerArgs += [
+                "-parameters",
+                '-Amapstruct.defaultComponentModel=spring',
+                '-Amapstruct.suppressGeneratorTimestamp=true'
+        ]
+    }
+}
+
+dependencies {
+    // --- Test Runtime ---
+    integrationTestRuntimeOnly libs.junit.platform.launcher
+
+    // --- Annotation Processors ---
+    integrationTestCompileOnly libs.lombok
+
+    // --- Testcontainers for Integration Tests ---
+    integrationTestImplementation libs.testcontainers.junit.jupiter
+    integrationTestImplementation libs.testcontainers.mongodb
+    integrationTestImplementation libs.testcontainers.postgresql
+    integrationTestImplementation libs.testcontainers.rabbitmq
+    integrationTestImplementation 'org.testcontainers:testcontainers:1.18.3'
+}
+
+// ===== Integration Test Task =====
+tasks.register('integrationTest', Test) {
+    description = "Run integration tests"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
+    jvmArgs += [
+        "-javaagent:${configurations.mockitoAgent.singleFile.absolutePath}",
+        "-Dfile.encoding=UTF-8",
+        "-Dconsole.encoding=UTF-8"
+    ]
+    systemProperty "spring.profiles.active", "integrationTest"
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/tests/integration")
+        junitXml.required = true
+        junitXml.outputLocation = layout.buildDirectory.dir("reports/tests/integration/xml")
+    }
+}
+
+tasks.named('processIntegrationTestResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.check.dependsOn.add(tasks.named("integrationTest"))

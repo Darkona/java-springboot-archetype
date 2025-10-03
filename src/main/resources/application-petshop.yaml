@@ -1,0 +1,33 @@
+spring:
+  config:
+    activate:
+      on-profile: petshop
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:petshop}
+    username: ${POSTGRES_USER:petshop}
+    password: ${POSTGRES_PASSWORD:petshop}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    # optionally configure virtual-host, etc.
+
+petshop:
+  events:
+    exchange: petshop.events
