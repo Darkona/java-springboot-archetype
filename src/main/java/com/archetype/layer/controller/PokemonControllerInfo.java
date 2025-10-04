@@ -19,9 +19,7 @@ public interface PokemonControllerInfo {
 
     @Operation(summary = "Create a new Pokemon", description = "Creates a new Pokemon and returns the persisted document")
     @ApiResponse(responseCode = "201", description = "Created")
-    ResponseEntity<PokemonDocument> createPokemon(
-            @Parameter(description = "Pokemon create payload") PokemonCreate req
-    );
+    ResponseEntity<PokemonDocument> createPokemon(@Parameter(description = "Pokemon create payload") PokemonCreate req);
 
     @Operation(summary = "Get a Pokemon", description = "Retrieve a Pokemon by id")
     @ApiResponse(responseCode = "200", description = "OK")

@@ -139,6 +139,7 @@ dependencies {
 
     // --- Modulith ---
     implementation libs.spring.modulith.starter.core
+    testImplementation libs.spring.modulith.starter.test
     runtimeOnly libs.spring.modulith.actuator
     runtimeOnly libs.spring.modulith.observability
 

@@ -41,19 +41,25 @@ dependencies {
     // --- ArchUnit for Architecture Testing ---
     architectureTestImplementation libs.archunit
     architectureTestImplementation libs.archunit.junit5
+    architectureTestImplementation libs.spring.modulith.starter.test
 }
 
 // ===== Architecture Test Task =====
 tasks.register('architectureTest', Test) {
-    description = "Run architecture tests"
+
+    group = 'verification'
+    description = "Run Architecture Tests"
+
+    useJUnitPlatform()
+
+    testLogging { events "passed", "failed", "skipped" }
+    jvmArgs += ["-Dfile.encoding=UTF-8","-Dconsole.encoding=UTF-8"]
+
     testClassesDirs = sourceSets.architectureTest.output.classesDirs
     classpath = sourceSets.architectureTest.runtimeClasspath
-    useJUnitPlatform()
-    jvmArgs += [
-        "-Dfile.encoding=UTF-8",
-        "-Dconsole.encoding=UTF-8"
-    ]
+
     systemProperty "spring.profiles.active", "architectureTest"
+
     reports {
         html.required = true
         html.outputLocation = layout.buildDirectory.dir("reports/tests/architecture")
