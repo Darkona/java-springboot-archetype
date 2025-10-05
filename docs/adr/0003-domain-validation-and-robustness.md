@@ -59,9 +59,9 @@ Examples
 Constructor with validation and domain exception:
 
 ```java
-package com.skeletor.layer.domain.model;
+package com.archetype.layer.domain.model;
 
-import com.skeletor.layer.domain.exception.PokemonValidationException;
+import com.archetype.layer.domain.exception.PokemonValidationException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -96,7 +96,7 @@ public class Pokemon {
 Domain exception example:
 
 ```java
-package com.skeletor.layer.domain.exception;
+package com.archetype.layer.domain.exception;
 
 public class PokemonValidationException extends RuntimeException {
     public PokemonValidationException(String message) {

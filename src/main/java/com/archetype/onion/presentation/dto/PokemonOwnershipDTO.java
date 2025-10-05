@@ -1,4 +1,4 @@
-package com.archetype.onion.presentation.dto;
+﻿package com.archetype.onion.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

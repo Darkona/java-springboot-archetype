@@ -22,7 +22,7 @@ Rationale
 Rules
 -----
 1. Scope
-   - These rules apply to the domain packages (e.g., `com.skeletor.layer.domain.*` and any other packages that exclusively contain domain logic).
+   - These rules apply to the domain packages (e.g., `com.archetype.layer.domain.*` and any other packages that exclusively contain domain logic).
    - Integration, infrastructure, controllers, and adapters follow their own testing standards (integration tests, contract tests, etc.) but are not subject to the 100% domain coverage requirement.
 
 2. Unit test coverage
@@ -62,7 +62,7 @@ Implementation Steps
 --------------------
 1. Add testing tools to build:
    - Add JaCoCo plugin for coverage reporting.
-   - Add Pitest plugin and configure it to run over domain packages (e.g., `com.skeletor.layer.domain.*`).
+   - Add Pitest plugin and configure it to run over domain packages (e.g., `com.archetype.layer.domain.*`).
    - Configure Gradle tasks:
      - `:domain:test` runs unit tests and JaCoCo
      - `:domain:pitest` runs mutation analysis (fast mode for CI)

@@ -1,4 +1,4 @@
-package com.archetype.hexagonal.adapter.out.messaging;
+﻿package com.archetype.hexagonal.adapter.out.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

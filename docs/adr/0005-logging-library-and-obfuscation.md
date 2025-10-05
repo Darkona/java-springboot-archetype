@@ -26,7 +26,7 @@ Guidelines
    - Example (Gradle): add dependency and document how to enable it in `application-local.yaml` or via a `spring.profiles.active` flag.
 
 2. Global configuration
-   - Create a single configuration class or module (e.g., `com.skeletor.logging.LoggingConfig`) that wires `logged` for local profiles and configures:
+   - Create a single configuration class or module (e.g., `com.archetype.logging.LoggingConfig`) that wires `logged` for local profiles and configures:
      - default log level for local development,
      - human-friendly formatting,
      - a global redaction pipeline (see below).

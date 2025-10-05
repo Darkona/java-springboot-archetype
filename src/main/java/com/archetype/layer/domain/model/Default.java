@@ -1,4 +1,4 @@
-package com.archetype.layer.domain.model;
+﻿package com.archetype.layer.domain.model;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

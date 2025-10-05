@@ -1,4 +1,4 @@
-package com.archetype.layer.persistence.document;
+﻿package com.archetype.layer.persistence.document;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +16,12 @@ public class PokemonDocument {
     private Integer baseExperience;
     private Integer height;
     private Integer weight;
+    
+    // Additional fields for domain mapping
+    private Integer level;
+    private Boolean shiny;
+    private Integer nationalId;
+    private String speciesName;
     
     // Getters and setters
     public UUID getId() {
@@ -73,5 +79,36 @@ public class PokemonDocument {
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
+    
+    public Integer getLevel() {
+        return level;
+    }
+    
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+    
+    public Boolean getShiny() {
+        return shiny;
+    }
+    
+    public void setShiny(Boolean shiny) {
+        this.shiny = shiny;
+    }
+    
+    public Integer getNationalId() {
+        return nationalId;
+    }
+    
+    public void setNationalId(Integer nationalId) {
+        this.nationalId = nationalId;
+    }
+    
+    public String getSpeciesName() {
+        return speciesName;
+    }
+    
+    public void setSpeciesName(String speciesName) {
+        this.speciesName = speciesName;
+    }
 }
-

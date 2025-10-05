@@ -1,4 +1,4 @@
-package com.archetype.onion.presentation.mapper;
+﻿package com.archetype.onion.presentation.mapper;
 
 import com.archetype.onion.domain.model.PokemonOwnership;
 import com.archetype.onion.domain.model.Trainer;

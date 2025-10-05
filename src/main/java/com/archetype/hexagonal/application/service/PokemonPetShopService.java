@@ -1,4 +1,4 @@
-package com.archetype.hexagonal.application.service;
+﻿package com.archetype.hexagonal.application.service;
 
 import com.archetype.hexagonal.application.port.in.AdoptPokemon;
 import com.archetype.hexagonal.application.port.in.ListAvailablePokemons;

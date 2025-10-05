@@ -28,3 +28,14 @@ otel:
   sdk.disabled: true
   javaagent.enabled: false
   instrumentation.common.default-enabled: false
+
+# Client configurations
+clients:
+  pokemon:
+    url: http://localhost:8080
+    connect-timeout: 5000
+    read-timeout: 10000
+  pokeapi:
+    url: https://pokeapi.co
+    connect-timeout: 5000
+    read-timeout: 10000

@@ -1,4 +1,4 @@
-package com.archetype.hexagonal.adapter.out.persistence;
+﻿package com.archetype.hexagonal.adapter.out.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.CollectionTable;

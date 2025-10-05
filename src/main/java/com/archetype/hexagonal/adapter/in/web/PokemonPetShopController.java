@@ -1,4 +1,4 @@
-package com.archetype.hexagonal.adapter.in.web;
+﻿package com.archetype.hexagonal.adapter.in.web;
 
 import com.archetype.hexagonal.application.service.PokemonPetShopService;
 import com.archetype.hexagonal.adapter.in.web.dto.PokemonCreateRequest;
@@ -8,7 +8,6 @@ import com.archetype.hexagonal.application.port.in.ListAvailablePokemons;
 import com.archetype.hexagonal.application.port.in.RegisterPokemon;
 import com.archetype.hexagonal.domain.model.PokemonPet;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * REST controller (adapter-in) for the Petshop hexagonal module.
+ * Follows ADR 0015 (Prefer Spring annotations over ResponseEntity) for clean controller design.
  * Endpoints:
  *  - GET  /api/hexagonal/pokemon        -> list available
  *  - POST /api/hexagonal/pokemon        -> register new pokemon
@@ -48,9 +48,10 @@ public class PokemonPetShopController {
     }
 
     @PostMapping
-    public ResponseEntity<PokemonResponse> register(@RequestBody PokemonCreateRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public PokemonResponse register(@RequestBody PokemonCreateRequest request) {
         PokemonPet created = registerUseCase.register(request.getName(), request.getTypes());
-        return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(created));
+        return toResponse(created);
     }
 
     @PostMapping("/{id}/adopt")
@@ -89,4 +90,3 @@ public class PokemonPetShopController {
         public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
     }
 }
-

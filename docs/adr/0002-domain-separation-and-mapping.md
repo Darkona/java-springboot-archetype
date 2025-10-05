@@ -43,6 +43,30 @@ Negative / Trade-offs:
 
 Guidelines & Examples
 ---------------------
+
+## Mapper Package Organization
+
+All mappers should be organized under a centralized `mapper` package with subpackages by mapping concern:
+
+```
+src/main/java/com/archetype/layer/mapper/
+├── dto/
+│   └── PokemonMapper.java              // DTO ↔ Domain Model
+└── persistence/
+    └── PokemonPersistenceMapper.java   // Domain Model ↔ Persistence Document
+```
+
+**Benefits of centralized mapper organization:**
+- Centralizes all mapping logic in one discoverable location
+- Simplifies architecture test rules (no exceptions needed)
+- Makes mapper discovery and maintenance easier
+- Clear separation between DTO and persistence mapping concerns
+
+**Mapper Package Rules:**
+- `*.mapper.dto.*` - DTO ↔ Domain Model mapping only
+- `*.mapper.persistence.*` - Domain Model ↔ Persistence Document mapping only
+- Each mapper should have a single, well-defined mapping responsibility
+
 1. Domain model (clean, contains logic):
 ```java
 // src/main/java/com/example/domain/model/Pokemon.java
@@ -81,6 +105,7 @@ public class PokemonDocument {
 
 Example MapStruct mapper (domain <-> persistence):
 ```java
+// src/main/java/com/example/layer/mapper/persistence/PokemonPersistenceMapper.java
 @Mapper(componentModel = "spring")
 public interface PokemonPersistenceMapper {
     Pokemon toDomain(PokemonDocument doc);
@@ -90,8 +115,9 @@ public interface PokemonPersistenceMapper {
 
 Example MapStruct mapper (domain <-> controller DTO):
 ```java
+// src/main/java/com/example/layer/mapper/dto/PokemonMapper.java
 @Mapper(componentModel = "spring")
-public interface PokemonApiMapper {
+public interface PokemonMapper {
     Pokemon toDomain(PokemonCreate dto);
     PokemonDetails toDetailsDto(Pokemon domain);
 }
@@ -112,9 +138,9 @@ Implementation / Migration Steps
 Current project status (at time of ADR creation)
 ------------------------------------------------
 - The project already has:
-  - Controller DTOs in `src/main/java/com/skeletor/layer/domain/dto/request` and `response`.
-  - A persistence document `src/main/java/com/skeletor/layer/persistence/document/PokemonDocument.java`.
-  - A mapper at `src/main/java/com/skeletor/layer/domain/dto/mapper/PokemonMapper.java`.
+  - Controller DTOs in `src/main/java/com/archetype/layer/domain/dto/request` and `response`.
+  - A persistence document `src/main/java/com/archetype/layer/persistence/document/PokemonDocument.java`.
+  - A mapper at `src/main/java/com/archetype/layer/domain/dto/mapper/PokemonMapper.java`.
 - Based on a quick scan, the project appears to follow the separation rules in core places (controllers accept/return DTOs, persistence classes are separate). A follow-up scan can validate full compliance and identify any files that need to be refactored.
 
 Notes

@@ -1,4 +1,4 @@
-package com.archetype.hexagonal.adapter.in.web.dto;
+﻿package com.archetype.hexagonal.adapter.in.web.dto;
 
 import java.time.Instant;
 import java.util.List;

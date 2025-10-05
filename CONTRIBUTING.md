@@ -27,7 +27,7 @@ Automated helper
 ----------------
 A small helper exists to scaffold a starter `*Info` interface from a compiled controller class:
 
-Tool: `com.skeletor.tools.InfoInterfaceGenerator`
+Tool: `com.archetype.tools.InfoInterfaceGenerator`
 
 Usage (from project root):
 1. Compile the project so controller classes exist under `build/classes/java/main`:
@@ -36,9 +36,9 @@ Usage (from project root):
 
 2. Run the generator:
    - Windows example:
-     cmd /c java -cp "build/classes/java/main;build/resources/main" com.skeletor.tools.InfoInterfaceGenerator com.skeletor.layer.controller.PokemonController src/main/java/com/skeletor/layer/controller
+     cmd /c java -cp "build/classes/java/main;build/resources/main" com.archetype.tools.InfoInterfaceGenerator com.archetype.layer.controller.PokemonController src/main/java/com/archetype/layer/controller
    - Unix example:
-     ./gradlew -q run --no-daemon --args="com.skeletor.layer.controller.PokemonController src/main/java/com/skeletor/layer/controller"
+     ./gradlew -q run --no-daemon --args="com.archetype.layer.controller.PokemonController src/main/java/com/archetype/layer/controller"
 
 Notes:
 - The generator emits method signatures and placeholder `@Operation/@ApiResponse` annotations; you must review and expand the documentation (parameters, response codes, descriptions).

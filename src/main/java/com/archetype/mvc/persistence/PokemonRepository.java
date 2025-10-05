@@ -1,4 +1,4 @@
-package com.archetype.mvc.persistence;
+﻿package com.archetype.mvc.persistence;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

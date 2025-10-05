@@ -1,4 +1,4 @@
-package com.archetype.mvc.service;
+﻿package com.archetype.mvc.service;
 
 import com.archetype.mvc.model.SpeciesOverview;
 import com.archetype.mvc.persistence.PokemonRepository;
@@ -35,7 +35,7 @@ public class PokedexService {
     }
 
     private SpeciesOverview toOverview(PokemonDocument doc) {
-        return new SpeciesOverview(doc.getId(), doc.getName(), doc.getTypes());
+        return new SpeciesOverview(doc.nationalId(), doc.name(), doc.types());
     }
 }
 

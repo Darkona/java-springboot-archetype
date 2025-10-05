@@ -23,7 +23,7 @@ Rationale
 
 Package layout (canonical)
 --------------------------
-Example base package: `com.example.<module>.layer` or `com.skeletor.layer`
+Example base package: `com.example.<module>.layer` or `com.archetype.layer`
 
 Top-level packages under module `layer`:
 
@@ -44,12 +44,14 @@ Top-level packages under module `layer`:
   - `pubsub.publisher` — Publisher components.
   - `pubsub.subscriber` — Subscriber components (message handlers).
 - `config` — Spring configuration classes (profiles, beans, modules config).
-- `clients` — Declarative HTTP clients (Feign interfaces) for calling remote services. Organize clients by external service: `clients.<service>` (for example `com.skeletor.clients.pokemon`). Each service folder should contain:
+- `clients` — Declarative HTTP clients (Feign interfaces) for calling remote services. Organize clients by external service: `clients.<service>` (for example `com.archetype.clients.pokemon`). Each service folder should contain:
   - Feign client interfaces (`*Client`).
   - Client-side DTOs (`dto` package) separate from domain/persistence DTOs.
   - Client-specific mappers (`mapper` package) to translate between client DTOs and the application's persistence/domain models.
-  - Optional client-specific configuration (e.g., a configuration class for timeouts, decoders, interceptors).
-  This keeps remote-contract code isolated, makes it easy to swap implementations or mock clients in tests, and preserves clear adapter boundaries.
+  - Client configuration classes (e.g., `*ClientConfiguration` for timeouts, decoders, interceptors).
+  - Client service classes (`*ClientService`) that encapsulate the client usage and mapping logic.
+  - Error decoders and exception classes specific to the client.
+  This keeps all client implementation code together, isolated from other layers, and makes it easy to swap implementations or mock entire client modules in tests while preserving clear adapter boundaries.
 - `utils` — small helpers, generators, custom annotations, shared utilities. Keep this small and focused.
 - `mapper` — (if you prefer global mappers; otherwise keep mappers under dto/persistence subpackages)
 - `api` — (modulith only) Public API package exposed to other modules. Configure modulith visibility to allow other modules to read this package only if intended.
@@ -81,20 +83,20 @@ Modulith specifics
 
 Examples (based on this repository)
 -----------------------------------
-- `com.skeletor.layer.controller.PokemonController`
-- `com.skeletor.layer.service.PokemonService`
-- `com.skeletor.layer.domain.model.Pokemon`
-- `com.skeletor.layer.domain.dto.request.PokemonCreate`
-- `com.skeletor.layer.domain.dto.mapper.PokemonMapper`
-- `com.skeletor.layer.persistence.document.PokemonDocument`
-- `com.skeletor.layer.persistence.PokemonRepository` (repositories live under persistence)
+- `com.archetype.layer.controller.PokemonController`
+- `com.archetype.layer.service.PokemonService`
+- `com.archetype.layer.domain.model.Pokemon`
+- `com.archetype.layer.domain.dto.request.PokemonCreate`
+- `com.archetype.layer.domain.dto.mapper.PokemonMapper`
+- `com.archetype.layer.persistence.document.PokemonDocument`
+- `com.archetype.layer.persistence.PokemonRepository` (repositories live under persistence)
 
 Directory tree example
 ----------------------
 A canonical directory/tree example (ASCII) for the `layer` module:
 
 ```
-src/main/java/com/skeletor/layer
+src/main/java/com/archetype/layer
 ├── controller
 │   ├── PokemonController.java
 │   └── PokemonControllerInfo.java
@@ -126,12 +128,15 @@ src/main/java/com/skeletor/layer
 │   ├── pokemon
 │   │   ├── dto
 │   │   │   ├── PokemonClientCreate.java
-│   │   │   └── PokemonClientDetails.java
+│   │   │   ├── PokemonClientDetails.java
+│   │   │   └── PokemonClientOverview.java
 │   │   ├── mapper
 │   │   │   └── PokemonClientMapper.java
 │   │   ├── PokemonClient.java
-│   │   └── FeignConfiguration.java
-│   └── (other service folders follow same pattern: `dto`, `mapper`, `client`, `config`)
+│   │   ├── PokemonClientConfiguration.java
+│   │   ├── PokemonClientErrorDecoder.java
+│   │   └── PokemonClientService.java
+│   └── (other service folders follow same pattern: `dto`, `mapper`, `client`, `config`, `service`)
 ├── pubsub
 │   ├── events
 │   ├── publisher

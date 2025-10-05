@@ -1,4 +1,4 @@
-package com.archetype;
+﻿package com.archetype;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.archetype.ArchitectureRules.implementMatchingInfoInterface;
+import static com.archetype.ArchitectureConditions.implementMatchingInfoInterface;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
@@ -40,7 +40,7 @@ public class ArchitectureTests {
     }
 
     @ArchTest
-    @DisplayName("\"Info\" controller interfaces should be annotated with @Tag")
+    @DisplayName("\"Info\" controller interfaces should be annotated with springdoc @Tag")
     void controller_info_impl(JavaClasses classes) {
 
         classes().that()

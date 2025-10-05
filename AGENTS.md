@@ -17,7 +17,7 @@ High-level intent for an agent
 
 Essential rules for the agent
 -----------------------------
-- Always obey the ADR documents present in `docs/adr/`. They codify the project's conventions (package layout, mapping rules, client patterns, logging, etc).
+- Always obey the ADR documents present in `docs/adr/`. They codify the project's conventions (package layout, mapping rules, client patterns, logging, controller design, etc).
 - Do NOT copy detailed implementation from example modules. Example code is for reference only (structure, naming, tests, DI patterns, mapper usage).
 - Keep boundaries clear:
   - Domain packages must be framework- and persistence-free.
@@ -40,7 +40,7 @@ Questions the agent must ask the user before scaffolding
 Recommended agent workflow
 --------------------------
 1. Repo scan
-   - Read ADRs in `docs/adr/` (especially 0002, 0006, 0007).
+   - Read ADRs in `docs/adr/` (especially those covering domain separation, package structure, HTTP clients, and controller design).
    - Inspect `build.gradle` and the `gradle/` helper scripts for test/source-set conventions (architectureTest, integrationTest, spockTest).
    - Review `src/` example modules: `layer`, `hexagonal`, `onion`, `mvc`.
    - Review `src/architectureTest` to learn enforced rules.
@@ -59,7 +59,9 @@ Recommended agent workflow
      - ArchUnit and architectureTest source set (optional to include as part of CI)
      - Spring Boot starters (web, security, data-* according to chosen persistence)
      - OpenFeign (per ADR 0007) if HTTP clients are required
-   - Add an ADR documenting the chosen architecture (copy ADR 0006 as a starting template and adapt it to the new project's package names).
+     - Bean Validation for DTO validation (per ADR 0016)
+   - Add an ADR documenting the chosen architecture (use an unused ADR number as a starting template and adapt it to the new project's package names).
+   - Implement exception handling infrastructure following ADR 0016 (domain exceptions, global handler, i18n support).
 
 5. Scaffold adapters for external services (optional)
    - For each external service the user requested, create `clients.<service>` with:
@@ -72,6 +74,8 @@ Recommended agent workflow
 6. Add mapping and adapter examples
    - Add MapStruct mapper interfaces for domain ↔ DTO and client DTO ↔ persistence/domain.
    - Provide example service that demonstrates adapter usage (call client → map → persist / map → return DTO).
+   - Implement domain-specific exceptions with error codes following ADR 0016.
+   - Add global exception handler with RFC 9457 compliance and internationalization.
 
 7. Add tests
    - Copy architecture test patterns (ArchUnit) to enforce package rules and update package names accordingly.
@@ -90,11 +94,11 @@ How to handle examples vs production code
 
 Files and sections an agent should pay attention to
 --------------------------------------------------
-- docs/adr/0001*..0007* — architecture & conventions
+- docs/adr/ — architecture & conventions (currently 16 ADRs covering injection, domain separation, validation, testing, logging, package structure, HTTP clients, build standards, API documentation, observability, AOP, version management, test naming, architecture testing, controller design, and exception handling)
 - build.gradle and gradle/*.gradle — dependency and source-set patterns
 - src/architectureTest — ArchUnit examples and how architectureTest source-set is configured
-- src/main/java/com/skeletor/* — example modules (layer, onion, hexagonal, mvc)
-- src/main/java/com/skeletor/clients — example Feign clients, config, mappers
+- src/main/java/com/archetype/* — example modules (layer, onion, hexagonal, mvc)
+- src/main/java/com/archetype/clients — example Feign clients, config, mappers
 - src/integrationTest — examples of integration tests and testcontainers setup
 
 Useful CLI commands (run from the project root)
@@ -187,6 +191,125 @@ Some features are disabled by default for local development to simplify setup. S
     docker-compose up -d
     ```
 
+Generated Project Structure Examples
+-----------------------------------
+Here are examples of what the agent should generate for each architecture:
+
+### Layered Architecture Project Structure
+```
+com.yourcompany.yourproject/
+├── YourProjectApplication.java
+├── config/
+│   └── SecurityConfig.java
+├── controller/
+│   ├── YourEntityController.java
+│   └── YourEntityControllerInfo.java
+├── service/
+│   └── YourEntityService.java
+├── domain/
+│   ├── model/
+│   │   └── YourEntity.java
+│   └── dto/
+│       ├── request/
+│       │   └── YourEntityCreate.java
+│       └── response/
+│           └── YourEntityDetails.java
+├── persistence/
+│   ├── YourEntityRepository.java
+│   └── document/
+│       └── YourEntityDocument.java
+├── mapper/
+│   ├── dto/
+│   │   └── YourEntityDtoMapper.java
+│   └── persistence/
+│       └── YourEntityPersistenceMapper.java
+└── clients/
+    └── externalservice/
+        ├── ExternalServiceClient.java
+        ├── dto/
+        │   └── ExternalServiceDto.java
+        └── mapper/
+            └── ExternalServiceMapper.java
+```
+
+### Hexagonal Architecture Project Structure
+```
+com.yourcompany.yourproject/
+├── YourProjectApplication.java
+├── domain/
+│   └── model/
+│       └── YourEntity.java
+├── application/
+│   ├── port/
+│   │   ├── in/
+│   │   │   ├── CreateYourEntity.java
+│   │   │   └── ListYourEntities.java
+│   │   └── out/
+│   │       └── YourEntityRepositoryPort.java
+│   └── service/
+│       └── YourEntityService.java
+└── adapter/
+    ├── in/
+    │   ├── web/
+    │   │   ├── YourEntityController.java
+    │   │   └── dto/
+    │   │       ├── YourEntityCreateRequest.java
+    │   │       └── YourEntityResponse.java
+    │   └── messaging/
+    │       └── YourEntityEventListener.java
+    └── out/
+        ├── persistence/
+        │   ├── YourEntityEntity.java
+        │   ├── YourEntityJpaRepository.java
+        │   └── YourEntityRepositoryAdapter.java
+        └── messaging/
+            └── YourEntityEventPublisher.java
+```
+
+Validation Commands for Generated Projects
+-----------------------------------------
+After scaffolding, agents should run these commands to validate the generated project:
+
+```bash
+# Verify project builds successfully
+./gradlew build
+
+# Run architecture tests to ensure compliance
+./gradlew architectureTest
+
+# Verify application starts
+./gradlew bootRun --args="--spring.profiles.active=local" &
+sleep 10
+curl -f http://localhost:8080/actuator/health
+pkill -f "bootRun"
+
+# Check code quality
+./gradlew spotlessCheck
+```
+
+Common Troubleshooting Scenarios
+-------------------------------
+
+**Issue: Architecture tests fail after scaffolding**
+- Check package naming matches chosen architecture
+- Ensure domain models don't import Spring/persistence annotations
+- Verify mappers are in correct packages
+
+**Issue: Application fails to start**
+- Check main class package matches root package
+- Verify required dependencies are included
+- Ensure configuration classes are properly annotated
+
+**Issue: Build fails with compilation errors**
+- Check MapStruct processors are configured
+- Verify Lombok is properly set up
+- Ensure all required annotations are present
+
+**Issue: Tests fail to run**
+- Check test source sets are properly configured
+- Verify testcontainers dependencies for integration tests
+- Ensure proper test profiles are used
+
 Checklist template the agent should use (update per run)
 -------------------------------------------------------
 - [ ] Read ADRs and repo layout
@@ -196,8 +319,165 @@ Checklist template the agent should use (update per run)
 - [ ] Add client packages (if requested)
 - [ ] Add mappers and example adapters
 - [ ] Add ADR for chosen architecture
-- [ ] Run architecture tests / build
+- [ ] Run validation commands (build, architectureTest, health check)
+- [ ] Verify code quality (spotlessCheck)
+- [ ] Generate setup instructions for the user
 - [ ] Deliver scaffold and a short report with next recommended steps
+
+Advanced Scaffolding Techniques
+------------------------------
+
+### For Modulith Projects
+When scaffolding a modulith, create separate packages for each business module:
+
+```
+com.yourcompany.yourproject/
+├── YourProjectApplication.java
+├── orders/              # Business module 1
+│   ├── domain/
+│   ├── application/
+│   └── adapter/
+├── inventory/           # Business module 2
+│   ├── domain/
+│   ├── application/
+│   └── adapter/
+├── shipping/            # Business module 3
+│   ├── domain/
+│   ├── application/
+│   └── adapter/
+└── shared/              # Shared components
+    ├── config/
+    └── common/
+```
+
+### Client Integration Patterns
+For each external service, always create this structure:
+
+```
+com.yourcompany.yourproject.clients.servicename/
+├── ServiceNameClient.java          # @FeignClient interface
+├── ServiceNameConfiguration.java   # Client config (timeouts, etc.)
+├── dto/
+│   ├── ServiceNameRequest.java     # Request DTOs
+│   └── ServiceNameResponse.java    # Response DTOs
+└── mapper/
+    └── ServiceNameMapper.java      # MapStruct mapper
+```
+
+### Exception Handling Patterns
+Following ADR 0016, always implement:
+
+```
+com.yourcompany.yourproject/
+├── domain/
+│   └── exception/
+│       ├── DomainException.java          # Base exception class
+│       ├── EntityNotFoundException.java  # 404 errors
+│       ├── EntityAlreadyExistsException.java  # 409 conflicts
+│       ├── EntityValidationException.java     # 422 business validation
+│       └── EntityServiceException.java        # 500 service errors
+├── config/
+│   ├── GlobalExceptionHandler.java       # RFC 9457 error responses
+│   └── InternationalizationConfig.java   # i18n configuration
+└── resources/
+    └── messages.properties               # Error message templates
+```
+
+Error Handling and Fallback Strategies
+-------------------------------------
+
+**If user provides invalid architecture choice:**
+Respond: "Invalid architecture choice. Please select one of: layer, hexagonal, onion, mvc, or modulith."
+
+**If user provides invalid package name:**
+Respond: "Invalid package name. Please use Java package naming conventions (e.g., com.company.project)."
+
+**If scaffolding fails:**
+1. Check target directory permissions
+2. Verify all required templates are available
+3. Ensure no naming conflicts with existing files
+4. Fall back to basic scaffold without advanced features
+
+**If validation fails:**
+1. Report specific failing tests/commands
+2. Provide suggested fixes
+3. Offer to regenerate with simpler configuration
+
+Post-Scaffolding User Instructions Template
+------------------------------------------
+After successful scaffolding, provide these instructions:
+
+```
+🎉 Project scaffolded successfully!
+
+📁 Project Details:
+- Root package: {package_name}
+- Architecture: {architecture_type}
+- Persistence: {persistence_type}
+- External clients: {client_list}
+
+🚀 Next Steps:
+1. Navigate to your project directory: cd {project_directory}
+2. Set up local development: ./setup-local-config.sh
+3. Build the project: ./gradlew build
+4. Run the application: ./gradlew bootRun --args="--spring.profiles.active=local"
+
+🧪 Testing:
+- Unit tests: ./gradlew test
+- Integration tests: ./gradlew integrationTest
+- Architecture tests: ./gradlew architectureTest
+
+📚 Documentation:
+- View your ADRs: docs/adr/ (create new ones using unused numbers as needed)
+- API docs: http://localhost:8080/swagger-ui.html (when running)
+- Actuator endpoints: http://localhost:8080/actuator
+
+⚙️ Configuration:
+- Local environment: ../local-config/.env
+- Application config: src/main/resources/application-local.yaml
+
+📝 TODO for your project:
+- Replace example domain models with your business entities
+- Implement your specific business logic
+- Add authentication/authorization rules
+- Configure external service URLs in .env file
+- Set up CI/CD pipeline
+- Create new ADRs as needed using the next unused number
+```
+
+Architecture Selection Decision Tree
+-----------------------------------
+To help agents make informed recommendations, use this decision tree:
+
+**Choose LAYERED when:**
+- Simple CRUD operations dominate
+- Rapid prototyping is needed
+- Team is new to advanced architectural patterns
+- Business logic is straightforward
+
+**Choose HEXAGONAL when:**
+- Complex business logic with many external dependencies
+- High testability requirements
+- Need to isolate domain from infrastructure concerns
+- Multiple adapters (web, CLI, messaging) required
+
+**Choose ONION when:**
+- Domain-driven design approach
+- Rich domain models with complex business rules
+- Enterprise applications with evolving requirements
+- Strong separation of concerns is critical
+
+**Choose MVC when:**
+- Server-side rendered web applications
+- Traditional web development patterns preferred
+- Simple presentation logic
+- Thymeleaf or similar templating engines used
+
+**Choose MODULITH when:**
+- Large application that could be multiple services
+- Want to maintain deployment simplicity
+- Need clear module boundaries within a monolith
+- Planning future microservices extraction
 
 Example questions the agent should present to the user (verbatim)
 -----------------------------------------------------------------
@@ -206,6 +486,20 @@ Example questions the agent should present to the user (verbatim)
 3. "What is the artifact/module name for the new project?"
 4. "Which persistence technology do you want (Mongo, JPA/Hibernate, none)?"
 5. "List any external HTTP services you want a Feign client scaffolded for (name + property key for URL)."
+
+Template Responses for Common Scenarios
+--------------------------------------
+**For simple business applications:**
+"Based on your requirements for a straightforward CRUD application, I recommend the **layered architecture**. This provides clear separation between presentation, business, and data layers while remaining simple to understand and maintain."
+
+**For complex domain logic:**
+"Given the complexity of your business rules and the need for high testability, I suggest the **hexagonal architecture**. This will allow you to isolate your core business logic from external dependencies and make testing much easier."
+
+**For enterprise applications:**
+"For enterprise-grade applications with rich domain models, the **onion architecture** is ideal. It enforces dependency inversion and keeps your domain logic completely isolated from infrastructure concerns."
+
+**For web applications with server-side rendering:**
+"Since you're building a web application with server-side rendering, the **MVC architecture** is the most appropriate choice. It provides the traditional web development patterns you'll need."
 
 Reporting expectations
 ----------------------

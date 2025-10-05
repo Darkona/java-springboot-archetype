@@ -1,4 +1,4 @@
-package com.archetype.mvc
+﻿package com.archetype.mvc
 
 import com.archetype.mvc.controller.PokedexController
 import com.archetype.mvc.model.SpeciesOverview

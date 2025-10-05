@@ -1,4 +1,4 @@
-package com.archetype.onion.presentation.rest;
+﻿package com.archetype.onion.presentation.rest;
 
 import com.archetype.onion.application.ports.in.TrainerUseCase;
 import com.archetype.onion.domain.model.PokemonOwnership;
@@ -11,14 +11,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 /**
  * REST controller for trainer operations in the onion architecture.
  * Presentation layer component that delegates to the application layer through ports.
+ * Follows ADR 0015 (Prefer Spring annotations over ResponseEntity) for clean controller design.
  */
 @RestController
 @RequestMapping("/api/trainers")
@@ -31,53 +32,56 @@ public class TrainerController {
     private final TrainerMapper mapper;
     
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new trainer")
-    public ResponseEntity<TrainerDTO> createTrainer(@RequestBody TrainerDTO trainerDTO) {
+    public TrainerDTO createTrainer(@RequestBody TrainerDTO trainerDTO) {
         try {
             Trainer trainer = mapper.toDomain(trainerDTO);
             Trainer created = trainerUseCase.createTrainer(trainer);
-            return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDTO(created));
+            return mapper.toDTO(created);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid trainer data");
         }
     }
     
     @PostMapping("/{trainerId}/pokemon")
     @Operation(summary = "Add a Pokemon to a trainer's collection")
-    public ResponseEntity<TrainerDTO> addPokemon(
+    public TrainerDTO addPokemon(
             @PathVariable String trainerId,
             @RequestBody PokemonOwnershipDTO ownershipDTO) {
         try {
             PokemonOwnership ownership = mapper.toDomain(ownershipDTO);
             Trainer updated = trainerUseCase.addPokemonToTrainer(trainerId, ownership);
-            return ResponseEntity.ok(mapper.toDTO(updated));
+            return mapper.toDTO(updated);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trainer not found: " + trainerId);
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Pokemon already assigned to trainer");
         }
     }
     
     @GetMapping("/{trainerId}")
     @Operation(summary = "Get a trainer by ID")
-    public ResponseEntity<TrainerDTO> getTrainer(@PathVariable String trainerId) {
+    public TrainerDTO getTrainer(@PathVariable String trainerId) {
         return trainerUseCase.getTrainer(trainerId)
             .map(mapper::toDTO)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trainer not found: " + trainerId));
     }
     
     @GetMapping
     @Operation(summary = "List all trainers")
-    public ResponseEntity<List<TrainerDTO>> listTrainers() {
+    public List<TrainerDTO> listTrainers() {
         List<Trainer> trainers = trainerUseCase.listTrainers();
-        return ResponseEntity.ok(mapper.toDTOList(trainers));
+        return mapper.toDTOList(trainers);
     }
     
     @DeleteMapping("/{trainerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a trainer")
-    public ResponseEntity<Void> deleteTrainer(@PathVariable String trainerId) {
+    public void deleteTrainer(@PathVariable String trainerId) {
         boolean deleted = trainerUseCase.deleteTrainer(trainerId);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trainer not found: " + trainerId);
+        }
     }
 }

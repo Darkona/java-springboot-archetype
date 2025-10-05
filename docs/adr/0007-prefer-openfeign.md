@@ -57,8 +57,8 @@ Ensure dependency management BOM imports (Spring Cloud) are configured in build.
 2. Enable Feign clients in configuration:
 ```java
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.skeletor")
-public class SkeletorApplication { ... }
+@EnableFeignClients(basePackages = "com.archetype")
+public class ArchetypeApplication { ... }
 ```
 
 3. Define a typed Feign client:
@@ -73,25 +73,31 @@ public interface PokemonClient {
 }
 ```
 
-4. Use a mapper at the adapter boundary:
+4. Organize client components in encapsulated packages:
+- Place all client-related code under `clients.<service>` package (e.g., `clients.pokemon`)
+- Include: client interface, DTOs, mappers, configuration, error decoders, and service classes
+- Keep client service classes (`*ClientService`) in the same package to encapsulate usage patterns
+- This encapsulation makes it easier to mock entire client modules and maintain clear boundaries
+
+5. Use a mapper at the adapter boundary:
 - Map incoming domain model or DTO to the Feign client DTO and vice versa. Keep mapping code separate (MapStruct preferred, per ADR 0002).
 
-5. Configure shared aspects centrally:
+6. Configure shared aspects centrally:
 - Interceptors (add auth headers)
 - Error decoder to translate HTTP errors into domain or application exceptions
 - Timeouts and connection pool settings via properties
 - Tracing and metrics (OpenTelemetry / Micrometer)
 
-6. Error handling / fallbacks:
+7. Error handling / fallbacks:
 - Prefer explicit error decoding and domain-specific exceptions rather than blind fallbacks.
 - If fallback behavior is required, provide an explicit fallback implementation bean and document the behavior. Consider resilience patterns (resilience4j) for retries/circuit-breakers and keep those concerns configurable via properties.
 
-7. Testing and stubbing:
+8. Testing and stubbing:
 - Unit tests: mock the Feign interfaces.
 - Integration / contract tests: use WireMock or contract-based tests to stub remote services.
 - For local development, consider a property profile that points Feign clients at local stubs.
 
-8. Security:
+9. Security:
 - Centralize authentication in a request interceptor that adds Authorization headers.
 - Never log full credentials; run request/response bodies through the project's Redactor/SafeLogger per ADR 0005.
 

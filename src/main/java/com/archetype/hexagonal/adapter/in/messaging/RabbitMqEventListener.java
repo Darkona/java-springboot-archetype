@@ -1,4 +1,4 @@
-package com.archetype.hexagonal.adapter.in.messaging;
+﻿package com.archetype.hexagonal.adapter.in.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
