@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pokedex - Species List</title>
-  <link rel="stylesheet" th:href="@{/pokedex/css/pokedex.css}" />
+    <meta charset="UTF-8"/>
+    <title>Pokedex - Species List</title>
+    <link rel="stylesheet" th:href="@{/pokedex/css/pokedex.css}"/>
 </head>
 <body>
-  <header>
+<header>
     <h1>Pokedex</h1>
     <p>Species list (read-only)</p>
-  </header>
+</header>
 
-  <main>
+<main>
     <section>
-      <ul>
-        <!-- Model: pokemons -> List<com.archetype.mvc.model.SpeciesOverview> -->
-        <li th:each="p : ${pokemons}">
-          <a th:href="@{|/pokedex/${p.id}|}">
-            <strong th:text="${p.name}">Pokemon Name</strong>
-          </a>
-          <span> — </span>
-          <span th:text="${#lists.isEmpty(p.types) ? 'Unknown' : p.types.join(', ')}">types</span>
-        </li>
-      </ul>
+        <ul>
+            <!-- Model: pokemons -> List<com.archetype.mvc.model.SpeciesOverview> -->
+            <li th:each="p : ${pokemons}">
+                <a th:href="@{|/pokedex/${p.id}|}">
+                    <strong th:text="${p.name}">Pokemon Name</strong>
+                </a>
+                <span> — </span>
+                <span th:text="${#lists.isEmpty(p.types) ? 'Unknown' : p.types.join(', ')}">types</span>
+            </li>
+        </ul>
 
-      <div th:if="${#lists.isEmpty(pokemons)}">
-        <em>No species available.</em>
-      </div>
+        <div th:if="${#lists.isEmpty(pokemons)}">
+            <em>No species available.</em>
+        </div>
     </section>
-  </main>
+</main>
 
-  <footer>
+<footer>
     <small>Skeleton Pokedex example — read-only</small>
-  </footer>
+</footer>
 </body>
 </html>

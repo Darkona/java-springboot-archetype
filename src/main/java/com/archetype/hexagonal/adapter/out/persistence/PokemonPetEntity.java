@@ -1,12 +1,13 @@
 ﻿package com.archetype.hexagonal.adapter.out.persistence;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

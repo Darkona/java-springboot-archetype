@@ -1,8 +1,8 @@
 ﻿package com.archetype.hexagonal.adapter.out.persistence;
 
+import com.archetype.hexagonal.adapter.out.mapper.PokemonPersistenceMapper;
 import com.archetype.hexagonal.application.port.out.PokemonRepositoryPort;
 import com.archetype.hexagonal.domain.model.PokemonPet;
-import com.archetype.hexagonal.adapter.out.mapper.PokemonPersistenceMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,9 +37,9 @@ public class PostgresPokemonAdapter implements PokemonRepositoryPort {
     @Override
     public List<PokemonPet> findAvailable() {
         return jpaRepository.findByAvailableTrue()
-                .stream()
-                .map(PokemonPersistenceMapper::toDomain)
-                .collect(Collectors.toList());
+                            .stream()
+                            .map(PokemonPersistenceMapper::toDomain)
+                            .collect(Collectors.toList());
     }
 }
 

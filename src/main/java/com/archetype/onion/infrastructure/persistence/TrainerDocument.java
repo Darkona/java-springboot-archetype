@@ -21,18 +21,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainerDocument {
-    
+
     @Id
     private String id;
     private String name;
     private Integer badges;
-    
+
     @Builder.Default
     private List<PokemonOwnershipDocument> ownedPokemons = new ArrayList<>();
-    
+
     private Instant createdAt;
     private Instant updatedAt;
-    
+
     /**
      * Embedded document for Pokemon ownership.
      */

@@ -13,27 +13,27 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface TrainerMapper {
-    
+
     /**
      * Convert Trainer domain model to DTO.
      */
     TrainerDTO toDTO(Trainer trainer);
-    
+
     /**
      * Convert Trainer DTO to domain model.
      */
     Trainer toDomain(TrainerDTO dto);
-    
+
     /**
      * Convert list of Trainer domain models to DTOs.
      */
     List<TrainerDTO> toDTOList(List<Trainer> trainers);
-    
+
     /**
      * Convert PokemonOwnership domain model to DTO.
      */
     PokemonOwnershipDTO toDTO(PokemonOwnership ownership);
-    
+
     /**
      * Convert PokemonOwnership DTO to domain model.
      */

@@ -4,7 +4,6 @@ import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.ErrorResponse;
 
 /**
  * Custom error decoder for Pokemon Feign client.
@@ -19,30 +18,30 @@ public class PokemonClientErrorDecoder implements ErrorDecoder {
     public Exception decode(String methodKey, Response response) {
         HttpStatus status = HttpStatus.valueOf(response.status());
         String url = response.request().url();
-        
-        log.warn("Pokemon client error - Method: {}, URL: {}, Status: {}", 
+
+        log.warn("Pokemon client error - Method: {}, URL: {}, Status: {}",
                 methodKey, url, status);
 
         switch (status) {
             case NOT_FOUND:
                 return new PokemonClientNotFoundException(
-                    String.format("Pokemon not found for request: %s", methodKey)
+                        String.format("Pokemon not found for request: %s", methodKey)
                 );
             case BAD_REQUEST:
                 return new PokemonClientValidationException(
-                    String.format("Invalid request for: %s", methodKey)
+                        String.format("Invalid request for: %s", methodKey)
                 );
             case UNAUTHORIZED:
                 return new PokemonClientAuthenticationException(
-                    "Authentication failed for Pokemon service"
+                        "Authentication failed for Pokemon service"
                 );
             case FORBIDDEN:
                 return new PokemonClientAuthorizationException(
-                    "Access denied for Pokemon service"
+                        "Access denied for Pokemon service"
                 );
             case INTERNAL_SERVER_ERROR:
                 return new PokemonClientServiceException(
-                    "Pokemon service internal error"
+                        "Pokemon service internal error"
                 );
             default:
                 return defaultErrorDecoder.decode(methodKey, response);

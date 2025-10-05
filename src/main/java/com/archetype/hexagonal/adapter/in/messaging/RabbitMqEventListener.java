@@ -2,23 +2,23 @@
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 /**
  * Simple test-only RabbitMQ listener used by the integration tests to verify
  * that events were published to the petshop.events exchange and received.
- *
+ * <p>
  * Binds a temporary queue to the configured exchange and listens to the
  * petshop.pokemon.* routing keys used by the publisher.
- *
+ * <p>
  * The queue and exchange names are configurable via properties:
- *  - petshop.events.exchange (default: petshop.events)
- *  - petshop.events.queue (default: petshop.events.test.queue)
- *
+ * - petshop.events.exchange (default: petshop.events)
+ * - petshop.events.queue (default: petshop.events.test.queue)
+ * <p>
  * This listener is intentionally minimal and only logs received messages.
  */
 @Component

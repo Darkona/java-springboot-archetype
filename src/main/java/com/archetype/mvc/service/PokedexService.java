@@ -25,9 +25,9 @@ public class PokedexService {
 
     public List<SpeciesOverview> findAllSpecies() {
         return repository.findAll()
-                .stream()
-                .map(this::toOverview)
-                .collect(Collectors.toList());
+                         .stream()
+                         .map(this::toOverview)
+                         .collect(Collectors.toList());
     }
 
     public Optional<SpeciesOverview> findSpeciesById(UUID id) {

@@ -5,10 +5,10 @@ import com.archetype.mvc.service.PokedexService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -34,7 +34,7 @@ public class PokedexController {
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") UUID id, Model model) {
         SpeciesOverview overview = service.findSpeciesById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Species not found: " + id));
+                                          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Species not found: " + id));
         model.addAttribute("pokemon", overview);
         return "pokedex/detail";
     }

@@ -7,15 +7,15 @@ import java.lang.reflect.Parameter;
 /**
  * Simple generator that inspects a compiled controller class via reflection and emits
  * a starter *Info interface source for OpenAPI annotations.
- *
+ * <p>
  * Usage:
  * 1) Ensure the project is compiled (gradlew build) so classes exist under build/classes/java/main
  * 2) Run:
- *    java -cp build/classes/java/main;build/resources/main com.archetype.tools.InfoInterfaceGenerator com.archetype.layer.controller.PokemonController [outputDir]
- *
+ * java -cp build/classes/java/main;build/resources/main com.archetype.tools.InfoInterfaceGenerator com.archetype.layer.controller.PokemonController [outputDir]
+ * <p>
  * If outputDir is provided the generated file <ControllerName>Info.java will be written there,
  * otherwise the source is printed to stdout.
- *
+ * <p>
  * Notes:
  * - The generator emits @Operation/@ApiResponse placeholders and method signatures matching the controller.
  * - You should review and add detailed OpenAPI annotations (@Parameter, descriptions, responses) after generation.
@@ -23,7 +23,8 @@ import java.lang.reflect.Parameter;
  */
 public class InfoInterfaceGenerator {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)
+    throws Exception {
         if (args.length == 0) {
             System.err.println("Usage: InfoInterfaceGenerator <fully.qualified.ControllerClass> [outputDir]");
             System.exit(2);

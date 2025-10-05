@@ -28,44 +28,44 @@ public class PokemonResponse {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getTypes() {
-        return types;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public List<String> getTypes() {
+        return types;
+    }
+
     public void setTypes(List<String> types) {
         this.types = types;
+    }
+
+    public boolean isAvailable() {
+        return available;
     }
 
     public void setAvailable(boolean available) {
         this.available = available;
     }
 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
     public void setCreatedAt(Instant createdAt) {

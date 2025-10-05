@@ -19,17 +19,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainerDTO {
-    
+
     private String id;
     private String name;
     private Integer badges;
-    
+
     @Builder.Default
     private List<PokemonOwnershipDTO> ownedPokemons = new ArrayList<>();
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private Instant createdAt;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private Instant updatedAt;
 }

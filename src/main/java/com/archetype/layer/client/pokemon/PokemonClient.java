@@ -5,7 +5,12 @@ import com.archetype.layer.client.pokemon.dto.PokemonClientDetails;
 import com.archetype.layer.client.pokemon.dto.PokemonClientOverview;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,14 +18,14 @@ import java.util.UUID;
 /**
  * OpenFeign client for Pokemon external service.
  * Demonstrates how to create a client for the same endpoints as our controller.
- * 
+ * <p>
  * Uses client-specific DTOs separate from domain DTOs to maintain clear adapter boundaries
  * as per ADR 0007 (Prefer OpenFeign) and ADR 0002 (Domain separation and mapping).
  */
 @FeignClient(
-    name = "pokemon-service",
-    url = "${clients.pokemon.url:http://localhost:8080}",
-    configuration = PokemonClientConfiguration.class
+        name = "pokemon-service",
+        url = "${clients.pokemon.url:http://localhost:8080}",
+        configuration = PokemonClientConfiguration.class
 )
 public interface PokemonClient {
 

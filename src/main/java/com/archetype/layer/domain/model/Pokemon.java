@@ -10,18 +10,15 @@ import java.util.Random;
 public class Pokemon {
 
     public static Random rand = new Random();
-
-    Species species;
-    String name;
-    int level;
-
     final int attackIV;
     final int defenseIV;
     final int speedIV;
     final int specialIV;
     final int hpIV;
     final boolean shiny;
-
+    Species species;
+    String name;
+    int level;
     long maxHp;
     MoveSet moveSet = new MoveSet();
 

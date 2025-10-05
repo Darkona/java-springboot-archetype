@@ -2,9 +2,9 @@
 
 import com.archetype.hexagonal.application.port.out.PokemonRepositoryPort;
 import com.archetype.hexagonal.domain.model.PokemonPet;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.context.annotation.Primary;
 
 import java.util.List;
 import java.util.Optional;

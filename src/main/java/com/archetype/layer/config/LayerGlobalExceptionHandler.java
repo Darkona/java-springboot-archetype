@@ -1,6 +1,10 @@
 package com.archetype.layer.config;
 
-import com.archetype.layer.domain.exception.*;
+import com.archetype.layer.domain.exception.LayerDomainException;
+import com.archetype.layer.domain.exception.PokemonAlreadyExistsException;
+import com.archetype.layer.domain.exception.PokemonNotFoundException;
+import com.archetype.layer.domain.exception.PokemonServiceException;
+import com.archetype.layer.domain.exception.PokemonValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +29,11 @@ import java.util.stream.Collectors;
 
 /**
  * Global exception handler for the layer module.
- * 
+ * <p>
  * Provides RFC 9457 compliant error responses with internationalization support.
  * Handles both Bean Validation (@Valid) errors and domain-specific exceptions.
- * 
- * Follows ADR 0015 (Spring annotations over ResponseEntity) and 
+ * <p>
+ * Follows ADR 0015 (Spring annotations over ResponseEntity) and
  * ADR 0016 (Exception handling strategy).
  */
 @ControllerAdvice
@@ -37,31 +41,30 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class LayerGlobalExceptionHandler {
-    
-    private final MessageSource messageSource;
-    
+
     private static final String PROBLEM_BASE_URL = "https://example.com/problems";
-    
+    private final MessageSource messageSource;
+
     /**
      * Build a RFC 9457 compliant ProblemDetail for domain exceptions.
      * Centralizes the common response building logic to reduce duplication.
-     * 
+     * <p>
      * IMPORTANT: This method NEVER includes stack traces or internal details in the response.
      * Only localized user-friendly messages are exposed via the API.
      */
     private ProblemDetail buildDomainProblemDetail(
-            LayerDomainException ex, 
-            HttpServletRequest request, 
-            Locale locale, 
-            HttpStatus status, 
+            LayerDomainException ex,
+            HttpServletRequest request,
+            Locale locale,
+            HttpStatus status,
             String problemType,
             String reasonKey) {
-        
+
         // Only include localized messages - NO internal details or stack traces
         String detail = messageSource.getMessage(ex.getErrorCode(), ex.getMessageArgs(), locale);
         String reason = messageSource.getMessage(reasonKey, null, locale);
         String title = messageSource.getMessage("http." + status.value() + ".title", null, locale);
-        
+
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
         problem.setTitle(title);
         problem.setType(URI.create(PROBLEM_BASE_URL + "/" + problemType));
@@ -69,10 +72,10 @@ public class LayerGlobalExceptionHandler {
         problem.setProperty("timestamp", Instant.now());
         problem.setProperty("errorCode", ex.getReasonCode());
         problem.setProperty("reason", reason);
-        
+
         return problem;
     }
-    
+
     /**
      * Log domain exceptions with consistent format and appropriate log level.
      * Stack traces are ONLY logged internally, NEVER exposed in API responses.
@@ -80,34 +83,34 @@ public class LayerGlobalExceptionHandler {
     private void logDomainException(LayerDomainException ex, HttpServletRequest request, boolean logAsError) {
         String message = "{} exception: errorCode={}, args={}, request={}";
         Object[] args = {
-            ex.getClass().getSimpleName(), 
-            ex.getErrorCode(), 
-            java.util.Arrays.toString(ex.getMessageArgs()), 
-            request.getRequestURI()
+                ex.getClass().getSimpleName(),
+                ex.getErrorCode(),
+                java.util.Arrays.toString(ex.getMessageArgs()),
+                request.getRequestURI()
         };
-        
+
         if (logAsError) {
             log.error(message, args, ex); // Include stack trace in LOGS ONLY for service errors
         } else {
             log.warn(message, args); // No stack trace for client errors
         }
     }
-    
+
     /**
      * Handle Pokemon not found exceptions.
      * Results in HTTP 404 Not Found.
      */
     @ExceptionHandler(PokemonNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ProblemDetail handlePokemonNotFound(PokemonNotFoundException ex, 
+    public ProblemDetail handlePokemonNotFound(PokemonNotFoundException ex,
                                                HttpServletRequest request,
                                                Locale locale) {
-        
+
         logDomainException(ex, request, false);
-        return buildDomainProblemDetail(ex, request, locale, HttpStatus.NOT_FOUND, 
-                                       "pokemon-not-found", ex.getErrorCode() + ".reason");
+        return buildDomainProblemDetail(ex, request, locale, HttpStatus.NOT_FOUND,
+                "pokemon-not-found", ex.getErrorCode() + ".reason");
     }
-    
+
     /**
      * Handle Pokemon already exists exceptions.
      * Results in HTTP 409 Conflict.
@@ -117,12 +120,12 @@ public class LayerGlobalExceptionHandler {
     public ProblemDetail handlePokemonAlreadyExists(PokemonAlreadyExistsException ex,
                                                     HttpServletRequest request,
                                                     Locale locale) {
-        
+
         logDomainException(ex, request, false);
-        return buildDomainProblemDetail(ex, request, locale, HttpStatus.CONFLICT, 
-                                       "pokemon-already-exists", "pokemon.already-exists.reason");
+        return buildDomainProblemDetail(ex, request, locale, HttpStatus.CONFLICT,
+                "pokemon-already-exists", "pokemon.already-exists.reason");
     }
-    
+
     /**
      * Handle Pokemon business validation exceptions.
      * Results in HTTP 422 Unprocessable Entity.
@@ -132,12 +135,12 @@ public class LayerGlobalExceptionHandler {
     public ProblemDetail handlePokemonValidation(PokemonValidationException ex,
                                                  HttpServletRequest request,
                                                  Locale locale) {
-        
+
         logDomainException(ex, request, false);
-        return buildDomainProblemDetail(ex, request, locale, HttpStatus.UNPROCESSABLE_ENTITY, 
-                                       "pokemon-validation-error", "pokemon.validation.reason");
+        return buildDomainProblemDetail(ex, request, locale, HttpStatus.UNPROCESSABLE_ENTITY,
+                "pokemon-validation-error", "pokemon.validation.reason");
     }
-    
+
     /**
      * Handle Pokemon service exceptions.
      * Results in HTTP 500 Internal Server Error.
@@ -147,12 +150,12 @@ public class LayerGlobalExceptionHandler {
     public ProblemDetail handlePokemonService(PokemonServiceException ex,
                                               HttpServletRequest request,
                                               Locale locale) {
-        
+
         logDomainException(ex, request, true); // Log as ERROR (with stack trace in logs only)
-        return buildDomainProblemDetail(ex, request, locale, HttpStatus.INTERNAL_SERVER_ERROR, 
-                                       "pokemon-service-error", "pokemon.service.reason");
+        return buildDomainProblemDetail(ex, request, locale, HttpStatus.INTERNAL_SERVER_ERROR,
+                "pokemon-service-error", "pokemon.service.reason");
     }
-    
+
     /**
      * Handle Bean Validation errors (@Valid annotations).
      * Results in HTTP 400 Bad Request with detailed field errors.
@@ -160,31 +163,31 @@ public class LayerGlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex,
-                                         HttpServletRequest request,
-                                         Locale locale) {
-        
+                                          HttpServletRequest request,
+                                          Locale locale) {
+
         // Log validation failure
-        log.warn("Validation failed for request: {}, errors: {}", 
+        log.warn("Validation failed for request: {}, errors: {}",
                 request.getRequestURI(), ex.getBindingResult().getFieldErrorCount());
-        
+
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        
+
         // Build detailed validation errors
         List<Map<String, Object>> errors = fieldErrors.stream()
-            .map(error -> {
-                String message = messageSource.getMessage(error, locale);
-                return Map.of(
-                    "field", error.getField(),
-                    "rejectedValue", error.getRejectedValue() != null ? error.getRejectedValue() : "",
-                    "message", message,
-                    "code", error.getCode() != null ? error.getCode() : "validation.error"
-                );
-            })
-            .collect(Collectors.toList());
-        
+                                                      .map(error -> {
+                                                          String message = messageSource.getMessage(error, locale);
+                                                          return Map.of(
+                                                                  "field", error.getField(),
+                                                                  "rejectedValue", error.getRejectedValue() != null ? error.getRejectedValue() : "",
+                                                                  "message", message,
+                                                                  "code", error.getCode() != null ? error.getCode() : "validation.error"
+                                                          );
+                                                      })
+                                                      .collect(Collectors.toList());
+
         String title = messageSource.getMessage("http.400.title", null, locale);
         String detail = messageSource.getMessage("validation.multiple-errors", new Object[]{errors.size()}, locale);
-        
+
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
         problem.setTitle(title);
         problem.setType(URI.create(PROBLEM_BASE_URL + "/validation-error"));
@@ -192,10 +195,10 @@ public class LayerGlobalExceptionHandler {
         problem.setProperty("timestamp", Instant.now());
         problem.setProperty("errorCode", "VALIDATION_ERROR");
         problem.setProperty("errors", errors);
-        
+
         return problem;
     }
-    
+
     /**
      * Handle method argument type mismatch errors (e.g., invalid UUID format).
      * Results in HTTP 400 Bad Request.
@@ -203,15 +206,15 @@ public class LayerGlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex,
-                                           HttpServletRequest request,
-                                           Locale locale) {
-        
-        log.warn("Type mismatch error: parameter={}, value={}, request={}", 
+                                            HttpServletRequest request,
+                                            Locale locale) {
+
+        log.warn("Type mismatch error: parameter={}, value={}, request={}",
                 ex.getName(), ex.getValue(), request.getRequestURI());
-        
+
         String title = messageSource.getMessage("http.400.title", null, locale);
         String detail = String.format("Invalid value '%s' for parameter '%s'", ex.getValue(), ex.getName());
-        
+
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
         problem.setTitle(title);
         problem.setType(URI.create(PROBLEM_BASE_URL + "/type-mismatch"));
@@ -220,10 +223,10 @@ public class LayerGlobalExceptionHandler {
         problem.setProperty("errorCode", "TYPE_MISMATCH");
         problem.setProperty("parameter", ex.getName());
         problem.setProperty("rejectedValue", ex.getValue());
-        
+
         return problem;
     }
-    
+
     /**
      * Handle any other layer domain exceptions.
      * Results in HTTP 500 Internal Server Error as fallback.
@@ -231,14 +234,14 @@ public class LayerGlobalExceptionHandler {
     @ExceptionHandler(LayerDomainException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleLayerDomain(LayerDomainException ex,
-                                          HttpServletRequest request,
-                                          Locale locale) {
-        
+                                           HttpServletRequest request,
+                                           Locale locale) {
+
         logDomainException(ex, request, true); // Log as ERROR (with stack trace in logs only)
-        
+
         // Fallback to generic reason for unhandled domain exceptions
         String reasonKey = ex.getErrorCode() + ".reason";
-        return buildDomainProblemDetail(ex, request, locale, HttpStatus.INTERNAL_SERVER_ERROR, 
-                                       "layer-domain-error", reasonKey);
+        return buildDomainProblemDetail(ex, request, locale, HttpStatus.INTERNAL_SERVER_ERROR,
+                "layer-domain-error", reasonKey);
     }
 }

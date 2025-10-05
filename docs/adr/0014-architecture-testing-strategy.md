@@ -86,6 +86,7 @@ void persistence_should_not_depend_on_upper_layers() {
 ## Examples
 ### Good - Smart Internal Validation
 ```java
+
 // Only validates internal layer dependencies, ignores Spring Framework, etc.
 noClasses()
     .that().resideInAPackage("..layer.persistence..")
@@ -106,3 +107,4 @@ noClasses()
         "java.util..", "org.slf4j..", // ... endless list
     )
     .check(classes);
+```

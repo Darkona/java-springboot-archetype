@@ -10,7 +10,7 @@ public record Species(int nationalId,
                       List<EggGroup> eggGroups,
                       int baseHp,
                       List<Species> evolutions,
-                      List<Tuple<Integer, Move>> moves ) {
+                      List<Tuple<Integer, Move>> moves) {
 
 
 }

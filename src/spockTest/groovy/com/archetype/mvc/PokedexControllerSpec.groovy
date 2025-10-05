@@ -3,10 +3,10 @@
 import com.archetype.mvc.controller.PokedexController
 import com.archetype.mvc.model.SpeciesOverview
 import com.archetype.mvc.service.PokedexService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -34,9 +34,9 @@ class PokedexControllerSpec extends Specification {
 
         then:
         result.andExpect(status().isOk())
-              .andExpect(view().name("pokedex/list"))
-              .andExpect(model().attributeExists("pokemons"))
-              .andExpect(model().attribute("pokemons", [overview]))
+                .andExpect(view().name("pokedex/list"))
+                .andExpect(model().attributeExists("pokemons"))
+                .andExpect(model().attribute("pokemons", [overview]))
     }
 
     @Unroll
@@ -51,9 +51,9 @@ class PokedexControllerSpec extends Specification {
 
         then:
         result.andExpect(status().isOk())
-              .andExpect(view().name("pokedex/detail"))
-              .andExpect(model().attributeExists("pokemon"))
-              .andExpect(model().attribute("pokemon", overview))
+                .andExpect(view().name("pokedex/detail"))
+                .andExpect(model().attributeExists("pokemon"))
+                .andExpect(model().attribute("pokemon", overview))
 
         where:
         // single iteration, kept for didactic @Unroll example

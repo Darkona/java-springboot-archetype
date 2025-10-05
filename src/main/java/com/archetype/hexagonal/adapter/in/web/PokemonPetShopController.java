@@ -1,14 +1,20 @@
 ﻿package com.archetype.hexagonal.adapter.in.web;
 
-import com.archetype.hexagonal.application.service.PokemonPetShopService;
 import com.archetype.hexagonal.adapter.in.web.dto.PokemonCreateRequest;
 import com.archetype.hexagonal.adapter.in.web.dto.PokemonResponse;
 import com.archetype.hexagonal.application.port.in.AdoptPokemon;
 import com.archetype.hexagonal.application.port.in.ListAvailablePokemons;
 import com.archetype.hexagonal.application.port.in.RegisterPokemon;
+import com.archetype.hexagonal.application.service.PokemonPetShopService;
 import com.archetype.hexagonal.domain.model.PokemonPet;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +24,10 @@ import java.util.stream.Collectors;
  * REST controller (adapter-in) for the Petshop hexagonal module.
  * Follows ADR 0015 (Prefer Spring annotations over ResponseEntity) for clean controller design.
  * Endpoints:
- *  - GET  /api/hexagonal/pokemon        -> list available
- *  - POST /api/hexagonal/pokemon        -> register new pokemon
- *  - POST /api/hexagonal/pokemon/{id}/adopt -> adopt pokemon (body: { "ownerId": "..." })
- *  - POST /api/hexagonal/pokemon/{id}/return -> return pokemon
+ * - GET  /api/hexagonal/pokemon        -> list available
+ * - POST /api/hexagonal/pokemon        -> register new pokemon
+ * - POST /api/hexagonal/pokemon/{id}/adopt -> adopt pokemon (body: { "ownerId": "..." })
+ * - POST /api/hexagonal/pokemon/{id}/return -> return pokemon
  */
 @RestController
 @RequestMapping("/api/hexagonal/pokemon")
@@ -83,10 +89,10 @@ public class PokemonPetShopController {
 
         public AdoptRequest() {}
 
-        public AdoptRequest(String ownerId) { this.ownerId = ownerId; }
+        public AdoptRequest(String ownerId) {this.ownerId = ownerId;}
 
-        public String getOwnerId() { return ownerId; }
+        public String getOwnerId() {return ownerId;}
 
-        public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
+        public void setOwnerId(String ownerId) {this.ownerId = ownerId;}
     }
 }

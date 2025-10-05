@@ -10,7 +10,7 @@ import java.util.Optional;
  * This interface defines the contract for the repository adapter.
  */
 public interface TrainerRepositoryPort {
-    
+
     /**
      * Save a trainer.
      *
@@ -18,7 +18,7 @@ public interface TrainerRepositoryPort {
      * @return the saved trainer
      */
     Trainer save(Trainer trainer);
-    
+
     /**
      * Find a trainer by ID.
      *
@@ -26,14 +26,14 @@ public interface TrainerRepositoryPort {
      * @return the trainer if found
      */
     Optional<Trainer> findById(String trainerId);
-    
+
     /**
      * Find all trainers.
      *
      * @return list of all trainers
      */
     List<Trainer> findAll();
-    
+
     /**
      * Delete a trainer by ID.
      *
@@ -41,7 +41,7 @@ public interface TrainerRepositoryPort {
      * @return true if deleted, false if not found
      */
     boolean deleteById(String trainerId);
-    
+
     /**
      * Check if a trainer exists by ID.
      *

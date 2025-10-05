@@ -13,5 +13,6 @@ public record PokemonDocument(@MongoId int nationalId,
                               Integer baseExperience,
                               Integer height,
                               Integer weight
-) { }
+) {
+}
 

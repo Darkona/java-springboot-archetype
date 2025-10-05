@@ -1,7 +1,11 @@
 package com.archetype.layer.client.pokeapi.mapper;
 
 import com.archetype.layer.client.pokeapi.dto.PokeApiPokemon;
-import com.archetype.layer.domain.model.*;
+import com.archetype.layer.domain.model.Ability;
+import com.archetype.layer.domain.model.Move;
+import com.archetype.layer.domain.model.Pokemon;
+import com.archetype.layer.domain.model.Species;
+import com.archetype.layer.domain.model.Type;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -47,11 +51,11 @@ public interface PokeApiMapper {
             return List.of();
         }
         return pokeApiTypes.stream()
-                .map(pokeApiType -> new Type(
-                        pokeApiType.type().name(),
-                        pokeApiType.slot()
-                ))
-                .collect(Collectors.toList());
+                           .map(pokeApiType -> new Type(
+                                   pokeApiType.type().name(),
+                                   pokeApiType.slot()
+                           ))
+                           .collect(Collectors.toList());
     }
 
     /**
@@ -62,12 +66,12 @@ public interface PokeApiMapper {
             return List.of();
         }
         return pokeApiAbilities.stream()
-                .map(pokeApiAbility -> new Ability(
-                        pokeApiAbility.ability().name(),
-                        pokeApiAbility.isHidden(),
-                        pokeApiAbility.slot()
-                ))
-                .collect(Collectors.toList());
+                               .map(pokeApiAbility -> new Ability(
+                                       pokeApiAbility.ability().name(),
+                                       pokeApiAbility.isHidden(),
+                                       pokeApiAbility.slot()
+                               ))
+                               .collect(Collectors.toList());
     }
 
     /**
@@ -79,14 +83,14 @@ public interface PokeApiMapper {
             return List.of();
         }
         return pokeApiMoves.stream()
-                .limit(4) // Limit to first 4 moves
-                .map(pokeApiMove -> new Move(
-                        pokeApiMove.move().name(),
-                        50,   // Default power
-                        100,  // Default accuracy
-                        20    // Default PP
-                ))
-                .collect(Collectors.toList());
+                           .limit(4) // Limit to first 4 moves
+                           .map(pokeApiMove -> new Move(
+                                   pokeApiMove.move().name(),
+                                   50,   // Default power
+                                   100,  // Default accuracy
+                                   20    // Default PP
+                           ))
+                           .collect(Collectors.toList());
     }
 
     /**
@@ -110,9 +114,9 @@ public interface PokeApiMapper {
             return 0;
         }
         return stats.stream()
-                .filter(stat -> statName.equals(stat.stat().name()))
-                .findFirst()
-                .map(PokeApiPokemon.PokeApiStat::baseStat)
-                .orElse(0);
+                    .filter(stat -> statName.equals(stat.stat().name()))
+                    .findFirst()
+                    .map(PokeApiPokemon.PokeApiStat::baseStat)
+                    .orElse(0);
     }
 }

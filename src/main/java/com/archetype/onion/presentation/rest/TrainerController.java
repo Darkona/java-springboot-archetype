@@ -27,10 +27,10 @@ import java.util.List;
 @Logged
 @Tag(name = "Trainer", description = "Pokemon Trainer management API")
 public class TrainerController {
-    
+
     private final TrainerUseCase trainerUseCase;
     private final TrainerMapper mapper;
-    
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new trainer")
@@ -43,7 +43,7 @@ public class TrainerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid trainer data");
         }
     }
-    
+
     @PostMapping("/{trainerId}/pokemon")
     @Operation(summary = "Add a Pokemon to a trainer's collection")
     public TrainerDTO addPokemon(
@@ -59,22 +59,22 @@ public class TrainerController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Pokemon already assigned to trainer");
         }
     }
-    
+
     @GetMapping("/{trainerId}")
     @Operation(summary = "Get a trainer by ID")
     public TrainerDTO getTrainer(@PathVariable String trainerId) {
         return trainerUseCase.getTrainer(trainerId)
-            .map(mapper::toDTO)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trainer not found: " + trainerId));
+                             .map(mapper::toDTO)
+                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trainer not found: " + trainerId));
     }
-    
+
     @GetMapping
     @Operation(summary = "List all trainers")
     public List<TrainerDTO> listTrainers() {
         List<Trainer> trainers = trainerUseCase.listTrainers();
         return mapper.toDTOList(trainers);
     }
-    
+
     @DeleteMapping("/{trainerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a trainer")

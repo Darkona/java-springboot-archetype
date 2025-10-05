@@ -16,7 +16,7 @@ public class PokeApiClientErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
-        log.warn("PokeAPI error for method '{}': {} {}", 
+        log.warn("PokeAPI error for method '{}': {} {}",
                 methodKey, response.status(), response.reason());
 
         return switch (response.status()) {

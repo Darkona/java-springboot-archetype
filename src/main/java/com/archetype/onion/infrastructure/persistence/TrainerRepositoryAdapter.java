@@ -19,29 +19,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Logged
 public class TrainerRepositoryAdapter implements TrainerRepositoryPort {
-    
+
     private final TrainerMongoRepository mongoRepository;
-    
+
     @Override
     public Trainer save(Trainer trainer) {
         TrainerDocument document = toDocument(trainer);
         TrainerDocument saved = mongoRepository.save(document);
         return toDomain(saved);
     }
-    
+
     @Override
     public Optional<Trainer> findById(String trainerId) {
         return mongoRepository.findById(trainerId)
-            .map(this::toDomain);
+                              .map(this::toDomain);
     }
-    
+
     @Override
     public List<Trainer> findAll() {
         return mongoRepository.findAll().stream()
-            .map(this::toDomain)
-            .collect(Collectors.toList());
+                              .map(this::toDomain)
+                              .collect(Collectors.toList());
     }
-    
+
     @Override
     public boolean deleteById(String trainerId) {
         if (mongoRepository.existsById(trainerId)) {
@@ -50,53 +50,53 @@ public class TrainerRepositoryAdapter implements TrainerRepositoryPort {
         }
         return false;
     }
-    
+
     @Override
     public boolean existsById(String trainerId) {
         return mongoRepository.existsById(trainerId);
     }
-    
+
     /**
      * Convert domain model to MongoDB document.
      */
     private TrainerDocument toDocument(Trainer trainer) {
         List<TrainerDocument.PokemonOwnershipDocument> ownershipDocs = trainer.getOwnedPokemons().stream()
-            .map(o -> TrainerDocument.PokemonOwnershipDocument.builder()
-                .pokemonId(o.getPokemonId())
-                .nickname(o.getNickname())
-                .acquiredAt(o.getAcquiredAt())
-                .build())
-            .collect(Collectors.toList());
-        
+                                                                              .map(o -> TrainerDocument.PokemonOwnershipDocument.builder()
+                                                                                                                                .pokemonId(o.getPokemonId())
+                                                                                                                                .nickname(o.getNickname())
+                                                                                                                                .acquiredAt(o.getAcquiredAt())
+                                                                                                                                .build())
+                                                                              .collect(Collectors.toList());
+
         return TrainerDocument.builder()
-            .id(trainer.getId())
-            .name(trainer.getName())
-            .badges(trainer.getBadges())
-            .ownedPokemons(ownershipDocs)
-            .createdAt(trainer.getCreatedAt())
-            .updatedAt(trainer.getUpdatedAt())
-            .build();
+                              .id(trainer.getId())
+                              .name(trainer.getName())
+                              .badges(trainer.getBadges())
+                              .ownedPokemons(ownershipDocs)
+                              .createdAt(trainer.getCreatedAt())
+                              .updatedAt(trainer.getUpdatedAt())
+                              .build();
     }
-    
+
     /**
      * Convert MongoDB document to domain model.
      */
     private Trainer toDomain(TrainerDocument document) {
         List<PokemonOwnership> ownerships = document.getOwnedPokemons().stream()
-            .map(o -> PokemonOwnership.builder()
-                .pokemonId(o.getPokemonId())
-                .nickname(o.getNickname())
-                .acquiredAt(o.getAcquiredAt())
-                .build())
-            .collect(Collectors.toList());
-        
+                                                    .map(o -> PokemonOwnership.builder()
+                                                                              .pokemonId(o.getPokemonId())
+                                                                              .nickname(o.getNickname())
+                                                                              .acquiredAt(o.getAcquiredAt())
+                                                                              .build())
+                                                    .collect(Collectors.toList());
+
         return Trainer.builder()
-            .id(document.getId())
-            .name(document.getName())
-            .badges(document.getBadges())
-            .ownedPokemons(ownerships)
-            .createdAt(document.getCreatedAt())
-            .updatedAt(document.getUpdatedAt())
-            .build();
+                      .id(document.getId())
+                      .name(document.getName())
+                      .badges(document.getBadges())
+                      .ownedPokemons(ownerships)
+                      .createdAt(document.getCreatedAt())
+                      .updatedAt(document.getUpdatedAt())
+                      .build();
     }
 }

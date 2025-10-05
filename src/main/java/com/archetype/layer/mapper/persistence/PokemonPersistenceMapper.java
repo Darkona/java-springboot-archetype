@@ -35,15 +35,15 @@ public interface PokemonPersistenceMapper {
         // This would typically involve looking up the full species data
         // For now, create a minimal species with the stored data
         return new Species(
-            document.getNationalId(),
-            document.getSpeciesName(),
-            null, // firstType
-            null, // secondType
-            null, // abilities
-            null, // eggGroups
-            50,   // baseHp
-            null, // evolutions
-            null  // moves
+                document.getNationalId(),
+                document.getSpeciesName(),
+                null, // firstType
+                null, // secondType
+                null, // abilities
+                null, // eggGroups
+                50,   // baseHp
+                null, // evolutions
+                null  // moves
         );
     }
 }

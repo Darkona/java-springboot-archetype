@@ -16,11 +16,11 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PokemonOwnership {
-    
+
     private String pokemonId;
     private String nickname;
     private Instant acquiredAt;
-    
+
     /**
      * Validate Pokemon ownership data.
      *
@@ -30,11 +30,11 @@ public class PokemonOwnership {
         if (pokemonId == null || pokemonId.trim().isEmpty()) {
             throw new IllegalArgumentException("Pokemon ID cannot be empty");
         }
-        
+
         if (nickname == null || nickname.trim().isEmpty()) {
             throw new IllegalArgumentException("Pokemon nickname cannot be empty");
         }
-        
+
         if (nickname.length() > 50) {
             throw new IllegalArgumentException("Pokemon nickname cannot exceed 50 characters");
         }

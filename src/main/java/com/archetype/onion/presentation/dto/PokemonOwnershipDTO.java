@@ -17,10 +17,10 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PokemonOwnershipDTO {
-    
+
     private String pokemonId;
     private String nickname;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private Instant acquiredAt;
 }

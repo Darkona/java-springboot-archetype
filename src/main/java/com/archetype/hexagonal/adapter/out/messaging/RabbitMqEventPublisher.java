@@ -1,14 +1,14 @@
 ﻿package com.archetype.hexagonal.adapter.out.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.archetype.hexagonal.application.port.out.EventPublisherPort;
 import com.archetype.hexagonal.domain.model.PokemonPet;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -17,18 +17,18 @@ import java.util.Map;
 /**
  * Simple RabbitMQ publisher using RabbitTemplate.
  * Publishes small JSON payloads to the petshop.events exchange with routing keys:
- *  - petshop.pokemon.registered
- *  - petshop.pokemon.adopted
- *  - petshop.pokemon.returned
- *
+ * - petshop.pokemon.registered
+ * - petshop.pokemon.adopted
+ * - petshop.pokemon.returned
+ * <p>
  * This implementation is intentionally simple; messages are best-effort.
  */
 @Component
 public class RabbitMqEventPublisher implements EventPublisherPort {
 
+    private static final Logger log = LoggerFactory.getLogger(RabbitMqEventPublisher.class);
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
-    private static final Logger log = LoggerFactory.getLogger(RabbitMqEventPublisher.class);
     @Value("${petshop.events.exchange:petshop.events}")
     private String exchange;
 

@@ -11,7 +11,7 @@ import java.util.Optional;
  * This interface represents the application's entry point for trainer operations.
  */
 public interface TrainerUseCase {
-    
+
     /**
      * Create a new trainer.
      *
@@ -19,7 +19,7 @@ public interface TrainerUseCase {
      * @return the created trainer with generated ID
      */
     Trainer createTrainer(Trainer trainer);
-    
+
     /**
      * Add a Pokemon to a trainer's collection.
      *
@@ -27,10 +27,10 @@ public interface TrainerUseCase {
      * @param ownership the Pokemon ownership details
      * @return the updated trainer
      * @throws IllegalArgumentException if trainer not found
-     * @throws IllegalStateException if trainer already has maximum Pokemon or nickname conflict
+     * @throws IllegalStateException    if trainer already has maximum Pokemon or nickname conflict
      */
     Trainer addPokemonToTrainer(String trainerId, PokemonOwnership ownership);
-    
+
     /**
      * Get a trainer by ID.
      *
@@ -38,14 +38,14 @@ public interface TrainerUseCase {
      * @return the trainer if found
      */
     Optional<Trainer> getTrainer(String trainerId);
-    
+
     /**
      * List all trainers.
      *
      * @return list of all trainers
      */
     List<Trainer> listTrainers();
-    
+
     /**
      * Delete a trainer.
      *

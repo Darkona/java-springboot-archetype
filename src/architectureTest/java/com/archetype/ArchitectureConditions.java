@@ -42,33 +42,6 @@ public class ArchitectureConditions {
                     }
                 }
             };
-
-    /**
-     * Smart condition that only checks internal layer dependencies.
-     * Allows external dependencies (Spring, JPA, etc.) but validates internal module structure.
-     */
-    public static ArchCondition<JavaClass> onlyDependOnInternalLayerClasses(String basePackage) {
-        return new ArchCondition<JavaClass>("only depend on allowed internal layer classes") {
-            @Override
-            public void check(JavaClass javaClass, ConditionEvents events) {
-                javaClass.getDirectDependenciesFromSelf()
-                        .stream()
-                        .filter(dependency -> dependency.getTargetClass().getPackageName().startsWith(basePackage))
-                        .forEach(dependency -> {
-                            JavaClass targetClass = dependency.getTargetClass();
-                            String targetPackage = targetClass.getPackageName();
-                            String sourcePackage = javaClass.getPackageName();
-
-                            // Only validate dependencies within the module
-                            if (sourcePackage.startsWith(basePackage) && targetPackage.startsWith(basePackage)) {
-                                // Custom validation logic can be added here
-                                // This is a flexible condition that can be extended
-                            }
-                        });
-            }
-        };
-    }
-
     /**
      * Condition to check if a class follows proper Spring component annotation.
      */
@@ -108,7 +81,6 @@ public class ArchitectureConditions {
                     }
                 }
             };
-
     /**
      * Condition to validate naming conventions for layer components.
      */
@@ -122,17 +94,43 @@ public class ArchitectureConditions {
                     // Controllers should be in controller package and end with Controller
                     if (packageName.endsWith(".controller") &&
                             !className.endsWith("Controller")
-                    && !javaClass.isInterface()) {
+                            && !javaClass.isInterface()) {
                         events.add(SimpleConditionEvent.violated(javaClass,
                                 String.format("Class %s in controller package should end with 'Controller'", className)));
                     }
 
                     // Services should be in service package and end with Service
-                    if (packageName.endsWith(".service") && !className.endsWith("Service") ) {
+                    if (packageName.endsWith(".service") && !className.endsWith("Service")) {
                         events.add(SimpleConditionEvent.violated(javaClass,
                                 String.format("Class %s in service package should end with 'Service'", className)));
                     }
 
                 }
             };
+
+    /**
+     * Smart condition that only checks internal layer dependencies.
+     * Allows external dependencies (Spring, JPA, etc.) but validates internal module structure.
+     */
+    public static ArchCondition<JavaClass> onlyDependOnInternalLayerClasses(String basePackage) {
+        return new ArchCondition<JavaClass>("only depend on allowed internal layer classes") {
+            @Override
+            public void check(JavaClass javaClass, ConditionEvents events) {
+                javaClass.getDirectDependenciesFromSelf()
+                         .stream()
+                         .filter(dependency -> dependency.getTargetClass().getPackageName().startsWith(basePackage))
+                         .forEach(dependency -> {
+                             JavaClass targetClass = dependency.getTargetClass();
+                             String targetPackage = targetClass.getPackageName();
+                             String sourcePackage = javaClass.getPackageName();
+
+                             // Only validate dependencies within the module
+                             if (sourcePackage.startsWith(basePackage) && targetPackage.startsWith(basePackage)) {
+                                 // Custom validation logic can be added here
+                                 // This is a flexible condition that can be extended
+                             }
+                         });
+            }
+        };
+    }
 }

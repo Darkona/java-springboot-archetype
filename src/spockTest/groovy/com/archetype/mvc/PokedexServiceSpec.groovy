@@ -5,9 +5,6 @@ import com.archetype.mvc.persistence.document.PokemonDocument
 import com.archetype.mvc.service.PokedexService
 import spock.lang.Specification
 
-import java.util.Optional
-import java.util.UUID
-
 class PokedexServiceSpec extends Specification {
 
     PokemonRepository repository = Mock()

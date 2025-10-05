@@ -58,7 +58,9 @@ Ensure dependency management BOM imports (Spring Cloud) are configured in build.
 ```java
 @SpringBootApplication
 @EnableFeignClients(basePackages = "com.archetype")
-public class ArchetypeApplication { ... }
+public class ArchetypeApplication {
+    //implementation
+}
 ```
 
 3. Define a typed Feign client:

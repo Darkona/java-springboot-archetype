@@ -38,7 +38,8 @@ public interface PokemonClientMapper {
      * Note: Client uses simplified moves as strings, domain uses Move objects.
      */
     @Mapping(target = "moves", expression = "java(mapMovesToObjects(clientDetails.moves()))")
-    @Mapping(target = "secret", ignore = true) // Client doesn't expose secret information
+    @Mapping(target = "secret", ignore = true)
+    // Client doesn't expose secret information
     PokemonDetails toDomainDetails(PokemonClientDetails clientDetails);
 
     /**
@@ -46,7 +47,8 @@ public interface PokemonClientMapper {
      * Note: Domain Move objects are simplified to strings for client.
      */
     @Mapping(target = "moves", expression = "java(mapMovesToStrings(domainDetails.moves()))")
-    @Mapping(target = "id", ignore = true) // Client ID will be set separately
+    @Mapping(target = "id", ignore = true)
+    // Client ID will be set separately
     PokemonClientDetails toClientDetails(PokemonDetails domainDetails);
 
     /**
@@ -57,7 +59,8 @@ public interface PokemonClientMapper {
     /**
      * Map domain overview response to client overview response.
      */
-    @Mapping(target = "id", ignore = true) // Client ID will be set separately
+    @Mapping(target = "id", ignore = true)
+    // Client ID will be set separately
     PokemonClientOverview toClientOverview(PokemonOverview domainOverview);
 
     // ===== Helper Methods =====
@@ -70,13 +73,13 @@ public interface PokemonClientMapper {
             return List.of();
         }
         return moveNames.stream()
-                .map(name -> new Move(
-                        name,
-                        50,   // Default power
-                        100,  // Default accuracy
-                        20    // Default PP
-                ))
-                .toList();
+                        .map(name -> new Move(
+                                name,
+                                50,   // Default power
+                                100,  // Default accuracy
+                                20    // Default PP
+                        ))
+                        .toList();
     }
 
     /**
@@ -87,7 +90,7 @@ public interface PokemonClientMapper {
             return List.of();
         }
         return moves.stream()
-                .map(Move::name)
-                .toList();
+                    .map(Move::name)
+                    .toList();
     }
 }

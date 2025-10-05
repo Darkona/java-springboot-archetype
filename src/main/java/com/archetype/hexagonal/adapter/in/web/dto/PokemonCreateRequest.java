@@ -18,12 +18,12 @@ public class PokemonCreateRequest {
         return name;
     }
 
-    public List<String> getTypes() {
-        return types;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<String> getTypes() {
+        return types;
     }
 
     public void setTypes(List<String> types) {

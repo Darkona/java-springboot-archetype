@@ -5,8 +5,6 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.archetype.ArchitectureConditions.beProperlyAnnotatedSpringComponent;
-import static com.archetype.ArchitectureConditions.followLayerNamingConventions;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 /**

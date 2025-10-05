@@ -19,24 +19,24 @@ import java.time.Duration;
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    
+
     /**
      * Configure Redis cache manager with JSON serialization and TTL.
      */
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(5)) // Cache entries expire after 5 minutes
-            .serializeKeysWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-            )
-            .serializeValuesWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-            )
-            .disableCachingNullValues(); // Don't cache null values
-        
+                                                                .entryTtl(Duration.ofMinutes(5)) // Cache entries expire after 5 minutes
+                                                                .serializeKeysWith(
+                                                                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+                                                                )
+                                                                .serializeValuesWith(
+                                                                        RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+                                                                )
+                                                                .disableCachingNullValues(); // Don't cache null values
+
         return RedisCacheManager.builder(connectionFactory)
-            .cacheDefaults(config)
-            .build();
+                                .cacheDefaults(config)
+                                .build();
     }
 }

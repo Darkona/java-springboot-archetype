@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title th:text="${pokemon.name} + ' — Pokedex'">Pokemon Detail</title>
-  <link rel="stylesheet" th:href="@{/pokedex/css/pokedex.css}" />
+    <meta charset="UTF-8"/>
+    <title th:text="${pokemon.name} + ' — Pokedex'">Pokemon Detail</title>
+    <link rel="stylesheet" th:href="@{/pokedex/css/pokedex.css}"/>
 </head>
 <body>
-  <header>
+<header>
     <h1 th:text="${pokemon.name}">Pokemon Name</h1>
     <p><a th:href="@{/pokedex}">← Back to list</a></p>
-  </header>
+</header>
 
-  <main>
+<main>
     <section>
-      <h2>Species Info</h2>
-      <dl>
-        <dt>ID</dt>
-        <dd th:text="${pokemon.id}">id</dd>
+        <h2>Species Info</h2>
+        <dl>
+            <dt>ID</dt>
+            <dd th:text="${pokemon.id}">id</dd>
 
-        <dt>Types</dt>
-        <dd th:text="${#lists.isEmpty(pokemon.types) ? 'Unknown' : pokemon.types.join(', ')}">types</dd>
-      </dl>
+            <dt>Types</dt>
+            <dd th:text="${#lists.isEmpty(pokemon.types) ? 'Unknown' : pokemon.types.join(', ')}">types</dd>
+        </dl>
     </section>
-  </main>
+</main>
 
-  <footer>
+<footer>
     <small>Skeleton Pokedex example — read-only</small>
-  </footer>
+</footer>
 </body>
 </html>

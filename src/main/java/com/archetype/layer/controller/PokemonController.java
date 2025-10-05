@@ -1,17 +1,18 @@
 ﻿package com.archetype.layer.controller;
 
 import com.archetype.layer.client.pokeapi.PokeApiDataService;
-import com.archetype.layer.mapper.dto.PokemonDtoMapper;
 import com.archetype.layer.domain.dto.request.PokemonCreate;
 import com.archetype.layer.domain.dto.response.PokemonDetails;
 import com.archetype.layer.domain.dto.response.PokemonOverview;
 import com.archetype.layer.domain.model.Pokemon;
+import com.archetype.layer.mapper.dto.PokemonDtoMapper;
 import com.archetype.layer.service.PokemonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -60,8 +61,8 @@ public class PokemonController implements PokemonControllerInfo {
     public List<PokemonOverview> getAllPokemons() {
         List<Pokemon> pokemons = pokemonService.getAllPokemons();
         return pokemons.stream()
-                .map(pokemonDtoMapper::toOverview)
-                .toList();
+                       .map(pokemonDtoMapper::toOverview)
+                       .toList();
     }
 
     /**
@@ -71,7 +72,7 @@ public class PokemonController implements PokemonControllerInfo {
     @PostMapping("/populate/first-generation")
     public Map<String, Object> populateFirstGeneration() {
         List<Pokemon> populated = pokeApiDataService.populateFirstGenerationPokemon();
-        
+
         return Map.of(
                 "message", "First generation Pokemon population completed",
                 "populated_count", populated.size(),
@@ -87,16 +88,16 @@ public class PokemonController implements PokemonControllerInfo {
     public Map<String, Object> populateRange(
             @RequestParam int startId,
             @RequestParam int endId) {
-        
+
         if (startId < 1 || endId > 151 || startId > endId) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, 
+                    HttpStatus.BAD_REQUEST,
                     "Invalid range. Must be between 1-151 and startId <= endId"
             );
         }
-        
+
         List<Pokemon> populated = pokeApiDataService.populatePokemonRange(startId, endId);
-        
+
         return Map.of(
                 "message", String.format("Pokemon population completed for range %d-%d", startId, endId),
                 "populated_count", populated.size(),
@@ -111,7 +112,7 @@ public class PokemonController implements PokemonControllerInfo {
     public Map<String, Object> getPopulationStatus() {
         long currentCount = pokeApiDataService.getCurrentPokemonCount();
         boolean isFirstGenComplete = pokeApiDataService.isFirstGenerationPopulated();
-        
+
         return Map.of(
                 "current_pokemon_count", currentCount,
                 "first_generation_complete", isFirstGenComplete,

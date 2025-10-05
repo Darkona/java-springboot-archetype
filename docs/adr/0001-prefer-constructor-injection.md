@@ -53,7 +53,9 @@ public class FooService {
     @Autowired
     private BarRepository barRepository;
 
-    public void doThing() { ... }
+    public void doThing() { 
+        //implementation
+    }
 }
 ```
 
@@ -67,7 +69,9 @@ import org.springframework.stereotype.Component;
 public class FooService {
     private final BarRepository barRepository;
 
-    public void doThing() { ... }
+    public void doThing() {
+        //implementation
+    }
 }
 ```
 
@@ -81,7 +85,9 @@ public class FooService {
         this.barRepository = Objects.requireNonNull(barRepository);
     }
 
-    public void doThing() { ... }
+    public void doThing() {
+        //implementation
+    }
 }
 ```
 
