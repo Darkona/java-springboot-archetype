@@ -84,7 +84,7 @@ otel:
 ### References
 
 - [OpenTelemetry Java Agent Documentation](https://opentelemetry.io/docs/languages/java/automatic/)
-- [ADR 0010 - Observability with OpenTelemetry](adr/0010-observability-opentelemetry.md)
+- [implementation/0002 - Observability with OpenTelemetry](adr/implementation/0002-observability-with-opentelemetry.md)
 
 ---
 

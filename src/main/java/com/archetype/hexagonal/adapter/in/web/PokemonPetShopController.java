@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * REST controller (adapter-in) for the Petshop hexagonal module.
@@ -50,19 +49,19 @@ public class PokemonPetShopController {
 
     @GetMapping
     public List<PokemonResponse> listAvailable() {
-        return listUseCase.listAvailable().stream().map(this::toResponse).collect(Collectors.toList());
+        return listUseCase.listAvailable().stream().map(this::toResponse).toList();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PokemonResponse register(@RequestBody PokemonCreateRequest request) {
-        PokemonPet created = registerUseCase.register(request.getName(), request.getTypes());
+        PokemonPet created = registerUseCase.register(request.name(), request.types());
         return toResponse(created);
     }
 
     @PostMapping("/{id}/adopt")
     public PokemonResponse adopt(@PathVariable("id") UUID id, @RequestBody AdoptRequest request) {
-        PokemonPet adopted = adoptUseCase.adopt(id, request.getOwnerId());
+        PokemonPet adopted = adoptUseCase.adopt(id, request.ownerId());
         return toResponse(adopted);
     }
 
@@ -83,16 +82,9 @@ public class PokemonPetShopController {
         );
     }
 
-    // Simple DTO used by adopt endpoint to avoid adding many small files in this example.
-    public static class AdoptRequest {
-        private String ownerId;
-
-        public AdoptRequest() {}
-
-        public AdoptRequest(String ownerId) {this.ownerId = ownerId;}
-
-        public String getOwnerId() {return ownerId;}
-
-        public void setOwnerId(String ownerId) {this.ownerId = ownerId;}
-    }
+    /**
+     * Request DTO for adopting Pokemon.
+     * Follows ADR 0017 (Java 21 language features) by using records for DTOs.
+     */
+    public record AdoptRequest(String ownerId) {}
 }

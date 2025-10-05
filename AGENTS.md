@@ -58,10 +58,10 @@ Recommended agent workflow
      - MapStruct (mappers)
      - ArchUnit and architectureTest source set (optional to include as part of CI)
      - Spring Boot starters (web, security, data-* according to chosen persistence)
-     - OpenFeign (per ADR 0007) if HTTP clients are required
-     - Bean Validation for DTO validation (per ADR 0016)
+     - OpenFeign (per architecture/0004) if HTTP clients are required
+     - Bean Validation for DTO validation (per architecture/0006)
    - Add an ADR documenting the chosen architecture (use an unused ADR number as a starting template and adapt it to the new project's package names).
-   - Implement exception handling infrastructure following ADR 0016 (domain exceptions, global handler, i18n support).
+   - Implement exception handling infrastructure following architecture/0006 (domain exceptions, global handler, i18n support).
 
 5. Scaffold adapters for external services (optional)
    - For each external service the user requested, create `clients.<service>` with:
@@ -74,7 +74,7 @@ Recommended agent workflow
 6. Add mapping and adapter examples
    - Add MapStruct mapper interfaces for domain ↔ DTO and client DTO ↔ persistence/domain.
    - Provide example service that demonstrates adapter usage (call client → map → persist / map → return DTO).
-   - Implement domain-specific exceptions with error codes following ADR 0016.
+   - Implement domain-specific exceptions with error codes following architecture/0006.
    - Add global exception handler with RFC 9457 compliance and internationalization.
 
 7. Add tests
@@ -94,7 +94,7 @@ How to handle examples vs production code
 
 Files and sections an agent should pay attention to
 --------------------------------------------------
-- docs/adr/ — architecture & conventions (currently 16 ADRs covering injection, domain separation, validation, testing, logging, package structure, HTTP clients, build standards, API documentation, observability, AOP, version management, test naming, architecture testing, controller design, and exception handling)
+- docs/adr/ — architecture & conventions (17 ADRs organized by theme: foundation/ for core standards, architecture/ for domain design patterns, implementation/ for tool configurations, and patterns/ for architecture-specific guidance)
 - build.gradle and gradle/*.gradle — dependency and source-set patterns
 - src/architectureTest — ArchUnit examples and how architectureTest source-set is configured
 - src/main/java/com/archetype/* — example modules (layer, onion, hexagonal, mvc)
@@ -365,7 +365,7 @@ com.yourcompany.yourproject.clients.servicename/
 ```
 
 ### Exception Handling Patterns
-Following ADR 0016, always implement:
+Following architecture/0006, always implement:
 
 ```
 com.yourcompany.yourproject/

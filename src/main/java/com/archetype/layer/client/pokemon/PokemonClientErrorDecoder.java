@@ -22,30 +22,24 @@ public class PokemonClientErrorDecoder implements ErrorDecoder {
         log.warn("Pokemon client error - Method: {}, URL: {}, Status: {}",
                 methodKey, url, status);
 
-        switch (status) {
-            case NOT_FOUND:
-                return new PokemonClientNotFoundException(
-                        String.format("Pokemon not found for request: %s", methodKey)
-                );
-            case BAD_REQUEST:
-                return new PokemonClientValidationException(
-                        String.format("Invalid request for: %s", methodKey)
-                );
-            case UNAUTHORIZED:
-                return new PokemonClientAuthenticationException(
-                        "Authentication failed for Pokemon service"
-                );
-            case FORBIDDEN:
-                return new PokemonClientAuthorizationException(
-                        "Access denied for Pokemon service"
-                );
-            case INTERNAL_SERVER_ERROR:
-                return new PokemonClientServiceException(
-                        "Pokemon service internal error"
-                );
-            default:
-                return defaultErrorDecoder.decode(methodKey, response);
-        }
+        return switch (status) {
+            case NOT_FOUND -> new PokemonClientNotFoundException(
+                    String.format("Pokemon not found for request: %s", methodKey)
+            );
+            case BAD_REQUEST -> new PokemonClientValidationException(
+                    String.format("Invalid request for: %s", methodKey)
+            );
+            case UNAUTHORIZED -> new PokemonClientAuthenticationException(
+                    "Authentication failed for Pokemon service"
+            );
+            case FORBIDDEN -> new PokemonClientAuthorizationException(
+                    "Access denied for Pokemon service"
+            );
+            case INTERNAL_SERVER_ERROR -> new PokemonClientServiceException(
+                    "Pokemon service internal error"
+            );
+            default -> defaultErrorDecoder.decode(methodKey, response);
+        };
     }
 
     /**

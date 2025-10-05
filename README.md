@@ -269,26 +269,42 @@ See [`AGENTS.md`](AGENTS.md) for detailed implementation guidance.
 
 ## 📚 Architectural Decision Records (ADRs)
 
-This archetype includes 16 ADRs that define conventions and standards:
+This archetype includes 17 ADRs organized by theme for better navigation and AI-friendly structure:
 
+### 📁 Foundation - Core Standards
 | ADR | Title | Key Decisions |
 |-----|-------|---------------|
-| [0001](docs/adr/0001-prefer-constructor-injection.md) | Constructor Injection | Mandatory constructor injection for dependencies |
-| [0002](docs/adr/0002-domain-separation-and-mapping.md) | Domain Separation | Layer separation with MapStruct mapping |
-| [0003](docs/adr/0003-domain-validation-and-robustness.md) | Domain Validation | Validation strategies and error handling |
-| [0004](docs/adr/0004-domain-testing-and-tdd.md) | Testing & TDD | Testing pyramid and TDD practices |
-| [0005](docs/adr/0005-logging-library-and-obfuscation.md) | Logging Standards | Structured logging with obfuscation |
-| [0006](docs/adr/0006-layered-architecture-structure.md) | Package Structure | Standard package organization |
-| [0007](docs/adr/0007-prefer-openfeign.md) | HTTP Clients | OpenFeign for external service integration |
-| [0008](docs/adr/0008-build-and-dependency-standards.md) | Build Standards | Gradle and dependency management |
-| [0009](docs/adr/0009-openapi-controller-annotations.md) | API Documentation | OpenAPI 3 documentation standards |
-| [0010](docs/adr/0010-observability-opentelemetry.md) | Observability | OpenTelemetry integration |
-| [0011](docs/adr/0011-aspectj-weaving-for-logged.md) | AOP Logging | AspectJ for cross-cutting concerns |
-| [0012](docs/adr/0012-gradle-version-catalog-toml.md) | Version Management | Gradle version catalogs |
-| [0013](docs/adr/0013-prefer-displayname-for-tests.md) | Test Naming | Readable test names |
-| [0014](docs/adr/0014-architecture-testing-strategy.md) | Architecture Testing | ArchUnit testing strategy |
-| [0015](docs/adr/0015-prefer-spring-annotations-over-responseentity.md) | Controller Design | Spring annotations over ResponseEntity |
-| [0016](docs/adr/0016-exception-handling-strategy.md) | Exception Handling | RFC 9457 compliant error responses with i18n |
+| [foundation/0001](docs/adr/foundation/0001-build-and-dependency-standards.md) | Build Standards | Gradle, Java 21, dependency policy |
+| [foundation/0002](docs/adr/foundation/0002-java-21-language-features.md) | Java 21 Features | Records, switch expressions, modern patterns |
+| [foundation/0003](docs/adr/foundation/0003-constructor-injection.md) | Constructor Injection | Mandatory constructor injection for dependencies |
+| [foundation/0004](docs/adr/foundation/0004-gradle-version-catalog.md) | Version Management | Gradle version catalogs |
+
+### 🏗️ Architecture - Domain Design & Cross-cutting Patterns
+| ADR | Title | Key Decisions |
+|-----|-------|---------------|
+| [architecture/0001](docs/adr/architecture/0001-domain-separation-and-mapping.md) | Domain Separation | Layer separation with MapStruct mapping |
+| [architecture/0002](docs/adr/architecture/0002-domain-validation-strategy.md) | Domain Validation | Validation strategies and error handling |
+| [architecture/0003](docs/adr/architecture/0003-testing-strategy-and-tdd.md) | Testing & TDD | Testing pyramid and TDD practices |
+| [architecture/0004](docs/adr/architecture/0004-openfeign-http-clients.md) | HTTP Clients | OpenFeign for external service integration |
+| [architecture/0005](docs/adr/architecture/0005-spring-annotations-over-responseentity.md) | Controller Design | Spring annotations over ResponseEntity |
+| [architecture/0006](docs/adr/architecture/0006-exception-handling-strategy.md) | Exception Handling | RFC 9457 compliant error responses with i18n |
+
+### ⚙️ Implementation - Tool Configurations & Conventions
+| ADR | Title | Key Decisions |
+|-----|-------|---------------|
+| [implementation/0001](docs/adr/implementation/0001-logging-standards-and-obfuscation.md) | Logging Standards | Structured logging with obfuscation |
+| [implementation/0002](docs/adr/implementation/0002-observability-with-opentelemetry.md) | Observability | OpenTelemetry integration |
+| [implementation/0003](docs/adr/implementation/0003-openapi-documentation-standards.md) | API Documentation | OpenAPI 3 documentation standards |
+| [implementation/0004](docs/adr/implementation/0004-architecture-testing-strategy.md) | Architecture Testing | ArchUnit testing strategy |
+| [implementation/0005](docs/adr/implementation/0005-aspectj-weaving-configuration.md) | AOP Configuration | AspectJ for cross-cutting concerns |
+| [implementation/0006](docs/adr/implementation/0006-test-naming-conventions.md) | Test Naming | Readable test names |
+
+### 🎯 Patterns - Architecture-Specific Guidance
+| ADR | Title | Key Decisions |
+|-----|-------|---------------|
+| [patterns/0001](docs/adr/patterns/0001-layered-architecture-package-structure.md) | Package Structure | Layered architecture organization |
+
+See [docs/adr/README.md](docs/adr/README.md) for complete navigation guide.
 
 ## 🔧 Helper Scripts
 
