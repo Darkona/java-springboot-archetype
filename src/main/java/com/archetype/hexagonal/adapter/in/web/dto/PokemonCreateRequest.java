@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.adapter.in.web.dto;
+package com.archetype.hexagonal.adapter.in.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

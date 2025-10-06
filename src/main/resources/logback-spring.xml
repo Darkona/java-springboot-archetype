@@ -5,11 +5,11 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!-- LOKI push URL (override with -DLOKI_URL=... or env LOKI_URL) -->
-    <property name="LOKI_URL" value="${LOKI_HOST:-http://alloy:9999}/loki/api/v1/push"/>
+
 
     <!-- Local / docker profile: console + optional Loki when containerized -->
-    <springProfile name="local, docker">
-
+    <springProfile name="local">
+        <property name="LOKI_URL" value="${LOKI_HOST:-http://localhost:9999}/loki/api/v1/push"/>
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n}</pattern>
@@ -66,6 +66,7 @@
 
     <!-- Container / integration profile (explicit) -->
     <springProfile name="container, testInt">
+        <property name="LOKI_URL" value="${LOKI_HOST:-http://alloy:9999}/loki/api/v1/push"/>
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n}</pattern>

@@ -1,4 +1,4 @@
-﻿package com.archetype;
+package com.archetype;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;

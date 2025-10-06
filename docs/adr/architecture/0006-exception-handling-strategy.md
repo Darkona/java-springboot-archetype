@@ -17,6 +17,7 @@ Implement a comprehensive exception handling strategy for the layer module using
 ## Context
 
 Spring Boot applications need consistent error handling that:
+
 - Provides meaningful error responses to API consumers
 - Follows international standards (RFC 9457 Problem Details)
 - Supports multiple languages/locales
@@ -24,11 +25,13 @@ Spring Boot applications need consistent error handling that:
 - Enables proper debugging without exposing sensitive information
 - Maintains clean controller code per ADR 0015
 
-The existing approach of throwing generic `RuntimeException` and using `ResponseStatusException` inconsistently led to poor error responses and debugging difficulties.
+The existing approach of throwing generic `RuntimeException` and using `ResponseStatusException` inconsistently led to poor error responses and debugging
+difficulties.
 
 ## Problem
 
 ### Current Issues:
+
 - **Generic exceptions**: `RuntimeException("Pokemon not found")` provides no context
 - **No standardization**: Different controllers handle errors differently
 - **No internationalization**: Error messages are hardcoded in English
@@ -37,6 +40,7 @@ The existing approach of throwing generic `RuntimeException` and using `Response
 - **Debugging difficulties**: No structured logging or error correlation
 
 ### Requirements:
+
 - RFC 9457 compliant error responses
 - Configurable error messages with i18n support
 - Clear separation between format and business validation
@@ -58,12 +62,14 @@ LayerDomainException (base)
 ### Validation Strategy (Hybrid Approach)
 
 **Technical/Format Validation (@Valid)**
+
 - Required fields (`@NotNull`, `@NotBlank`)
 - Format constraints (`@Size`, `@Min`, `@Max`, `@Pattern`)
 - Data type validation
 - Results in HTTP 400 Bad Request
 
 **Business Logic Validation (Domain Exceptions)**
+
 - Duplicate business keys
 - Complex business rules
 - Cross-entity validations
@@ -85,6 +91,7 @@ LayerDomainException (base)
 ```
 
 For validation errors with multiple fields:
+
 ```json
 {
   "type": "https://example.com/problems/validation-error",
@@ -118,17 +125,19 @@ For validation errors with multiple fields:
 public abstract class LayerDomainException extends RuntimeException {
     private final String errorCode;
     private final Object[] messageArgs;
-    
+
     protected LayerDomainException(String errorCode, Object... messageArgs) {
         super(errorCode);
         this.errorCode = errorCode;
         this.messageArgs = messageArgs != null ? messageArgs.clone() : new Object[0];
     }
-    
-    public String getErrorCode() { return errorCode; }
-    public Object[] getMessageArgs() { return messageArgs.clone(); }
-    public String getReasonCode() { 
-        return errorCode.toUpperCase().replace('.', '_').replace('-', '_'); 
+
+    public String getErrorCode() {return errorCode;}
+
+    public Object[] getMessageArgs() {return messageArgs.clone();}
+
+    public String getReasonCode() {
+        return errorCode.toUpperCase().replace('.', '_').replace('-', '_');
     }
 }
 ```
@@ -152,32 +161,33 @@ public class PokemonAlreadyExistsException extends LayerDomainException {
 ### 3. Global Exception Handler
 
 ```java
+
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
 @Slf4j
 public class LayerGlobalExceptionHandler {
-    
+
     private final MessageSource messageSource;
-    
+
     @ExceptionHandler(PokemonNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ProblemDetail handlePokemonNotFound(PokemonNotFoundException ex, 
+    public ProblemDetail handlePokemonNotFound(PokemonNotFoundException ex,
                                                HttpServletRequest request,
                                                Locale locale) {
         // Log with context (no stack trace in response)
-        log.warn("Pokemon not found: errorCode={}, args={}, request={}", 
+        log.warn("Pokemon not found: errorCode={}, args={}, request={}",
                 ex.getErrorCode(), Arrays.toString(ex.getMessageArgs()), request.getRequestURI());
-        
+
         String detail = messageSource.getMessage(ex.getErrorCode(), ex.getMessageArgs(), locale);
         // ... build RFC 9457 response
     }
-    
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex,
-                                         HttpServletRequest request,
-                                         Locale locale) {
+                                          HttpServletRequest request,
+                                          Locale locale) {
         // Handle @Valid errors with detailed field information
     }
 }
@@ -186,9 +196,10 @@ public class LayerGlobalExceptionHandler {
 ### 4. Internationalization Configuration
 
 ```java
+
 @Configuration
 public class InternationalizationConfig {
-    
+
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -197,7 +208,7 @@ public class InternationalizationConfig {
         messageSource.setFallbackToSystemLocale(false);
         return messageSource;
     }
-    
+
     @Bean
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
@@ -215,7 +226,6 @@ pokemon.not-found=Pokemon with ID {0} was not found
 pokemon.already-exists.national-id=Pokemon with national ID {0} already exists
 pokemon.name.required=Pokemon name is required
 pokemon.national-id.min=National ID must be at least {0}
-
 # Error reason codes
 pokemon.not-found.reason=The requested Pokemon does not exist in the database
 pokemon.already-exists.reason=A Pokemon with the same identifier already exists
@@ -224,18 +234,19 @@ pokemon.already-exists.reason=A Pokemon with the same identifier already exists
 ### 6. Service Layer Integration
 
 ```java
+
 @Service
 @Slf4j
 public class PokemonService {
-    
+
     public Pokemon getPokemon(UUID id) {
         log.debug("Retrieving Pokemon with ID: {}", id);
-        
+
         return pokemonRepository.findById(id)
-                .map(persistenceMapper::toDomain)
-                .orElseThrow(() -> new PokemonNotFoundException(id));
+                                .map(persistenceMapper::toDomain)
+                                .orElseThrow(() -> new PokemonNotFoundException(id));
     }
-    
+
     public Pokemon createPokemon(PokemonCreate request) {
         if (pokemonRepository.existsByNationalId(request.nationalId())) {
             throw new PokemonAlreadyExistsException(request.nationalId());
@@ -248,10 +259,11 @@ public class PokemonService {
 ### 7. Controller Integration
 
 ```java
+
 @RestController
 @RequestMapping("/api/pokemon")
 public class PokemonController {
-    
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PokemonDetails createPokemon(@Valid @RequestBody PokemonCreate req) {
@@ -265,28 +277,31 @@ public class PokemonController {
 
 ## HTTP Status Code Mapping
 
-| Exception Type | HTTP Status | Usage |
-|----------------|-------------|-------|
-| `MethodArgumentNotValidException` | 400 Bad Request | @Valid format/constraint violations |
-| `PokemonNotFoundException` | 404 Not Found | Entity does not exist |
-| `PokemonAlreadyExistsException` | 409 Conflict | Business key conflicts |
-| `PokemonValidationException` | 422 Unprocessable Entity | Business rule violations |
-| `PokemonServiceException` | 500 Internal Server Error | System/integration failures |
+| Exception Type                    | HTTP Status               | Usage                               |
+|-----------------------------------|---------------------------|-------------------------------------|
+| `MethodArgumentNotValidException` | 400 Bad Request           | @Valid format/constraint violations |
+| `PokemonNotFoundException`        | 404 Not Found             | Entity does not exist               |
+| `PokemonAlreadyExistsException`   | 409 Conflict              | Business key conflicts              |
+| `PokemonValidationException`      | 422 Unprocessable Entity  | Business rule violations            |
+| `PokemonServiceException`         | 500 Internal Server Error | System/integration failures         |
 
 ## Logging Strategy
 
 ### Client/Business Errors (WARN level):
+
 - Pokemon not found
 - Validation failures
 - Business rule violations
 - No stack traces
 
 ### System Errors (ERROR level):
+
 - Service exceptions
 - Unexpected errors
 - Include stack traces for debugging
 
 ### Example Log Output:
+
 ```
 2024-10-05 05:00:00 WARN  - Pokemon not found: errorCode=pokemon.not-found, args=[12345-abc-def], request=/api/pokemon/12345-abc-def
 2024-10-05 05:01:00 WARN  - Validation failed for request: /api/pokemon, errors: 2
@@ -296,18 +311,21 @@ public class PokemonController {
 ## Benefits
 
 ### For Developers:
+
 - **Clean controllers**: No exception handling boilerplate
 - **Consistent responses**: All errors follow RFC 9457 format
 - **Easy debugging**: Structured logging with correlation
 - **Type safety**: Specific exception types vs generic strings
 
 ### For API Consumers:
+
 - **Standard format**: RFC 9457 compliance for tools/libraries
 - **Machine readable**: Error codes for programmatic handling
 - **Human readable**: Localized messages for user interfaces
 - **Complete information**: All validation errors in single response
 
 ### For Operations:
+
 - **Structured logging**: Easy parsing and alerting
 - **No sensitive data**: Stack traces not exposed to clients
 - **Correlation**: Request context in all error logs
@@ -316,22 +334,26 @@ public class PokemonController {
 ## Migration Strategy
 
 ### Phase 1: Foundation
+
 1. ✅ Create exception hierarchy and base classes
 2. ✅ Implement global exception handler
 3. ✅ Set up internationalization configuration
 4. ✅ Create message properties
 
 ### Phase 2: Service Layer
+
 1. ✅ Replace generic RuntimeException with domain exceptions
 2. ✅ Add structured logging
 3. ✅ Implement business validation logic
 
 ### Phase 3: Controller Layer
+
 1. ✅ Add @Valid annotations to DTOs
 2. ✅ Remove exception handling from controllers
 3. ✅ Update API documentation
 
 ### Phase 4: Testing & Documentation
+
 1. ⏳ Create unit tests for exception scenarios
 2. ⏳ Integration tests for error responses
 3. ⏳ Update API documentation with error examples
@@ -339,6 +361,7 @@ public class PokemonController {
 ## Trade-offs
 
 ### Pros:
+
 - **Standardized**: RFC 9457 compliance
 - **Maintainable**: Centralized error handling
 - **International**: Multi-language support
@@ -346,6 +369,7 @@ public class PokemonController {
 - **Clean**: Controllers focus on business logic
 
 ### Cons:
+
 - **Complexity**: More files and configuration
 - **Learning curve**: Team needs to understand error codes and patterns
 - **Performance**: Message resolution and exception creation overhead
@@ -354,6 +378,7 @@ public class PokemonController {
 ## Examples in This Codebase
 
 All examples can be found in the layer module:
+
 - Exception hierarchy: `src/main/java/com/archetype/layer/domain/exception/`
 - Global handler: `src/main/java/com/archetype/layer/config/LayerGlobalExceptionHandler.java`
 - Message properties: `src/main/resources/messages.properties`
@@ -363,6 +388,7 @@ All examples can be found in the layer module:
 ## Future Enhancements
 
 ### Potential Improvements:
+
 - **Error correlation IDs**: Add request correlation for distributed tracing
 - **Rate limiting errors**: Handle 429 Too Many Requests
 - **Validation groups**: Different validation rules for different operations

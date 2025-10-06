@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.application.ports.in;
+package com.archetype.onion.application.ports.in;
 
 import com.archetype.onion.domain.model.PokemonOwnership;
 import com.archetype.onion.domain.model.Trainer;

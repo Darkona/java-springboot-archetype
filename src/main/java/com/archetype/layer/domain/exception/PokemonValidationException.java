@@ -22,25 +22,6 @@ public class PokemonValidationException extends LayerDomainException {
         super("pokemon.validation.level.range", level, minLevel, maxLevel);
     }
 
-    /**
-     * Create exception for invalid Pokemon evolution data.
-     *
-     * @param pokemonName The Pokemon name
-     * @param reason      The reason why evolution is invalid
-     */
-    public PokemonValidationException(String pokemonName, String reason) {
-        super("pokemon.validation.evolution.invalid", pokemonName, reason);
-    }
-
-    /**
-     * Create exception for invalid Pokemon type combination.
-     *
-     * @param firstType  The first type
-     * @param secondType The second type that conflicts
-     */
-    public PokemonValidationException(String firstType, String secondType) {
-        super("pokemon.validation.type.combination", firstType, secondType);
-    }
 
     /**
      * Private constructor for generic validation failures.

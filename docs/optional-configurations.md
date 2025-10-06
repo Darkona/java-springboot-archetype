@@ -4,11 +4,13 @@ This document contains optional configurations that can be enabled if needed for
 
 ## OpenTelemetry Agent (Optional)
 
-The OpenTelemetry Java agent provides automatic instrumentation for observability. It is **disabled by default** in local development but can be enabled when needed.
+The OpenTelemetry Java agent provides automatic instrumentation for observability. It is **disabled by default** in local development but can be enabled when
+needed.
 
 ### When to Enable
 
 Enable OpenTelemetry when you need:
+
 - Distributed tracing across microservices
 - Automatic instrumentation of HTTP clients, databases, and frameworks
 - Integration with observability backends (Jaeger, Tempo, etc.)
@@ -90,11 +92,13 @@ otel:
 
 ## Running with Databases (PostgreSQL, MongoDB, RabbitMQ)
 
-By default, the local profile has database and messaging auto-configurations disabled to simplify initial setup. This allows you to run the application without external dependencies.
+By default, the local profile has database and messaging auto-configurations disabled to simplify initial setup. This allows you to run the application without
+external dependencies.
 
 ### When to Enable
 
 Enable databases and messaging when you need:
+
 - Full persistence functionality
 - Integration testing with real databases
 - Message queue functionality
@@ -109,13 +113,13 @@ Enable databases and messaging when you need:
    ```
 
    Available services:
-   - **PostgreSQL**: Port 5432 (user: `archetype`, password: `archetype`, database: `archetype`)
-   - **MongoDB**: Port 27017 (user: `archetype`, password: `archetype`, database: `archetype`)
-   - **RabbitMQ**: Port 5672 for AMQP, Port 15672 for Management UI (user: `archetype`, password: `archetype`)
-   - **Redis**: Port 6379 (password: `archetype`) - optional, start with `docker-compose up -d redis`
+    - **PostgreSQL**: Port 5432 (user: `archetype`, password: `archetype`, database: `archetype`)
+    - **MongoDB**: Port 27017 (user: `archetype`, password: `archetype`, database: `archetype`)
+    - **RabbitMQ**: Port 5672 for AMQP, Port 15672 for Management UI (user: `archetype`, password: `archetype`)
+    - **Redis**: Port 6379 (password: `archetype`) - optional, start with `docker-compose up -d redis`
 
 2. **Re-enable auto-configurations** in `src/main/resources/application-local.yaml`:
-   
+
    Comment out the exclusions:
    ```yaml
    spring:
@@ -155,12 +159,14 @@ Enable databases and messaging when you need:
 ### Stopping Services
 
 To stop the services:
+
 ```bash
 cd observability
 docker-compose down
 ```
 
 To stop and remove all data:
+
 ```bash
 cd observability
 docker-compose down -v
@@ -169,6 +175,7 @@ docker-compose down -v
 ### Additional Services
 
 The observability docker-compose includes other services you can optionally start:
+
 - **Full Observability Stack**: `docker-compose up -d` (starts everything including Grafana, Loki, Tempo, Prometheus, Alloy)
 - **Grafana Dashboard**: Access at http://localhost:3000 (user: `admin`, password: `admin`)
 - **RabbitMQ Management**: Access at http://localhost:15672

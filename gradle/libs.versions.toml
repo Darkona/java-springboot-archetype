@@ -13,7 +13,9 @@ spring-dependency-management = "1.1.7"
 spring-security-oauth2-jose = "6.4.3"
 
 # Data & Persistence
-postgresql = "42.7.5"
+postgresql = "42.7.8"
+flyway = "11.13.2"
+flyway-postgresql="11.13.2"
 
 # Code Generation & Processing
 lombok = "1.18.36"
@@ -59,6 +61,7 @@ commons-lang3 = "3.19.0"
 [libraries]
 # Spring Boot Starters
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-thymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
 spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client" }
@@ -68,6 +71,8 @@ spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-b
 spring-boot-starter-amqp = { module = "org.springframework.boot:spring-boot-starter-amqp" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+spring-boot-starter-data-redis = {module = "org.springframework.boot:spring-boot-starter-data-redis" }
+spring-boot-starter-cache = {module = "org.springframework.boot:spring-boot-starter-cache" }
 
 # Spring Security
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose" }
@@ -84,9 +89,9 @@ spring-modulith-observability = { module = "org.springframework.modulith:spring-
 spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test" }
 
 # Data & Persistence
-flyway-core = { module = "org.flywaydb:flyway-core" }
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref= "flyway" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
-
+flyway-postgresql = {module = "org.flywaydb:flyway-database-postgresql", version.ref= "flyway-postgresql"}
 # Code Generation
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }

@@ -1,4 +1,4 @@
-﻿package com.archetype;
+package com.archetype;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.archetype.clients")
+@EnableFeignClients(basePackages = "com.archetype.layer.client")
 @EnableMongoRepositories
 @EnableJpaRepositories
 public class ArchetypeApplication {

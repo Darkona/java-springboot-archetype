@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.adapter.out.mapper;
+package com.archetype.hexagonal.adapter.out.mapper;
 
 import com.archetype.hexagonal.adapter.out.persistence.PokemonPetEntity;
 import com.archetype.hexagonal.domain.model.PokemonPet;

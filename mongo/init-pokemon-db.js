@@ -242,7 +242,6 @@ const speciesDocs = [
     secondType: "Poison",
     abilities: ["Overgrow","Chlorophyll"],
     eggGroups: ["GRASS","MONSTER"],
-    baseHp: 45,
     evolutions: [2,3],
     moves: [
       { level: 1, moveNumber: 33 }, // Tackle
@@ -259,7 +258,7 @@ const speciesDocs = [
     secondType: "Poison",
     abilities: ["Overgrow","Chlorophyll"],
     eggGroups: ["GRASS","MONSTER"],
-    baseHp: 60,
+  
     evolutions: [3],
     moves: [
       { level: 1, moveNumber: 33 },
@@ -276,7 +275,7 @@ const speciesDocs = [
     secondType: "Poison",
     abilities: ["Overgrow","Chlorophyll"],
     eggGroups: ["GRASS","MONSTER"],
-    baseHp: 80,
+  
     evolutions: [],
     moves: [
       { level: 1, moveNumber: 33 },
@@ -293,7 +292,7 @@ const speciesDocs = [
     secondType: null,
     abilities: ["Blaze","Solar Power"],
     eggGroups: ["MONSTER","DRAGON"],
-    baseHp: 39,
+  
     evolutions: [5,6],
     moves: [
       { level: 1, moveNumber: 33 }, // Tackle
@@ -309,7 +308,7 @@ const speciesDocs = [
     secondType: null,
     abilities: ["Torrent","Rain Dish"],
     eggGroups: ["WATER1","MONSTER"],
-    baseHp: 44,
+  
     evolutions: [8,9],
     moves: [
       { level: 1, moveNumber: 33 }, // Tackle
@@ -325,7 +324,7 @@ const speciesDocs = [
     secondType: null,
     abilities: ["Static","Lightning Rod"],
     eggGroups: ["FIELD","FAIRY"],
-    baseHp: 35,
+  
     evolutions: [26], // Raichu (26)
     moves: [
       { level: 1, moveNumber: 98 }, // Quick Attack
@@ -341,7 +340,7 @@ const speciesDocs = [
     secondType: null,
     abilities: ["Run Away","Adaptability","Anticipation"],
     eggGroups: ["GROUND","FIELD"],
-    baseHp: 55,
+  
     evolutions: [134,135,136], // Vaporeon, Jolteon, Flareon
     moves: [
       { level: 1, moveNumber: 33 }, // Tackle

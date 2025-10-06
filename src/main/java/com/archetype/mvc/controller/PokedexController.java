@@ -1,4 +1,4 @@
-﻿package com.archetype.mvc.controller;
+package com.archetype.mvc.controller;
 
 import com.archetype.mvc.model.SpeciesOverview;
 import com.archetype.mvc.service.PokedexService;
@@ -32,9 +32,8 @@ public class PokedexController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable("id") UUID id, Model model) {
-        SpeciesOverview overview = service.findSpeciesById(id)
-                                          .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Species not found: " + id));
+    public String detail(@PathVariable("id") int id, Model model) {
+        SpeciesOverview overview = service.findSpeciesById(id);
         model.addAttribute("pokemon", overview);
         return "pokedex/detail";
     }

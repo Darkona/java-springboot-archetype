@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.domain.model;
+package com.archetype.layer.domain.model;
 
 public enum EggGroup {
     MONSTER, WATER1, WATER2, WATER3, BUG, MINERAL, FLYING, AMORPHOUS, FIELD, FAIRY, DITTO, GRASS, DRAGON, HUMANLIKE, NOT_DISCOVERED, UNKNOWN

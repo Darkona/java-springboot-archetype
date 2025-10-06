@@ -1,4 +1,4 @@
-﻿package com.archetype.layer;
+package com.archetype.layer;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;

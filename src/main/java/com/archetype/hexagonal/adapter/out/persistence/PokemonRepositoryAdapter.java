@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.adapter.out.persistence;
+package com.archetype.hexagonal.adapter.out.persistence;
 
 import com.archetype.hexagonal.application.port.out.PokemonRepositoryPort;
 import com.archetype.hexagonal.domain.model.PokemonPet;

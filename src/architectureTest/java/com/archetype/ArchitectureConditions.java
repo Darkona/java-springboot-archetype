@@ -1,4 +1,4 @@
-﻿package com.archetype;
+package com.archetype;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;

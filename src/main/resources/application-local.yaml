@@ -1,17 +1,72 @@
 spring:
+
   application:
     name: Archetype-Local
+
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+#      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+#      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+#      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
   output:
     ansi:
       enabled: ALWAYS
+
   data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: archetype
+      username: archetype
+      password: archetype
+      authentication-database: admin
+      auto-index-creation: on
+
+    redis:
+      host: localhost
+      port: 6379
+      password: archetype
+      database: 0
+
+
+  jta:
+    enabled: false
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/archetype
+    username: archetype
+    password: archetype
+
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      maximum-pool-size: 10
+      minimum-idle: 4
+      jdbc-url:   jdbc:postgresql://localhost:5432/archetype
+
+  jpa:
+    hibernate:
+
+      ddl-auto: update
+    open-in-view: false
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: archetype
+    password: archetype
+
+  flyway:
+    postgresql:
+      transactional-lock: on
+    user: archetype
+    password: archetype
+    schemas: archetype
+    url: jdbc:postgresql://localhost:5432/archetype
+    enabled: false
+
 
 
 logged:
@@ -22,19 +77,15 @@ logging:
     console: "%cyan(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %30.30(-- %logger{30}) - %msg%n"
 
 otel:
-  metrics.exporter: none
+  metrics.exporter: otlp
+  # Disable logs exporter if using the Logback loki appender.
   logs.exporter: none
   traces.exporter: none
-  sdk.disabled: true
-  javaagent.enabled: false
+  sdk.disabled: false
   instrumentation.common.default-enabled: false
 
 # Client configurations
 clients:
-  pokemon:
-    url: http://localhost:8080
-    connect-timeout: 5000
-    read-timeout: 10000
   pokeapi:
     url: https://pokeapi.co
     connect-timeout: 5000

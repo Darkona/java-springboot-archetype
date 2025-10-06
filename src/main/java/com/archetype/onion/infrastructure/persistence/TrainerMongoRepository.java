@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.infrastructure.persistence;
+package com.archetype.onion.infrastructure.persistence;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

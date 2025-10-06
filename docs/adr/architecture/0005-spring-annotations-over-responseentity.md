@@ -6,16 +6,17 @@ Status: Accepted
 
 ## Decision
 
-Do not use `ResponseEntity<T>` in controller methods unless absolutely necessary for complex response scenarios. Instead, prefer returning domain objects directly and use Spring annotations to control HTTP status codes, headers, and other response aspects. This leads to cleaner, more readable controller code that focuses on business logic rather than HTTP plumbing.
+Do not use `ResponseEntity<T>` in controller methods unless absolutely necessary for complex response scenarios. Instead, prefer returning domain objects
+directly and use Spring annotations to control HTTP status codes, headers, and other response aspects. This leads to cleaner, more readable controller code
+that focuses on business logic rather than HTTP plumbing.
 
 ## Context
 
 Spring Boot controllers can handle HTTP responses in multiple ways:
+
 1. Using `ResponseEntity<T>` for full control over the response
 2. Returning domain objects directly and using annotations for HTTP concerns
 3. Using `@ResponseStatus`, `@ResponseBody`, and other Spring annotations
-
-Many developers default to using `ResponseEntity<T>` for all controller methods, even when simple scenarios only need to return data with standard HTTP status codes.
 
 ## Problem
 
@@ -73,6 +74,7 @@ public ResponseEntity<PokemonDetails> createPokemon(@RequestBody PokemonCreate r
 ### ⚠️ **Exception: When ResponseEntity IS appropriate**
 
 Use `ResponseEntity<T>` only when you need:
+
 - Dynamic status codes based on business logic
 - Custom headers that can't be set via annotations
 - Complex conditional responses
@@ -93,7 +95,7 @@ public ResponseEntity<String> conditionalOperation(@RequestBody SomeRequest requ
 ## Spring Annotations Reference
 
 - `@ResponseStatus(HttpStatus.CREATED)` - Set 201 status
-- `@ResponseStatus(HttpStatus.NO_CONTENT)` - Set 204 status  
+- `@ResponseStatus(HttpStatus.NO_CONTENT)` - Set 204 status
 - `@ResponseStatus(HttpStatus.ACCEPTED)` - Set 202 status
 - `@ResponseBody` - Serialize return value (implicit in `@RestController`)
 - `@Valid` - Enable validation
@@ -104,9 +106,10 @@ public ResponseEntity<String> conditionalOperation(@RequestBody SomeRequest requ
 Use `@ExceptionHandler` and `@ControllerAdvice` for consistent error responses:
 
 ```java
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(EntityNotFoundException ex) {

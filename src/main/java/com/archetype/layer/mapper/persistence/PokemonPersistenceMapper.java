@@ -1,49 +1,59 @@
-﻿package com.archetype.layer.mapper.persistence;
+package com.archetype.layer.mapper.persistence;
 
+import com.archetype.layer.domain.model.Ability;
 import com.archetype.layer.domain.model.Pokemon;
 import com.archetype.layer.domain.model.Species;
 import com.archetype.layer.persistence.document.PokemonDocument;
+import com.archetype.layer.persistence.document.SpeciesDocument;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Persistence mapper: maps between domain model and persistence document.
  * Following ADR 0002 - centralized mapper organization in mapper.persistence package.
  * This mapper works with domain models and persistence documents, NOT DTOs.
  */
-@Mapper(componentModel = "spring")
+@Mapper
 public interface PokemonPersistenceMapper {
-    PokemonPersistenceMapper INSTANCE = org.mapstruct.factory.Mappers.getMapper(PokemonPersistenceMapper.class);
 
-    // Map domain Pokemon -> MongoDB document
-    @Mapping(target = "id", ignore = true) // Let repository handle ID generation
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "level", source = "level")
-    @Mapping(target = "shiny", source = "shiny")
-    @Mapping(target = "nationalId", source = "species.nationalId")
-    @Mapping(target = "speciesName", source = "species.name")
-    PokemonDocument toDocument(Pokemon pokemon);
+    @Mapping(target = "abilities", source = "abilities", qualifiedByName = "idsToAbilities")
+    @Mapping(target = "moves",     source = "doc.moves")
+    Species toDomain(SpeciesDocument doc);
 
-    // Map document -> domain Pokemon
-    @Mapping(target = "species", expression = "java(createSpeciesFromDocument(document))")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "level", source = "level")
-    Pokemon toDomain(PokemonDocument document);
+    @Mapping(target = "abilities", source = "abilities", qualifiedByName = "abilitiesToIds")
+    @Mapping(target = "moves",     source = "species.moves")
+    SpeciesDocument toDocument(Species species);
 
-    // Helper method to create Species from document data
-    default Species createSpeciesFromDocument(PokemonDocument document) {
-        // This would typically involve looking up the full species data
-        // For now, create a minimal species with the stored data
-        return new Species(
-                document.getNationalId(),
-                document.getSpeciesName(),
-                null, // firstType
-                null, // secondType
-                null, // abilities
-                null, // eggGroups
-                50,   // baseHp
-                null, // evolutions
-                null  // moves
-        );
+    // ---- helpers ----
+
+    @Named("idsToAbilities")
+    default List<Ability> idsToAbilities(List<Integer> ids) {
+        if (ids == null) return List.of();
+        return ids.stream()
+                  .filter(Objects::nonNull)
+                  .map(id -> new Ability(id, null, null, null)) // name/desc/hidden unknown at this layer
+                  .toList();
     }
+
+    @Named("abilitiesToIds")
+    default List<Integer> abilitiesToIds(List<Ability> abilities) {
+        if (abilities == null) return List.of();
+        return abilities.stream()
+                        .filter(Objects::nonNull)
+                        .map(Ability::id)
+                        .toList();
+    }
+
+
+    List<SpeciesDocument> toDocuments(List<Species> species);
+
+    List<Species> toDomain(List<SpeciesDocument> speciesDocuments);
 }

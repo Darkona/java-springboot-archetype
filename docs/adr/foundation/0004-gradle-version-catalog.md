@@ -6,7 +6,8 @@ Status: Accepted
 
 ## Context
 
-Managing dependencies across multiple Gradle build files (main build.gradle, test.gradle, integrationTest.gradle, etc.) can become inconsistent and error-prone:
+Managing dependencies across multiple Gradle build files (main build.gradle, test.gradle, integrationTest.gradle, etc.) can become inconsistent and
+error-prone:
 
 - Version numbers scattered across multiple files
 - Risk of version conflicts between test types
@@ -15,7 +16,8 @@ Managing dependencies across multiple Gradle build files (main build.gradle, tes
 - Prone to typos in dependency coordinates
 - Hard to maintain consistent versions across modules
 
-Gradle introduced Version Catalogs (TOML format) as a modern solution for centralized dependency management that provides type-safe accessors and better IDE support.
+Gradle introduced Version Catalogs (TOML format) as a modern solution for centralized dependency management that provides type-safe accessors and better
+IDE support.
 
 ## Decision
 
@@ -28,7 +30,9 @@ All Gradle build files (`build.gradle`, `gradle/*.gradle`) must reference depend
 The version catalog is organized in `gradle/libs.versions.toml` with three main sections:
 
 ### 1. **[versions]** - All version numbers
+
 Organized by category:
+
 - Java & Gradle
 - Spring Framework
 - Security & OAuth
@@ -42,7 +46,9 @@ Organized by category:
 - Build Tools
 
 ### 2. **[libraries]** - Dependency declarations
+
 Organized by category with clear comments:
+
 - Spring Boot Starters
 - Spring Security
 - Spring Cloud
@@ -56,11 +62,13 @@ Organized by category with clear comments:
 - Agents
 
 ### 3. **[plugins]** - Plugin declarations
+
 All Gradle plugins with versions
 
 ## Usage Examples
 
 ### In build.gradle:
+
 ```gradle
 plugins {
     alias(libs.plugins.spring.boot)
@@ -79,6 +87,7 @@ wrapper {
 ```
 
 ### In test configuration files:
+
 ```gradle
 dependencies {
     testImplementation libs.spring.boot.starter.test
@@ -95,26 +104,31 @@ java {
 ## Benefits
 
 **Centralized Management:**
+
 - All versions in one location
 - Single source of truth for dependencies
 - Easy to update versions project-wide
 
 **Type Safety:**
+
 - IDE autocomplete for `libs.*` references
 - Compile-time validation of dependency references
 - Reduces typos and errors
 
 **Better Maintainability:**
+
 - Clear dependency organization with categories
 - Easy to see all project dependencies
 - Consistent naming conventions
 
 **Consistency:**
+
 - Same dependency referenced identically everywhere
 - No version conflicts between modules
 - Guaranteed version alignment
 
 **IDE Support:**
+
 - IntelliJ IDEA provides autocomplete for catalog entries
 - Quick navigation to version definitions
 - Inline documentation
@@ -131,32 +145,38 @@ java {
 ## Migration Notes
 
 When adding dependencies:
+
 1. Add version to `[versions]` section with descriptive key
 2. Add library to `[libraries]` section with `module` and optional `version.ref`
 3. Reference in build files as `libs.category.name`
 
 When updating versions:
+
 1. Update single version number in `[versions]` section
 2. Changes automatically propagate to all references
 
 ## Naming Conventions
 
 **Versions:** Use kebab-case
+
 - `spring-boot = "3.5.5"`
 - `opentelemetry-bom = "2.20.1"`
 
 **Libraries:** Use dot notation matching package/module structure
+
 - `spring.boot.starter.web`
 - `testcontainers.junit.jupiter`
 - `archunit.junit5`
 
 **Plugins:** Use dot notation matching plugin ID
+
 - `spring.boot`
 - `spring.dependency.management`
 
 ## Consequences
 
 ### Positive:
+
 - Dramatically improved maintainability
 - Reduced version conflicts
 - Better IDE experience
@@ -165,17 +185,20 @@ When updating versions:
 - Clear project dependency overview
 
 ### Negative:
+
 - Initial migration effort (one-time cost)
 - Slight learning curve for developers unfamiliar with version catalogs
 - Need to maintain TOML file organization
 
 ### Neutral:
+
 - Additional file to maintain (`gradle/libs.versions.toml`)
 - Build files slightly more verbose with `libs.` prefix
 
 ## Implementation Status
 
 ✅ **Completed:**
+
 - Created `gradle/libs.versions.toml` with all project dependencies
 - Migrated `build.gradle` to use version catalog
 - Migrated `gradle/test.gradle` to use version catalog
@@ -191,7 +214,7 @@ When updating versions:
 
 ## Notes
 
-- This ADR establishes the standard for all future Skelletor projects
+- This ADR establishes the standard for all future projects
 - Version catalog is a Gradle 7.0+ feature (we're using Gradle 9.1.0)
 - TOML format is widely supported with excellent tooling
 - Future: Consider adding dependency update automation tools (e.g., Renovate, Dependabot)

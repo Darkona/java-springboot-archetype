@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.application.services;
+package com.archetype.onion.application.services;
 
 import com.archetype.onion.application.ports.in.TrainerUseCase;
 import com.archetype.onion.application.ports.out.TrainerRepositoryPort;

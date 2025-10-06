@@ -114,6 +114,7 @@ dependencies {
     // --- Spring Boot Core ---
     implementation libs.spring.boot.starter.web
     implementation libs.spring.boot.starter.actuator
+    implementation libs.spring.boot.starter.thymeleaf
     developmentOnly libs.spring.boot.devtools
 
     // --- Security ---
@@ -123,11 +124,15 @@ dependencies {
     implementation libs.spring.security.oauth2.jose
 
     // --- Data Access ---
-    implementation libs.spring.boot.starter.data.jpa
+    implementation(libs.spring.boot.starter.data.jpa){
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-jta-narayana"
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-jta-atomikos"
+    }
     implementation libs.spring.boot.starter.data.mongodb
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation libs.spring.boot.starter.data.redis
+    implementation libs.spring.boot.starter.cache
     implementation libs.flyway.core
+    implementation libs.flyway.postgresql
     runtimeOnly libs.postgresql
 
     // --- Messaging ---
@@ -198,8 +203,8 @@ processResources.finalizedBy stageAgents
 bootRun {
     dependsOn(stageAgents)
     jvmArgs += [
-        "-Dfile.encoding=UTF-8",
-        "-Dconsole.encoding=UTF-8"
+            "-Dfile.encoding=UTF-8",
+            "-Dconsole.encoding=UTF-8"
     ]
     doFirst {
         def dir = agentsOut.get().asFile

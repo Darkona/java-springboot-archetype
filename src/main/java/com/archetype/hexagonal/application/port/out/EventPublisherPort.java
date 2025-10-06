@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.application.port.out;
+package com.archetype.hexagonal.application.port.out;
 
 import com.archetype.hexagonal.domain.model.PokemonPet;
 

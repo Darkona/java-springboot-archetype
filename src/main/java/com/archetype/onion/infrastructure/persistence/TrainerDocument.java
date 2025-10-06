@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.infrastructure.persistence;
+package com.archetype.onion.infrastructure.persistence;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

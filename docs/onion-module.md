@@ -5,6 +5,7 @@ This document describes the Pokemon Trainer module implemented using Onion Archi
 ## Overview
 
 The Trainer module demonstrates a complete implementation of Onion Architecture with:
+
 - **MongoDB** for persistence
 - **Redis** for caching
 - **REST API** for presentation
@@ -13,6 +14,7 @@ The Trainer module demonstrates a complete implementation of Onion Architecture 
 ## Architecture Layers
 
 ### 1. Domain (Core)
+
 Pure business logic with no framework dependencies.
 
 **Location**: `com.archetype.onion.domain.model`
@@ -20,51 +22,61 @@ Pure business logic with no framework dependencies.
 - **Trainer**: Domain entity representing a Pokemon trainer
 - **PokemonOwnership**: Value object for Pokemon ownership details
 - Domain rules enforced:
-  - Maximum 6 Pokemon per trainer
-  - Unique nicknames per trainer
-  - Name validation
-  - Badges cannot be negative
+    - Maximum 6 Pokemon per trainer
+    - Unique nicknames per trainer
+    - Name validation
+    - Badges cannot be negative
 
 ### 2. Application Layer
+
 Use cases and ports defining application boundaries.
 
 **Locations**:
+
 - `com.archetype.onion.application.ports.in`: Input ports (use cases)
 - `com.archetype.onion.application.ports.out`: Output ports (repository contracts)
 - `com.archetype.onion.application.services`: Application services
 
 **Key Components**:
+
 - **TrainerUseCase**: Defines business operations
 - **TrainerService**: Implements use cases, coordinates domain logic
 - Caching annotations applied here (@Cacheable, @CachePut, @CacheEvict)
 
 ### 3. Infrastructure Layer
+
 Implements output ports with framework-specific code.
 
 **Location**: `com.archetype.onion.infrastructure`
 
 **Persistence** (`infrastructure.persistence`):
+
 - **TrainerDocument**: MongoDB document entity
 - **TrainerMongoRepository**: Spring Data MongoDB repository
 - **TrainerRepositoryAdapter**: Implements repository port, maps between domain and documents
 
 **Configuration** (`infrastructure.config`):
+
 - **CacheConfig**: Redis cache configuration (5-minute TTL)
 - **TrainerDemoDataLoader**: Loads sample data in `demo` profile
 
 ### 4. Presentation Layer
+
 Exposes the application to external consumers.
 
 **Location**: `com.archetype.onion.presentation`
 
 **REST** (`presentation.rest`):
+
 - **TrainerController**: REST endpoints
 
 **DTOs** (`presentation.dto`):
+
 - **TrainerDTO**: Request/response DTO
 - **PokemonOwnershipDTO**: Ownership DTO
 
 **Mappers** (`presentation.mapper`):
+
 - **TrainerMapper**: MapStruct mapper for domain ↔ DTO conversion
 
 ## Caching Strategy
@@ -78,13 +90,13 @@ Exposes the application to external consumers.
 
 ### Cached Operations
 
-| Operation | Cache Behavior |
-|-----------|---------------|
-| `createTrainer` | @CachePut - adds to cache |
-| `addPokemonToTrainer` | @CachePut - updates cache |
-| `getTrainer` | @Cacheable - reads from cache |
-| `deleteTrainer` | @CacheEvict - removes from cache |
-| `listTrainers` | No caching (always fresh from DB) |
+| Operation             | Cache Behavior                    |
+|-----------------------|-----------------------------------|
+| `createTrainer`       | @CachePut - adds to cache         |
+| `addPokemonToTrainer` | @CachePut - updates cache         |
+| `getTrainer`          | @Cacheable - reads from cache     |
+| `deleteTrainer`       | @CacheEvict - removes from cache  |
+| `listTrainers`        | No caching (always fresh from DB) |
 
 ## Running Locally
 
@@ -104,6 +116,7 @@ docker-compose up -d mongodb redis
 ```
 
 This starts:
+
 - **MongoDB**: localhost:27017 (credentials: archetype/archetype)
 - **Redis**: localhost:6379 (password: archetype)
 
@@ -147,6 +160,7 @@ gradlew.bat bootRun --args="--spring.profiles.active=local"
 ## REST API Endpoints
 
 ### Create Trainer
+
 ```http
 POST /api/trainers
 Content-Type: application/json
@@ -158,6 +172,7 @@ Content-Type: application/json
 ```
 
 ### Add Pokemon to Trainer
+
 ```http
 POST /api/trainers/{trainerId}/pokemon
 Content-Type: application/json
@@ -169,16 +184,19 @@ Content-Type: application/json
 ```
 
 ### Get Trainer
+
 ```http
 GET /api/trainers/{trainerId}
 ```
 
 ### List All Trainers
+
 ```http
 GET /api/trainers
 ```
 
 ### Delete Trainer
+
 ```http
 DELETE /api/trainers/{trainerId}
 ```
@@ -198,6 +216,7 @@ gradlew.bat integrationTest
 ```
 
 **Test Coverage**:
+
 - Trainer creation
 - Pokemon addition with domain rule enforcement
 - Six Pokemon limit validation
@@ -205,6 +224,7 @@ gradlew.bat integrationTest
 - Caching behavior verification
 
 **Containers**:
+
 - MongoDB 7
 - Redis 7-alpine
 
@@ -215,12 +235,12 @@ gradlew.bat integrationTest
 When running with `demo` profile, the following trainers are automatically created:
 
 1. **Ash Ketchum** (8 badges)
-   - Pikachu
-   - Charizard
+    - Pikachu
+    - Charizard
 
 2. **Misty** (5 badges)
-   - Staryu
-   - Psyduck
+    - Staryu
+    - Psyduck
 
 ## Monitoring Cache Performance
 
@@ -243,6 +263,7 @@ MONITOR
 ### Via Spring Actuator
 
 Access cache metrics at:
+
 ```
 GET http://localhost:8080/actuator/metrics/cache.gets?tag=name:trainers
 ```
@@ -250,16 +271,19 @@ GET http://localhost:8080/actuator/metrics/cache.gets?tag=name:trainers
 ## Architecture Benefits
 
 ### Dependency Inversion
+
 - Domain has no dependencies on infrastructure
 - Application layer depends only on domain
 - Infrastructure depends on application (implements ports)
 
 ### Testability
+
 - Domain logic testable without frameworks
 - Application services testable with mocked ports
 - Integration tests with real infrastructure (Testcontainers)
 
 ### Flexibility
+
 - Easy to swap persistence (MongoDB → PostgreSQL)
 - Easy to swap cache (Redis → Hazelcast)
 - Easy to add new presentation layers (GraphQL, gRPC)
@@ -267,6 +291,7 @@ GET http://localhost:8080/actuator/metrics/cache.gets?tag=name:trainers
 ## Troubleshooting
 
 ### MongoDB Connection Issues
+
 ```bash
 # Check MongoDB is running
 docker ps | grep mongo
@@ -279,6 +304,7 @@ mongosh "mongodb://archetype:archetype@localhost:27017/archetype?authSource=admi
 ```
 
 ### Redis Connection Issues
+
 ```bash
 # Check Redis is running
 docker ps | grep redis
@@ -291,6 +317,7 @@ docker exec -it archetype-redis redis-cli -a archetype PING
 ```
 
 ### Cache Not Working
+
 - Verify `@EnableCaching` in CacheConfig
 - Check Redis connection in application logs
 - Confirm cache annotations in TrainerService

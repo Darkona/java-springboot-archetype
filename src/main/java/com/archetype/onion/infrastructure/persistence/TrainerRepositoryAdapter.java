@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.infrastructure.persistence;
+package com.archetype.onion.infrastructure.persistence;
 
 import com.archetype.onion.application.ports.out.TrainerRepositoryPort;
 import com.archetype.onion.domain.model.PokemonOwnership;

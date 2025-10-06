@@ -1,17 +1,18 @@
-﻿package com.archetype.layer.domain.model;
+package com.archetype.layer.domain.model;
 
 import java.util.List;
+import java.util.Map;
 
 public record Species(int nationalId,
                       String name,
                       Type firstType,
                       Type secondType,
                       List<Ability> abilities,
-                      List<EggGroup> eggGroups,
-                      int baseHp,
-                      List<Species> evolutions,
-                      List<Tuple<Integer, Move>> moves) {
+                      Map<Integer, String> moves,
+                      PokemonStats stats
+                      ) {
 
-
+    public record PokemonStats (int attack, int defense, int specialAttack, int specialDefense, int speed, int hp){
+    }
 }
 

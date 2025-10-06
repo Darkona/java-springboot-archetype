@@ -1,6 +1,8 @@
 package com.archetype.layer.client.pokeapi;
 
+import com.archetype.layer.client.pokeapi.dto.PokeApiAbility;
 import com.archetype.layer.client.pokeapi.dto.PokeApiPokemon;
+import io.github.darkona.logged.Logged;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +22,14 @@ public interface PokeApiClient {
     /**
      * Fetch a Pokemon by its ID from PokeAPI.
      *
-     * @param id Pokemon national ID (1-151 for first generation)
+     * @param id Pokemon national ID
      * @return Pokemon data from PokeAPI
      */
     @GetMapping("/api/v2/pokemon/{id}")
+    @Logged
     PokeApiPokemon getPokemonById(@PathVariable("id") int id);
 
-    /**
-     * Fetch a Pokemon by its name from PokeAPI.
-     *
-     * @param name Pokemon name (e.g., "bulbasaur")
-     * @return Pokemon data from PokeAPI
-     */
-    @GetMapping("/api/v2/pokemon/{name}")
-    PokeApiPokemon getPokemonByName(@PathVariable("name") String name);
+    @GetMapping("/api/v2/ability/{name}")
+    PokeApiAbility getAbilityByName(@PathVariable String name);
+
 }

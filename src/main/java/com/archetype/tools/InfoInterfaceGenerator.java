@@ -1,4 +1,4 @@
-﻿package com.archetype.tools;
+package com.archetype.tools;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

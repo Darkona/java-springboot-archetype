@@ -1,9 +1,14 @@
-﻿package com.archetype.layer.domain.model;
+package com.archetype.layer.domain.model;
 
-public class Ability {
+import io.github.darkona.logged.utils.Transformer;
 
-    private String name;
-    private String description;
+public record Ability(int id, String name, String description, Boolean hidden) {
 
+    public Ability(int id, String name, String description, Boolean hidden) {
+        this.id = id;
+        this.name = Transformer.capitalize(name);
+        this.description = description;
+        this.hidden = hidden;
+    }
 }
 

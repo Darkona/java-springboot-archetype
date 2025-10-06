@@ -74,7 +74,7 @@ services:
   # ===== Databases =====
   
   postgres:
-    image: postgres:16-alpine
+    image: postgres:15.14-alpine
     container_name: archetype-postgres
     environment:
       POSTGRES_DB: archetype
@@ -87,11 +87,12 @@ services:
       test: ["CMD-SHELL", "pg_isready -U archetype"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 59
+      ]
     networks: [archetype-network]
 
   mongodb:
-    image: mongo:7
+    image: mongo:8-noble
     container_name: archetype-mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: archetype

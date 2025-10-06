@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.infrastructure.config;
+package com.archetype.onion.infrastructure.config;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;

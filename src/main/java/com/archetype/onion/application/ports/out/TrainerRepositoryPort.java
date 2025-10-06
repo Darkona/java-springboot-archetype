@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.application.ports.out;
+package com.archetype.onion.application.ports.out;
 
 import com.archetype.onion.domain.model.Trainer;
 

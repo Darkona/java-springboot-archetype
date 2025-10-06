@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.domain.dto.request;
+package com.archetype.layer.domain.dto.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.domain.dto.response;
+package com.archetype.layer.domain.dto.response;
 
 import com.archetype.layer.domain.model.Move;
 import jakarta.annotation.Nullable;

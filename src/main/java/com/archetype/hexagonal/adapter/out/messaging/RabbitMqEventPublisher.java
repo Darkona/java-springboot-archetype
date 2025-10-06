@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.adapter.out.messaging;
+package com.archetype.hexagonal.adapter.out.messaging;
 
 import com.archetype.hexagonal.application.port.out.EventPublisherPort;
 import com.archetype.hexagonal.domain.model.PokemonPet;

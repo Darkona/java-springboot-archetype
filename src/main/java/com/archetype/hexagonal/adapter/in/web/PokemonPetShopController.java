@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.adapter.in.web;
+package com.archetype.hexagonal.adapter.in.web;
 
 import com.archetype.hexagonal.adapter.in.web.dto.PokemonCreateRequest;
 import com.archetype.hexagonal.adapter.in.web.dto.PokemonResponse;

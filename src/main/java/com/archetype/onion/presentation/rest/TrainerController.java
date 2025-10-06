@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.presentation.rest;
+package com.archetype.onion.presentation.rest;
 
 import com.archetype.onion.application.ports.in.TrainerUseCase;
 import com.archetype.onion.domain.model.PokemonOwnership;

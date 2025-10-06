@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.persistence;
+package com.archetype.layer.persistence.internal;
 
 import com.archetype.layer.persistence.document.PokemonDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;

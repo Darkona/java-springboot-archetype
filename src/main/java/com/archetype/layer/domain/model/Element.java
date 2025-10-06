@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.domain.model;
+package com.archetype.layer.domain.model;
 
 public enum Element {
 

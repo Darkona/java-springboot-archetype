@@ -5,6 +5,7 @@ This directory contains all architectural decisions for the Java Spring Boot arc
 ## Directory Structure
 
 ### 📁 **foundation/** - Core Standards
+
 Fundamental standards that affect all code regardless of architecture:
 
 - [0001-build-and-dependency-standards](foundation/0001-build-and-dependency-standards.md) - Gradle, Java 21, dependency policy
@@ -12,7 +13,8 @@ Fundamental standards that affect all code regardless of architecture:
 - [0003-constructor-injection](foundation/0003-constructor-injection.md) - Dependency injection standards
 - [0004-gradle-version-catalog](foundation/0004-gradle-version-catalog.md) - Version management approach
 
-### 🏗️ **architecture/** - Domain Design & Cross-cutting Patterns  
+### 🏗️ **architecture/** - Domain Design & Cross-cutting Patterns
+
 Architectural patterns that apply across different implementation styles:
 
 - [0001-domain-separation-and-mapping](architecture/0001-domain-separation-and-mapping.md) - Layer separation with MapStruct
@@ -23,6 +25,7 @@ Architectural patterns that apply across different implementation styles:
 - [0006-exception-handling-strategy](architecture/0006-exception-handling-strategy.md) - RFC 9457 compliant error responses
 
 ### ⚙️ **implementation/** - Tool Configurations & Specific Conventions
+
 Implementation details and tool-specific configurations:
 
 - [0001-logging-standards-and-obfuscation](implementation/0001-logging-standards-and-obfuscation.md) - Structured logging with obfuscation
@@ -33,6 +36,7 @@ Implementation details and tool-specific configurations:
 - [0006-test-naming-conventions](implementation/0006-test-naming-conventions.md) - Readable test names
 
 ### 🎯 **patterns/** - Architecture-Specific Guidance
+
 Guidance specific to particular architectural patterns:
 
 - [0001-layered-architecture-package-structure](patterns/0001-layered-architecture-package-structure.md) - Layered architecture package organization
@@ -40,12 +44,14 @@ Guidance specific to particular architectural patterns:
 ## Navigation Tips
 
 ### For AI Agents
+
 - **Core standards**: Start with `foundation/` for fundamental patterns
 - **Domain design**: Check `architecture/` for cross-cutting design decisions
 - **Tool setup**: Reference `implementation/` for specific configurations
 - **Pattern specifics**: Use `patterns/` for architecture-specific guidance
 
 ### For Humans
+
 - **New to the archetype?** Start with `foundation/0001` (build standards)
 - **Designing domain logic?** Focus on `architecture/` directory
 - **Setting up tools?** Browse `implementation/` directory
@@ -62,6 +68,7 @@ Guidance specific to particular architectural patterns:
 ## Contributing
 
 When adding new ADRs:
+
 1. Choose the appropriate theme directory
 2. Use the next available number in that directory
 3. Follow the naming convention: `NNNN-descriptive-title.md`
@@ -70,4 +77,5 @@ When adding new ADRs:
 
 ## Legacy References
 
-This structure was migrated from a flat numbering system. All content is preserved - only organization and numbering have changed for better discoverability and maintainability.
+This structure was migrated from a flat numbering system. All content is preserved - only organization and numbering have changed for better discoverability and
+maintainability.

@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.domain.model;
+package com.archetype.onion.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

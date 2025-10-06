@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.persistence.document;
+package com.archetype.layer.persistence.document;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

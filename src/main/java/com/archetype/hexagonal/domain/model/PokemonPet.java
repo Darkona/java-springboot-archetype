@@ -1,4 +1,4 @@
-﻿package com.archetype.hexagonal.domain.model;
+package com.archetype.hexagonal.domain.model;
 
 import java.time.Instant;
 import java.util.List;

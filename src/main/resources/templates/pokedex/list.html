@@ -20,7 +20,7 @@
                     <strong th:text="${p.name}">Pokemon Name</strong>
                 </a>
                 <span> — </span>
-                <span th:text="${#lists.isEmpty(p.types) ? 'Unknown' : p.types.join(', ')}">types</span>
+                <span th:text="${#lists.isEmpty(p.types) ? 'Unknown' : p.typesJoined()}">types</span>
             </li>
         </ul>
 
@@ -31,7 +31,7 @@
 </main>
 
 <footer>
-    <small>Skeleton Pokedex example — read-only</small>
+    <small>Pokedex example — read-only</small>
 </footer>
 </body>
 </html>

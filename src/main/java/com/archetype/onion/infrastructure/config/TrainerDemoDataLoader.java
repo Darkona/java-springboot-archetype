@@ -1,4 +1,4 @@
-﻿package com.archetype.onion.infrastructure.config;
+package com.archetype.onion.infrastructure.config;
 
 import com.archetype.onion.application.ports.in.TrainerUseCase;
 import com.archetype.onion.domain.model.PokemonOwnership;

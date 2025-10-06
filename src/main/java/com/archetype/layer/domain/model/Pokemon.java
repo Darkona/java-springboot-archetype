@@ -1,4 +1,4 @@
-﻿package com.archetype.layer.domain.model;
+package com.archetype.layer.domain.model;
 
 import lombok.Data;
 import org.springframework.util.StringUtils;
@@ -37,9 +37,9 @@ public class Pokemon {
         this.hpIV = calculateHpIV();
         this.shiny = calculateShiny();
         this.maxHp = calculateMaxHp();
-        species.moves().stream()
-               .filter(t -> t.first() == 1)
-               .forEach(m -> this.moveSet.addMove(m.second()));
+        species.moves().entrySet().stream()
+               .filter(t -> t.getKey() == 1)
+               .forEach(m -> this.moveSet.addMove(m.getValue()));
     }
 
     boolean calculateShiny() {
@@ -53,7 +53,7 @@ public class Pokemon {
     }
 
     int calculateMaxHp() {
-        return ((this.species.baseHp() + this.hpIV) * this.level / 100) + this.level + 10;
+        return ((this.species.stats().hp() + this.hpIV) * this.level / 100) + this.level + 10;
     }
 
     // Public accessors for mapping and external consumers
@@ -81,12 +81,12 @@ public class Pokemon {
     public static
     class MoveSet {
 
-        Move move1;
-        Move move2;
-        Move move3;
-        Move move4;
+        String move1;
+        String move2;
+        String move3;
+        String move4;
 
-        public void addMove(Move move) {
+        public void addMove(String move) {
             if (move == null) return;
             if (move.equals(move1) || move.equals(move2) ||
                     move.equals(move3) || move.equals(move4)) {
@@ -98,21 +98,11 @@ public class Pokemon {
             replaceMove(move4, move);
         }
 
-        Move replaceMove(Move initial, Move replacement) {
-            if (initial.hm()) return initial;
+        String replaceMove(String initial, String replacement) {
+            //if (initial.hm()) return initial;
             return replacement;
         }
 
-        public boolean setMove(Move move, int slot) {
-            if (move == null) return false;
-            return switch (slot) {
-                case 1 -> replaceMove(move1, move).equals(move);
-                case 2 -> replaceMove(move2, move).equals(move);
-                case 3 -> replaceMove(move3, move).equals(move);
-                case 4 -> replaceMove(move4, move).equals(move);
-                default -> false;
-            };
-        }
     }
 }
 
