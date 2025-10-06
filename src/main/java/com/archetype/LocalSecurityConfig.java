@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@Profile({"local", "petshop", "integrationTest"})
+@Profile({"local", "test"})
 public class LocalSecurityConfig {
 
     @Bean
@@ -20,6 +20,8 @@ public class LocalSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
+                        .requestMatchers("/actuator/health/**").permitAll()
                         .anyRequest().permitAll()
                 );
         return http.build();

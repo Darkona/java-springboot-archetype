@@ -26,7 +26,7 @@ lombok-mapstruct-binding = "0.2.0"
 archunit = "1.1.0"
 testcontainers = "1.18.3"
 spock = "2.4-M6-groovy-4.0"
-groovy = "5.0.1"
+groovy = "4.0.28"
 byte-buddy = "1.17.7"
 
 # Observability & Monitoring

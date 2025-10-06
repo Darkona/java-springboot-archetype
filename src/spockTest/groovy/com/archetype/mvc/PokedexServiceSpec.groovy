@@ -1,45 +1,50 @@
 package com.archetype.mvc
 
-import com.archetype.mvc.persistence.PokemonRepository
-import com.archetype.mvc.persistence.document.PokemonDocument
+import com.archetype.mvc.exception.PokemonNotFoundException
+import com.archetype.mvc.model.Species
+import com.archetype.mvc.model.Type
+import com.archetype.mvc.persistence.PokemonMvcDataRepository
+import com.archetype.mvc.persistence.document.SpeciesDocument
 import com.archetype.mvc.service.PokedexService
 import spock.lang.Specification
 
 class PokedexServiceSpec extends Specification {
 
-    PokemonRepository repository = Mock()
+    PokemonMvcDataRepository repository = Mock()
     PokedexService service = new PokedexService(repository)
 
     def "findAllSpecies returns mapped overviews"() {
         given:
-        UUID id = UUID.randomUUID()
-        PokemonDocument doc = new PokemonDocument()
-        doc.setId(id)
-        doc.setName("Bulbasaur")
-        doc.setTypes(List.of("Grass", "Poison"))
+        Species doc = new Species(1,
+                "Bulbasaur",
+                Type.grass,
+                Type.poison,
+                Collections.emptyList(),
+                Map.of(),
+                new Species.PokemonStats(0,0,0,0,0,0) );
 
-        repository.findAll() >> [doc]
+        repository.getAllSpecies() >> [doc]
 
         when:
         def result = service.findAllSpecies()
 
         then:
         result.size() == 1
-        result[0].id() == id
+        result[0].id() == 1
         result[0].name() == "Bulbasaur"
-        result[0].types() == ["Grass", "Poison"]
+        result[0].types() == ["GRASS", "POISON"]
     }
 
-    def "findSpeciesById returns empty when not found"() {
+    def "findSpeciesById throws exception when not found"() {
         given:
-        UUID id = UUID.randomUUID()
-        repository.findById(id) >> Optional.empty()
+        def id = -1
+
+        repository.getSpeciesById(id) >> { throw new PokemonNotFoundException(id) }
 
         when:
-        def opt = service.findSpeciesById(id)
+        service.findSpeciesById(id)
 
         then:
-        !opt.isPresent()
+        thrown(PokemonNotFoundException)
     }
 }
-

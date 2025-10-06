@@ -1,0 +1,47 @@
+# Spock Test Configuration
+spring:
+  profiles:
+    active: spockTest
+  
+  # Disable auto configuration that causes issues in tests
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.openfeign.FeignAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+  
+  # Test database configuration
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  
+  # Disable web features not needed for unit tests
+  web:
+    resources:
+      add-mappings: false
+  
+  main:
+    allow-bean-definition-overriding: true
+
+# Logging configuration for tests
+logging:
+  level:
+    com.archetype: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.test: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Management endpoints disabled for tests
+management:
+  endpoints:
+    enabled-by-default: false
+  health:
+    enabled: false

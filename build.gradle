@@ -170,6 +170,7 @@ dependencies {
     // --- Runtime Agents ---
     agents libs.opentelemetry.javaagent
     agents libs.aspectj.weaver
+
     mockitoAgent libs.byte.buddy.agent
 }
 

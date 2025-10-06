@@ -1,7 +1,7 @@
 package com.archetype.mvc.persistence.document;
 
-import com.archetype.layer.domain.model.Species;
-import com.archetype.layer.domain.model.Type;
+import com.archetype.mvc.model.Species;
+import com.archetype.mvc.model.Type;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;

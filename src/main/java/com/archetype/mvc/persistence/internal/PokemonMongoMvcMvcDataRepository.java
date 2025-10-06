@@ -13,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PokemonMongoMvcMvcDataRepository implements PokemonMvcDataRepository {
 
-    private final PokemonMvcRepository pokemonRepo;
     private final SpeciesMvcRepository speciesRepo;
     private final PokemonMvcPersistenceMapper mapper;
 

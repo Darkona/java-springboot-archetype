@@ -17,6 +17,7 @@ configurations {
     spockTestCompileOnly.extendsFrom testCompileOnly
     spockTestAnnotationProcessor.extendsFrom testAnnotationProcessor
     spockTestDevelopmentOnly.extendsFrom testDevelopmentOnly
+    spockTestMockitoAgent.extendsFrom mockitoAgent
 }
 
 java {
@@ -49,10 +50,11 @@ tasks.register('spockTest', Test) {
     classpath = sourceSets.spockTest.runtimeClasspath
     useJUnitPlatform()
     jvmArgs += [
+        "-javaagent:${configurations.mockitoAgent.singleFile.absolutePath}",
         "-Dfile.encoding=UTF-8",
         "-Dconsole.encoding=UTF-8"
     ]
-    systemProperty "spring.profiles.active", "spockTest"
+    systemProperty "spring.profiles.active", "test"
     reports {
         html.required = true
         html.outputLocation = layout.buildDirectory.dir("reports/tests/spock")
