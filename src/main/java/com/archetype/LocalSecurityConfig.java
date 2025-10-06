@@ -1,4 +1,4 @@
-﻿package com.archetype;
+package com.archetype;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +18,7 @@ public class LocalSecurityConfig {
     throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 );

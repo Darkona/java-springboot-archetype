@@ -1,20 +1,14 @@
 package com.archetype.layer.mapper.persistence;
 
 import com.archetype.layer.domain.model.Ability;
-import com.archetype.layer.domain.model.Pokemon;
 import com.archetype.layer.domain.model.Species;
-import com.archetype.layer.persistence.document.PokemonDocument;
 import com.archetype.layer.persistence.document.SpeciesDocument;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Persistence mapper: maps between domain model and persistence document.
@@ -25,11 +19,11 @@ import java.util.stream.Collectors;
 public interface PokemonPersistenceMapper {
 
     @Mapping(target = "abilities", source = "abilities", qualifiedByName = "idsToAbilities")
-    @Mapping(target = "moves",     source = "doc.moves")
+    @Mapping(target = "moves", source = "doc.moves")
     Species toDomain(SpeciesDocument doc);
 
     @Mapping(target = "abilities", source = "abilities", qualifiedByName = "abilitiesToIds")
-    @Mapping(target = "moves",     source = "species.moves")
+    @Mapping(target = "moves", source = "species.moves")
     SpeciesDocument toDocument(Species species);
 
     // ---- helpers ----

@@ -55,7 +55,7 @@ public class PokeApiDataService {
         var medio = intermediate.stream()
                                 .filter(m -> m.move().number() > 0 && m.move().name() != null && !m.move().name().isBlank())
                                 .map(PokeApiPokemon.PokeApiMove::move)
-                .toList();
+                                .toList();
 
 
         Map<Integer, String> moves = medio.stream().collect(Collectors.toMap(

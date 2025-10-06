@@ -3,7 +3,6 @@ package com.archetype.layer.controller;
 import com.archetype.layer.domain.dto.request.PokemonCreate;
 import com.archetype.layer.domain.dto.response.PokemonDetails;
 import com.archetype.layer.domain.dto.response.PokemonOverview;
-import com.archetype.layer.domain.model.Pokemon;
 import com.archetype.layer.domain.model.Species;
 import com.archetype.layer.service.PokemonService;
 import jakarta.validation.Valid;
@@ -130,7 +129,7 @@ public class PokemonController implements PokemonControllerInfo {
     }
 
     @GetMapping("/species")
-    public List<Species> getAllSpecies(){
+    public List<Species> getAllSpecies() {
         return pokemonService.listAllSpecies();
     }
 }

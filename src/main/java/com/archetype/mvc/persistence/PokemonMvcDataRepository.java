@@ -6,7 +6,6 @@ import com.archetype.mvc.model.Species;
 import java.util.List;
 
 
-
 public interface PokemonMvcDataRepository {
 
 

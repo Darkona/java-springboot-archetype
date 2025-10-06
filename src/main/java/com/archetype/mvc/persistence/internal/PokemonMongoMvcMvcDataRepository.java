@@ -40,14 +40,13 @@ public class PokemonMongoMvcMvcDataRepository implements PokemonMvcDataRepositor
 
     @Override
     public void saveAll(List<Species> species) {
-         speciesRepo.saveAll(mapper.toDocuments(species));
+        speciesRepo.saveAll(mapper.toDocuments(species));
     }
 
     @Override
     public boolean existsById(int id) {
         return speciesRepo.existsById(id);
     }
-
 
 
 }

@@ -23,10 +23,10 @@ public record PokeApiPokemon(
 ) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public int stat(String stat){
+    public int stat(String stat) {
         return stats.stream().filter(s -> s.stat.name != null && s.stat.name.equals(stat)).findFirst().
-             orElseGet(() -> new PokeApiStat(0, 0, new PokeApiStat.PokeStat(stat)))
-             .baseStat();
+                    orElseGet(() -> new PokeApiStat(0, 0, new PokeApiStat.PokeStat(stat)))
+                    .baseStat();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -54,14 +54,15 @@ public record PokeApiPokemon(
             @JsonProperty("version_group_details") List<PokeApiMoveDetail> details
     ) {
 
-        public boolean isValid(){
+        public boolean isValid() {
             return details.stream().anyMatch(detail -> validVersion(detail.version.name));
         }
 
-        private boolean validVersion(String version){
-            if(version == null) return false;
+        private boolean validVersion(String version) {
+            if (version == null) return false;
             return "red-blue".equals(version) || "yellow".equals(version) || "gold-silver".equals(version);
         }
+
         @JsonIgnoreProperties(ignoreUnknown = true)
         public record PokeApiMoveId(String name, String url) {
 
@@ -82,12 +83,14 @@ public record PokeApiPokemon(
         }
 
         public record PokeApiMoveDetail(@JsonProperty("level_learned_at") int levelLearn,
-                                        @JsonProperty("version_group") PokeApiMoveVersion version) {}
+                                        @JsonProperty("version_group") PokeApiMoveVersion version) {
+        }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public record PokeApiMoveVersion(String name) {
         }
     }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record PokeApiStat(
             @JsonProperty("base_stat") int baseStat,
@@ -95,10 +98,11 @@ public record PokeApiPokemon(
             @JsonProperty("stat") PokeStat stat
     ) {
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public record PokeStat(String name){
+        public record PokeStat(String name) {
 
         }
     }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record PokeApiSprites(
             @JsonProperty("front_default") String frontDefault,
@@ -107,6 +111,7 @@ public record PokeApiPokemon(
             @JsonProperty("back_shiny") String backShiny
     ) {
     }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record PokeApiSpecies(
             String name,

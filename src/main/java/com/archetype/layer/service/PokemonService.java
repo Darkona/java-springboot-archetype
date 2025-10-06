@@ -1,19 +1,13 @@
 package com.archetype.layer.service;
 
-import com.archetype.layer.domain.dto.request.PokemonCreate;
-import com.archetype.layer.domain.exception.PokemonAlreadyExistsException;
-import com.archetype.layer.domain.exception.PokemonNotFoundException;
-import com.archetype.layer.domain.exception.PokemonServiceException;
 import com.archetype.layer.domain.model.Pokemon;
 import com.archetype.layer.domain.model.Species;
 import com.archetype.layer.persistence.PokemonDataRepository;
-import com.archetype.layer.persistence.document.PokemonDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Service layer working with domain models.
@@ -28,10 +22,10 @@ import java.util.UUID;
 public class PokemonService {
 
     private final PokemonDataRepository repository;
-    private final PokeApiDataService  pokeApiDataService;
+    private final PokeApiDataService pokeApiDataService;
 
 
-//    public Pokemon createPokemon(PokemonCreate pokemonCreate) {
+    //    public Pokemon createPokemon(PokemonCreate pokemonCreate) {
 //        log.debug("Creating Pokemon with national ID: {}, name: {}", pokemonCreate.nationalId(), pokemonCreate.name());
 //
 //        // Check if Pokemon already exists by national ID

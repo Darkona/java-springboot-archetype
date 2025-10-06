@@ -23,19 +23,15 @@ mapstruct = "1.6.3"
 lombok-mapstruct-binding = "0.2.0"
 
 # Testing
-junit-platform = "1.12.2"
 archunit = "1.1.0"
 testcontainers = "1.18.3"
 spock = "2.4-M6-groovy-4.0"
 groovy = "5.0.1"
-mockito = "5.20.0"
 byte-buddy = "1.17.7"
 
 # Observability & Monitoring
 opentelemetry-bom = "2.20.1"
 opentelemetry-agent = "2.19.0"
-micrometer-otlp = "1.14.5"
-micrometer-prometheus = "1.14.5"
 logstash-logback-encoder = "8.1"
 logged = "1.5.0"
 loki-logback-appender = "2.0.0"

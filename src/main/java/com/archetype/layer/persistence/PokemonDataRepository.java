@@ -5,7 +5,6 @@ import com.archetype.layer.domain.model.Species;
 import java.util.List;
 
 
-
 public interface PokemonDataRepository {
 
 

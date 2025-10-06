@@ -10,9 +10,9 @@ public record Species(int nationalId,
                       List<Ability> abilities,
                       Map<Integer, String> moves,
                       PokemonStats stats
-                      ) {
+) {
 
-    public record PokemonStats (int attack, int defense, int specialAttack, int specialDefense, int speed, int hp){
+    public record PokemonStats(int attack, int defense, int specialAttack, int specialDefense, int speed, int hp) {
     }
 }
 

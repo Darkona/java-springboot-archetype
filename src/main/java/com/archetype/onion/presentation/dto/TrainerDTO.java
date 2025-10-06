@@ -9,20 +9,20 @@ import java.util.List;
 /**
  * Data Transfer Object for Trainer.
  * Used for REST API request/response.
- * 
+ * <p>
  * Follows ADR 0017 (Java 21 language features) by using records for DTOs.
  */
 public record TrainerDTO(
-    String id,
-    String name,
-    Integer badges,
-    List<PokemonOwnershipDTO> ownedPokemons,
-    
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-    Instant createdAt,
-    
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-    Instant updatedAt
+        String id,
+        String name,
+        Integer badges,
+        List<PokemonOwnershipDTO> ownedPokemons,
+
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+        Instant createdAt,
+
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+        Instant updatedAt
 ) {
     /**
      * Compact constructor to handle default values.
@@ -33,7 +33,7 @@ public record TrainerDTO(
             ownedPokemons = new ArrayList<>();
         }
     }
-    
+
     /**
      * Convenience constructor for creating TrainerDTO with default empty pokemon list.
      */

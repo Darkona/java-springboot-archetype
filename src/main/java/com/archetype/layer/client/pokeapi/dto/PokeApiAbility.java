@@ -11,7 +11,9 @@ public record PokeApiAbility(int id,
                              @JsonProperty("effect_entries") List<EffectEntry> effects) {
 
 
-    public record EffectEntry(String effect, EntryEffectLanguage language){}
+    public record EffectEntry(String effect, EntryEffectLanguage language) {
+    }
 
-    public record EntryEffectLanguage(String name){}
+    public record EntryEffectLanguage(String name) {
+    }
 }

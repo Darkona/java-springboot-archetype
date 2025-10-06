@@ -86,5 +86,6 @@ public class PokemonPetShopController {
      * Request DTO for adopting Pokemon.
      * Follows ADR 0017 (Java 21 language features) by using records for DTOs.
      */
-    public record AdoptRequest(String ownerId) {}
+    public record AdoptRequest(String ownerId) {
+    }
 }

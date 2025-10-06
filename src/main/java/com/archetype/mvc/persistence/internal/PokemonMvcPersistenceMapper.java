@@ -19,11 +19,11 @@ import java.util.Objects;
 public interface PokemonMvcPersistenceMapper {
 
     @Mapping(target = "abilities", source = "abilities", qualifiedByName = "idsToAbilities")
-    @Mapping(target = "moves",     source = "doc.moves")
+    @Mapping(target = "moves", source = "doc.moves")
     Species toDomain(SpeciesDocument doc);
 
     @Mapping(target = "abilities", source = "abilities", qualifiedByName = "abilitiesToIds")
-    @Mapping(target = "moves",     source = "species.moves")
+    @Mapping(target = "moves", source = "species.moves")
     SpeciesDocument toDocument(Species species);
 
     // ---- helpers ----

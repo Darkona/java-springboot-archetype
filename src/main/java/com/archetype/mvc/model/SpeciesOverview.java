@@ -13,7 +13,8 @@ public record SpeciesOverview(Integer id, String name, List<String> types) {
     public SpeciesOverview {
         name = Transformer.capitalize(name);
     }
-    public String typesJoined(){
+
+    public String typesJoined() {
         return types.stream().map(t -> Transformer.capitalize(t.toLowerCase())).collect(Collectors.joining(", "));
     }
 }

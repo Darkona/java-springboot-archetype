@@ -6,15 +6,16 @@ import java.util.UUID;
 
 /**
  * Response DTO for Pokemon in the hexagonal architecture module.
- * 
+ * <p>
  * Follows ADR 0017 (Java 21 language features) by using records for DTOs.
  * Represents a Pokemon with ownership and availability information.
  */
 public record PokemonResponse(
-    UUID id,
-    String name,
-    List<String> types,
-    boolean available,
-    String ownerId,
-    Instant createdAt
-) {}
+        UUID id,
+        String name,
+        List<String> types,
+        boolean available,
+        String ownerId,
+        Instant createdAt
+) {
+}

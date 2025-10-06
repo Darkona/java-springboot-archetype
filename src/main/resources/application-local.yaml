@@ -5,11 +5,11 @@ spring:
 
   autoconfigure:
     exclude:
-#      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-#      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-#      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-#      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+  #      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+  #      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+  #      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  #      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  #      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
 
   output:
     ansi:
@@ -44,7 +44,7 @@ spring:
       driver-class-name: org.postgresql.Driver
       maximum-pool-size: 10
       minimum-idle: 4
-      jdbc-url:   jdbc:postgresql://localhost:5432/archetype
+      jdbc-url: jdbc:postgresql://localhost:5432/archetype
 
   jpa:
     hibernate:
