@@ -9,11 +9,12 @@ spring:
 
   autoconfigure:
     exclude:
-  #      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-  #      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-  #      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-  #      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-  #      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+        - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+        - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+        - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+        - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+        - org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration
+        - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
 
   output:
     ansi:
@@ -32,7 +33,7 @@ spring:
     redis:
       host: localhost
       port: 6379
-      password: archetype
+      password: ${REDIS_PASSWORD}
       database: 0
 
   jta:
@@ -51,24 +52,14 @@ spring:
 
   jpa:
     hibernate:
-
       ddl-auto: update
     open-in-view: false
 
   rabbitmq:
     host: localhost
     port: 5672
-    username: archetype
-    password: archetype
-
-  flyway:
-    postgresql:
-      transactional-lock: on
-    user: archetype
-    password: archetype
-    schemas: archetype
-    url: jdbc:postgresql://localhost:5432/archetype
-    enabled: false
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 logged:
   color: true

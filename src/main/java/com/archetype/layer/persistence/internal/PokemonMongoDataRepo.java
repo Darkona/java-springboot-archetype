@@ -8,15 +8,14 @@ import com.archetype.layer.mapper.persistence.PokemonPersistenceMapper;
 import com.archetype.layer.mapper.persistence.SpeciesPersistenceMapper;
 import com.archetype.layer.persistence.PokemonDataRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
-
-@Repository
+@Component
 @RequiredArgsConstructor
-public class PokemonMongoDataRepository implements PokemonDataRepository {
+public class PokemonMongoDataRepo implements PokemonDataRepository {
 
     private final PokemonRepository pokemonRepo;
     private final SpeciesRepository speciesRepo;

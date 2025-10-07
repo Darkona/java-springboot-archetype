@@ -131,9 +131,6 @@ dependencies {
     implementation libs.spring.boot.starter.data.mongodb
     implementation libs.spring.boot.starter.data.redis
     implementation libs.spring.boot.starter.cache
-    implementation libs.flyway.core
-    implementation libs.flyway.postgresql
-    runtimeOnly libs.postgresql
 
     // --- Messaging ---
     implementation libs.spring.boot.starter.amqp

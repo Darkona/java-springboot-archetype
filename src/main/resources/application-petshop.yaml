@@ -5,7 +5,6 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:petshop}
     username: ${POSTGRES_USER:petshop}
     password: ${POSTGRES_PASSWORD:petshop}
-    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:

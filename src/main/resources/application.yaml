@@ -18,12 +18,12 @@ spring:
     config:
       enabled: false
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI}
-          jwk-set-uri: ${KEYCLOAK_JWK_URI}
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+#          jwk-set-uri: ${KEYCLOAK_JWK_URI}
 
 management:
   endpoints:

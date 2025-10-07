@@ -14,8 +14,6 @@ spring-security-oauth2-jose = "6.4.3"
 
 # Data & Persistence
 postgresql = "42.7.8"
-flyway = "11.13.2"
-flyway-postgresql="11.13.2"
 
 # Code Generation & Processing
 lombok = "1.18.36"
@@ -84,10 +82,6 @@ spring-modulith-actuator = { module = "org.springframework.modulith:spring-modul
 spring-modulith-observability = { module = "org.springframework.modulith:spring-modulith-observability" }
 spring-modulith-starter-test = { module = "org.springframework.modulith:spring-modulith-starter-test" }
 
-# Data & Persistence
-flyway-core = { module = "org.flywaydb:flyway-core", version.ref= "flyway" }
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
-flyway-postgresql = {module = "org.flywaydb:flyway-database-postgresql", version.ref= "flyway-postgresql"}
 # Code Generation
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
