@@ -1,6 +1,7 @@
 package com.archetype.layer.domain.model;
 
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -15,11 +16,16 @@ public class Pokemon {
     final int speedIV;
     final int specialIV;
     final int hpIV;
+    @Getter
     final boolean shiny;
+    @Getter
     Species species;
+    @Getter
     String name;
+    @Getter
     int level;
     long maxHp;
+    @Getter
     MoveSet moveSet = new MoveSet();
 
     public Pokemon(Species species, String name, int level) {
@@ -54,27 +60,6 @@ public class Pokemon {
 
     int calculateMaxHp() {
         return ((this.species.stats().hp() + this.hpIV) * this.level / 100) + this.level + 10;
-    }
-
-    // Public accessors for mapping and external consumers
-    public Species getSpecies() {
-        return this.species;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getLevel() {
-        return this.level;
-    }
-
-    public boolean isShiny() {
-        return this.shiny;
-    }
-
-    public MoveSet getMoveSet() {
-        return this.moveSet;
     }
 
     @Data

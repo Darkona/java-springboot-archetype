@@ -2,28 +2,28 @@ server:
   port: 8080
 
 spring:
+
   application:
     name: Archetype
 
-  cloud:
-    config:
-      enabled: false
-
   config:
-    # .env file outside of the project directory
-    # contains ENVIRONMENT=local
+    # .env file outside the project directory
+    # contains APP_PROFILE=local
     import: optional:file:../local-config/.env[.properties]
 
   profiles:
     active: ${APP_PROFILE:default}
 
+  cloud:
+    config:
+      enabled: false
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/olimpo
-          jwk-set-uri: http://localhost:8081/realms/olimpo/protocol/openid-connect/certs
-
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          jwk-set-uri: ${KEYCLOAK_JWK_URI}
 
 management:
   endpoints:

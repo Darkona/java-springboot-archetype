@@ -3,7 +3,7 @@ services:
   
   loki:
     image: grafana/loki:latest
-    container_name: archetype-loki
+    container_name: loki
     command: -config.file=/etc/loki/loki-config.yaml
     ports: ["3100:3100"]
     volumes:
@@ -13,7 +13,7 @@ services:
 
   tempo:
     image: grafana/tempo:latest
-    container_name: archetype-tempo
+    container_name: tempo
     command: ["-config.file=/etc/tempo/tempo.yaml"]
     ports:
       - "3200:3200"   # Tempo API (Grafana)
@@ -24,7 +24,7 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: archetype-prometheus
+    container_name: prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
       - "--storage.tsdb.path=/prometheus"
@@ -38,7 +38,7 @@ services:
 
   grafana:
     image: grafana/grafana:latest
-    container_name: archetype-grafana
+    container_name: grafana
     ports: ["3000:3000"]
     depends_on: [loki, tempo, prometheus]
     volumes:
@@ -51,7 +51,7 @@ services:
   # Alloy collects OTLP data and Docker logs
   alloy:
     image: grafana/alloy:latest
-    container_name: archetype-alloy
+    container_name: alloy
     command:
       - run
       - --server.http.listen-addr=0.0.0.0:12345
@@ -75,7 +75,7 @@ services:
   
   postgres:
     image: postgres:15.14-alpine
-    container_name: archetype-postgres
+    container_name: postgres
     environment:
       POSTGRES_DB: archetype
       POSTGRES_USER: archetype
@@ -88,12 +88,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 59
-      ]
     networks: [archetype-network]
 
   mongodb:
     image: mongo:8-noble
-    container_name: archetype-mongodb
+    container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: archetype
       MONGO_INITDB_ROOT_PASSWORD: archetype
@@ -111,7 +110,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: archetype-redis
+    container_name: redis
     command: redis-server --requirepass archetype
     ports: ["6379:6379"]
     volumes:
@@ -127,7 +126,7 @@ services:
   
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: archetype-rabbitmq
+    container_name: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: archetype
       RABBITMQ_DEFAULT_PASS: archetype

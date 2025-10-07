@@ -1,4 +1,4 @@
-package com.archetype.layer.domain.exception;
+package com.archetype.layer.exception;
 
 /**
  * Domain exception thrown when Pokemon business logic validation fails.

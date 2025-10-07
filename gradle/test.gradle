@@ -43,15 +43,12 @@ pitest {
         "${mainPackage}.hexagonal.*",
         "${mainPackage}.onion.*",
         "${mainPackage}.mvc.*",
-        "${mainPackage}.cqrs.*",
-        "${mainPackage}.clients.*"
     ])
     targetTests.set([
         "${mainPackage}.layer.*",
         "${mainPackage}.hexagonal.*",
         "${mainPackage}.onion.*",
         "${mainPackage}.mvc.*",
-        "${mainPackage}.cqrs.*"
     ])
     threads.set(8)
     jvmArgs.set(['-Xmx1024m'])

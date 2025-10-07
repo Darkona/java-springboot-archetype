@@ -22,37 +22,4 @@ import java.util.UUID;
 @Tag(name = "Pokemon API", description = "Operations to manage Pokemon")
 public interface PokemonControllerInfo {
 
-    @Operation(summary = "Create a new Pokemon", description = "Creates a new Pokemon and returns the persisted document")
-    @ApiResponse(responseCode = "201", description = "Created")
-    @ApiResponse(responseCode = "400", description = "Bad Request - Validation failed")
-    @ApiResponse(responseCode = "409", description = "Conflict - Pokemon already exists")
-    PokemonDetails createPokemon(@Parameter(description = "Pokemon create payload") @Valid PokemonCreate req);
-
-    @Operation(summary = "Get a Pokemon", description = "Retrieve a Pokemon by id")
-    @ApiResponse(responseCode = "200", description = "OK")
-    @ApiResponse(responseCode = "404", description = "Not Found - Pokemon does not exist")
-    PokemonDetails getPokemon(
-            @Parameter(description = "The Pokemon id") UUID id
-    );
-
-    @Operation(summary = "Update a Pokemon", description = "Update an existing Pokemon by id")
-    @ApiResponse(responseCode = "200", description = "Updated")
-    @ApiResponse(responseCode = "400", description = "Bad Request - Validation failed")
-    @ApiResponse(responseCode = "404", description = "Not Found - Pokemon does not exist")
-    @ApiResponse(responseCode = "409", description = "Conflict - Pokemon already exists")
-    PokemonDetails updatePokemon(
-            @Parameter(description = "The Pokemon id") UUID id,
-            @Parameter(description = "Pokemon update payload") @Valid PokemonCreate req
-    );
-
-    @Operation(summary = "Delete a Pokemon", description = "Delete a Pokemon by id")
-    @ApiResponse(responseCode = "204", description = "No Content")
-    @ApiResponse(responseCode = "404", description = "Not Found - Pokemon does not exist")
-    void deletePokemon(
-            @Parameter(description = "The Pokemon id") UUID id
-    );
-
-    @Operation(summary = "List Pokemons", description = "Get all Pokemons")
-    @ApiResponse(responseCode = "200", description = "OK")
-    List<PokemonOverview> getAllPokemons();
 }

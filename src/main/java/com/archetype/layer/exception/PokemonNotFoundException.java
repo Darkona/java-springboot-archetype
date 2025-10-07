@@ -1,4 +1,4 @@
-package com.archetype.layer.domain.exception;
+package com.archetype.layer.exception;
 
 import java.util.UUID;
 

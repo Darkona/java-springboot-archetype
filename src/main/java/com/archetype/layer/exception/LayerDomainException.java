@@ -1,4 +1,4 @@
-package com.archetype.layer.domain.exception;
+package com.archetype.layer.exception;
 
 /**
  * Base exception class for all domain-specific exceptions in the layer module.

@@ -1,13 +1,17 @@
 package com.archetype.layer.service;
 
+import com.archetype.layer.domain.dto.request.PokemonCreate;
 import com.archetype.layer.domain.model.Pokemon;
 import com.archetype.layer.domain.model.Species;
+import com.archetype.layer.exception.PokemonAlreadyExistsException;
 import com.archetype.layer.persistence.PokemonDataRepository;
+import com.archetype.layer.persistence.document.PokemonDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Service layer working with domain models.
@@ -25,39 +29,39 @@ public class PokemonService {
     private final PokeApiDataService pokeApiDataService;
 
 
-    //    public Pokemon createPokemon(PokemonCreate pokemonCreate) {
-//        log.debug("Creating Pokemon with national ID: {}, name: {}", pokemonCreate.nationalId(), pokemonCreate.name());
-//
-//        // Check if Pokemon already exists by national ID
-//        if (pokemonRepository.existsByNationalId(pokemonCreate.nationalId())) {
-//            throw new PokemonAlreadyExistsException(pokemonCreate.nationalId());
-//        }
-//
-//        try {
-//            // Create domain Pokemon from request DTO
-//            // In a real implementation, you'd lookup the Species from a species repository
-//            Species species = loadSpecies(pokemonCreate.nationalId(), pokemonCreate.name());
-//            Pokemon pokemon = new Pokemon(species, pokemonCreate.name(), 1); // Default level 1
-//
-//            // Map to document and save
-//            PokemonDocument document = persistenceMapper.toDocument(pokemon);
-//            document.setId(UUID.randomUUID());
-//            PokemonDocument saved = pokemonRepository.save(document);
-//
-//            // Map back to domain model and return
-//            Pokemon created = persistenceMapper.toDomain(saved);
-//            log.info("Successfully created Pokemon: id={}, nationalId={}, name={}",
-//                    created.getName(), pokemonCreate.nationalId(), pokemonCreate.name());
-//            return created;
-//
-//        } catch (Exception ex) {
-//            if (ex instanceof PokemonAlreadyExistsException) {
-//                throw ex; // Re-throw domain exceptions
-//            }
-//            throw new PokemonServiceException("create", pokemonCreate.nationalId(), ex);
-//        }
-//    }
-//
+        public Pokemon createPokemon(PokemonCreate pokemonCreate) {
+        log.debug("Creating Pokemon with national ID: {}, name: {}", pokemonCreate.nationalId(), pokemonCreate.name());
+
+        // Check if Pokemon already exists by national ID
+        if (repository.existsByNationalId(pokemonCreate.nationalId())) {
+            throw new PokemonAlreadyExistsException(pokemonCreate.nationalId());
+        }
+
+        try {
+            // Create domain Pokemon from request DTO
+            // In a real implementation, you'd lookup the Species from a species repository
+            Species species = repository.getSpeciesById(pokemonCreate.nationalId());
+            Pokemon pokemon = new Pokemon(species, pokemonCreate.name(), 1);
+
+            // Map to document and save
+            PokemonDocument document = repository.save(pokemon);
+            document.setId(UUID.randomUUID());
+            PokemonDocument saved = pokemonRepository.save(document);
+
+            // Map back to domain model and return
+            Pokemon created = persistenceMapper.toDomain(saved);
+            log.info("Successfully created Pokemon: id={}, nationalId={}, name={}",
+                    created.getName(), pokemonCreate.nationalId(), pokemonCreate.name());
+            return created;
+
+        } catch (Exception ex) {
+            if (ex instanceof PokemonAlreadyExistsException) {
+                throw ex; // Re-throw domain exceptions
+            }
+            throw new PokemonServiceException("create", pokemonCreate.nationalId(), ex);
+        }
+    }
+
     public Pokemon getPokemon(int id) {
 //        log.debug("Retrieving Pokemon with ID: {}", id);
 //

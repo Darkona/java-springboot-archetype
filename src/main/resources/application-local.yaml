@@ -3,6 +3,10 @@ spring:
   application:
     name: Archetype-Local
 
+  config:
+    activate:
+      on-profile: local
+
   autoconfigure:
     exclude:
   #      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
@@ -19,9 +23,9 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: archetype
-      username: archetype
-      password: archetype
+      database: ${MONGODB_DATABASE}
+      username: ${MONGODB_USERNAME}
+      password: ${MONGODB_PASSWORD}
       authentication-database: admin
       auto-index-creation: on
 
@@ -31,14 +35,13 @@ spring:
       password: archetype
       database: 0
 
-
   jta:
     enabled: false
 
   datasource:
     url: jdbc:postgresql://localhost:5432/archetype
-    username: archetype
-    password: archetype
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
 
     hikari:
       driver-class-name: org.postgresql.Driver
@@ -66,8 +69,6 @@ spring:
     schemas: archetype
     url: jdbc:postgresql://localhost:5432/archetype
     enabled: false
-
-
 
 logged:
   color: true

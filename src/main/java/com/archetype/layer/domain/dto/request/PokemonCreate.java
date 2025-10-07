@@ -1,5 +1,6 @@
 package com.archetype.layer.domain.dto.request;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -18,10 +19,10 @@ public record PokemonCreate(
 
         @NotNull(message = "pokemon.national-id.required")
         @Min(value = 1, message = "pokemon.national-id.min")
-        @Max(value = 1010, message = "pokemon.national-id.max")
+        @Max(value = 151, message = "pokemon.national-id.max")
         int nationalId,
 
-        @NotBlank(message = "pokemon.name.required")
+        @Nullable
         @Size(max = 50, message = "pokemon.name.max-length")
         String name
 

@@ -1,10 +1,5 @@
-package com.archetype.layer.config;
+package com.archetype.layer.exception;
 
-import com.archetype.layer.domain.exception.LayerDomainException;
-import com.archetype.layer.domain.exception.PokemonAlreadyExistsException;
-import com.archetype.layer.domain.exception.PokemonNotFoundException;
-import com.archetype.layer.domain.exception.PokemonServiceException;
-import com.archetype.layer.domain.exception.PokemonValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

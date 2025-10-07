@@ -2,7 +2,7 @@
 db = db.getSiblingDB('archetype');
 
 // Create collections with validation
-db.createCollection('pokemons', {
+db.createCollection('pokemon', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
