@@ -1,9 +1,14 @@
 package com.archetype.layer.mapper.persistence;
 
+import com.archetype.layer.domain.model.Ability;
 import com.archetype.layer.domain.model.Pokemon;
+import com.archetype.layer.persistence.document.AbilityEmbedded;
 import com.archetype.layer.persistence.document.PokemonDocument;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper
 public interface PokemonPersistenceMapper {
@@ -17,7 +22,14 @@ public interface PokemonPersistenceMapper {
     PokemonDocument toDocument(Pokemon pokemon);
 
 
-
-    @Mapping(target = "species", source = "doc.speciesName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "species", ignore = true)
     Pokemon toDomain(PokemonDocument doc);
+
+    List<Pokemon> toDomain(List<PokemonDocument> docs);
+
+    AbilityEmbedded toDocument(Ability ability);
+
+    @Mapping(target = "description", expression="java(new String())")
+    Ability toDomain(AbilityEmbedded ability);
 }

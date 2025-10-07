@@ -24,7 +24,6 @@ public class ArchitectureTests {
                 .should().notBeAnnotatedWith(Autowired.class)
                 .because("ADR 0001: Prefer constructor injection using @RequiredArgsConstructor or explicit constructors")
                 .check(classes);
-
     }
 
     @ArchTest
@@ -36,7 +35,6 @@ public class ArchitectureTests {
                  .should(implementMatchingInfoInterface)
                  .because("ADR 0009: Controller OpenAPI annotations through interface-based \"Info\" classes")
                  .check(classes);
-
     }
 
     @ArchTest
@@ -48,6 +46,5 @@ public class ArchitectureTests {
                  .should().beAnnotatedWith(Tag.class)
                  .because("ADR 0009: Controller OpenAPI annotations through interface-based \"Info\" classes")
                  .check(classes);
-
     }
 }

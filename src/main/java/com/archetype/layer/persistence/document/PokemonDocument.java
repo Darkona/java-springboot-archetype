@@ -13,7 +13,7 @@ public record PokemonDocument(
         @MongoId PokemonId id,
         @Indexed String name,
         List<String> types,
-        List<String> abilities,
+        List<AbilityEmbedded> abilities,
         Integer level,
         Boolean shiny,
         @Indexed Integer nationalId,

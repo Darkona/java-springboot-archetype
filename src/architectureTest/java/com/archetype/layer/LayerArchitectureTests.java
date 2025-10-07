@@ -77,26 +77,21 @@ public class LayerArchitectureTests {
 
 
     @Test
-    @DisplayName("Request DTOs should not be used by persistence layer")
-    void request_dtos_should_not_be_used_by_persistence() {
+    @DisplayName("Controller-level DTOs should not be used by persistence layer")
+    void controller_dtos_should_not_be_used_by_persistence() {
         noClasses()
-                .that().resideInAPackage(base + ".persistence..")
+                .that().resideInAnyPackage(
+                        base + ".persistence..",
+                        base + "..repository..",
+                        base + "..document..",
+                        base+ "..entity..")
                 .should().dependOnClassesThat().resideInAnyPackage(
-                        base + ".domain.dto.request.."
+                        base + "..dto..",
+                base + "..controller.."
                 )
                 .check(classes);
     }
 
-    @Test
-    @DisplayName("Response DTOs should not be used by persistence layer")
-    void response_dtos_should_not_be_used_by_persistence() {
-        noClasses()
-                .that().resideInAPackage(base + ".persistence..")
-                .should().dependOnClassesThat().resideInAnyPackage(
-                        base + ".domain.dto.response.."
-                )
-                .check(classes);
-    }
 
     @Test
     @DisplayName("Controllers should not directly use persistence documents")

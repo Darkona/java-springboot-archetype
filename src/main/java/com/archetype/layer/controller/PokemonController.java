@@ -2,17 +2,19 @@ package com.archetype.layer.controller;
 
 import com.archetype.layer.domain.dto.request.PokemonCreate;
 import com.archetype.layer.domain.dto.response.PokemonDetails;
-import com.archetype.layer.domain.dto.response.PokemonOverview;
 import com.archetype.layer.domain.model.Species;
 import com.archetype.layer.service.PokemonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * Controller layer using proper DTOs.
@@ -31,7 +33,7 @@ public class PokemonController implements PokemonControllerInfo {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PokemonDetails create(@RequestBody @Valid PokemonCreate pokemonCreate) {
-        return pokemonService.createPokemom(pokemonCreate);
+        return pokemonService.createPokemon(pokemonCreate);
     }
 
     @GetMapping("/load")

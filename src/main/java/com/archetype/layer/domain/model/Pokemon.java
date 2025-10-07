@@ -2,12 +2,15 @@ package com.archetype.layer.domain.model;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Random;
 
 
+@Setter
+@Getter
 public class Pokemon {
 
     public static Random rand = new Random();
@@ -16,16 +19,11 @@ public class Pokemon {
     final int speedIV;
     final int specialIV;
     final int hpIV;
-    @Getter
     final boolean shiny;
-    @Getter
     Species species;
-    @Getter
     String name;
-    @Getter
     int level;
     long maxHp;
-    @Getter
     MoveSet moveSet = new MoveSet();
 
     public Pokemon(Species species, String name, int level) {
@@ -46,6 +44,10 @@ public class Pokemon {
         species.moves().entrySet().stream()
                .filter(t -> t.getKey() == 1)
                .forEach(m -> this.moveSet.addMove(m.getValue()));
+    }
+
+    public List<String> getMoves() {
+        return List.of(moveSet.move1, moveSet.move2, moveSet.move3, moveSet.move4);
     }
 
     boolean calculateShiny() {

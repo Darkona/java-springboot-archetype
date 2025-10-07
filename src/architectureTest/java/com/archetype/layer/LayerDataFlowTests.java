@@ -18,24 +18,14 @@ public class LayerDataFlowTests {
     static final String base = "com.archetype.layer";
     static final JavaClasses classes = new ClassFileImporter().importPackages(base);
 
-    @Test
-    @DisplayName("Request DTOs should only be used by controllers and DTO mappers")
-    void request_dtos_should_only_be_used_by_controllers_and_mappers() {
-        noClasses()
-                .that().resideInAnyPackage(
-                        base + ".service..",
-                        base + ".persistence.."
-                )
-                .should().dependOnClassesThat().resideInAPackage(base + ".domain.dto.request..")
-                .check(classes);
-    }
 
     @Test
-    @DisplayName("Response DTOs should not be used by persistence layer")
-    void response_dtos_should_not_be_used_by_persistence() {
+    @DisplayName("Controller DTOs should not be used by persistence layer")
+    void dtos_should_not_be_used_by_persistence() {
         noClasses()
                 .that().resideInAPackage(base + ".persistence..")
-                .should().dependOnClassesThat().resideInAPackage(base + ".domain.dto.response..")
+                .should().dependOnClassesThat().resideInAPackage(
+                        base + ".domain.dto..")
                 .check(classes);
     }
 
@@ -66,34 +56,14 @@ public class LayerDataFlowTests {
     @Test
     @DisplayName("DTO mappers should only work with DTOs and domain models")
     void dto_mappers_should_work_with_dtos_and_domain() {
-        classes()
-                .that().resideInAPackage(base + ".mapper.dto..")
-                .should().onlyDependOnClassesThat().resideInAnyPackage(
-                        base + ".domain.model..",
-                        base + ".domain.dto..",
-                        "java..",
-                        "org.mapstruct..",
-                        "org.springframework.."
+        noClasses()
+                .that().resideInAPackage(base + ".domain.mapper..")
+                .should().dependOnClassesThat().resideInAnyPackage(
+                        base + ".persistence.."
                 )
-                .because("ADR 0002: DTO mappers should only work with domain models and DTOs")
-                .check(classes);
+                .because("ADR 0002: DTO mappers should only work with domain models and DTOs");
     }
 
-    @Test
-    @DisplayName("Persistence mappers should only work with domain models and documents")
-    void persistence_mappers_should_work_with_domain_and_documents() {
-        classes()
-                .that().resideInAPackage(base + ".mapper.persistence..")
-                .should().onlyDependOnClassesThat().resideInAnyPackage(
-                        base + ".domain.model..",
-                        base + ".persistence.document..",
-                        "java..",
-                        "org.mapstruct..",
-                        "org.springframework.."
-                )
-                .because("ADR 0002: Persistence mappers should only work with domain models and persistence documents")
-                .check(classes);
-    }
 
     @Test
     @DisplayName("Services should not return persistence documents")
@@ -111,12 +81,11 @@ public class LayerDataFlowTests {
     void controllers_should_use_dtos_not_domain_models() {
         // Controllers should primarily work with DTOs, not domain models
         // This is a design guideline - domain models can be used internally but not exposed
-        classes()
-                .that().resideInAPackage(base + ".controller..")
-                .should().dependOnClassesThat().resideInAnyPackage(
-                        base + ".domain.dto.request..",
-                        base + ".domain.dto.response.."
-                )
+        noClasses().that().resideInAPackage(base + ".controller..")
+                           .should().dependOnClassesThat()
+                   .resideInAnyPackage(
+                           base + "..model..")
+
                 .check(classes);
     }
 

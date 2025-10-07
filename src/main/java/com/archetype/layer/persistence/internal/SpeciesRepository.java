@@ -18,4 +18,6 @@ public interface SpeciesRepository extends MongoRepository<SpeciesDocument, Inte
     List<SpeciesDocument> findAllByFirstTypeAndSecondType(Type firstType, Type lastType);
 
     List<SpeciesDocument> findAllByFirstTypeOrSecondType(Type firstType, Type secondType);
+
+    SpeciesDocument getByNationalIdIs(int nationalId);
 }
