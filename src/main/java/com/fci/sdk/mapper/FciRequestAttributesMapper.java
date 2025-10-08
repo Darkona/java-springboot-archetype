@@ -1,10 +1,9 @@
 package com.fci.sdk.mapper;
 
-import com.dummy.sdk.fci.constant.FciContextConstants;
-import com.dummy.sdk.fci.constant.FciContractEnum;
-import com.dummy.sdk.fci.dto.FciPayload;
-import com.dummy.sdk.fci.dto.FciPayload.FciIdentity;
-import com.dummy.sdk.skeleton.request.SkeletonBaggageConstants;
+import com.fci.sdk.constant.FciContextConstants;
+import com.fci.sdk.constant.FciContractEnum;
+import com.fci.sdk.dto.FciPayload;
+import com.fci.sdk.skeleton.request.SkeletonBaggageConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -87,7 +86,7 @@ public class FciRequestAttributesMapper {
      * └── data: Map<String, String> #Copied from input data parameter
      */
     public final FciPayload toFciPayload(final ServletRequestAttributes attr,
-        final FciContractEnum contract, final Map<String, String> data) {
+                                         final FciContractEnum contract, final Map<String, String> data) {
       final FciPayload payload = new FciPayload(contract);
 
       /* Map identity data
@@ -105,7 +104,7 @@ public class FciRequestAttributesMapper {
       // TODO: We could manage this in a wey we do not create an identity
       // object if there's no userId or deviceId present in attributes
       payload.setIdentity(
-          FciIdentity.builder().userId(userId).deviceId(deviceId).build());
+          FciPayload.FciIdentity.builder().userId(userId).deviceId(deviceId).build());
 
       /* Map metadata
        * timestamp: current time in ISO 8601 format

@@ -1,6 +1,7 @@
 package com.fci.sdk.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fci.sdk.constant.FciContractEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

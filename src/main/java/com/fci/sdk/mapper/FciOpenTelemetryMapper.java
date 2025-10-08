@@ -1,8 +1,8 @@
 package com.fci.sdk.mapper;
 
-import com.dummy.sdk.fci.constant.FciContractEnum;
-import com.dummy.sdk.fci.dto.FciPayload;
-import com.dummy.sdk.skeleton.request.SkeletonBaggageConstants;
+import com.fci.sdk.constant.FciContractEnum;
+import com.fci.sdk.dto.FciPayload;
+import com.fci.sdk.skeleton.request.SkeletonBaggageConstants;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.context.Context;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,19 +69,19 @@ public class FciOpenTelemetryMapper {
         
         // Set metadata from baggage
         final FciPayload.FciMetadata metadata = FciPayload.FciMetadata.builder()
-                .timestamp(Instant.now().toString())
-                .transactionId(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_TRANSACTION_ID))
-                .parentTransactionId(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_PARENT_TRANSACTION_ID))
-                .layer(null) // not in baggage, must be set separately
-                .actionName(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_ACTION))
-                .applicationName(applicationName)
-                .artifactName(artifactName)
-                .channel(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_CHANNEL))
-                .flow(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_FLOW))
-                .criticality(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_CRITICALITY))
-                //TODO: Map from set attributes
-                .context(null) // not in baggage, must be set via request attributes
-                .build();
+                                                                      .timestamp(Instant.now().toString())
+                                                                      .transactionId(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_TRANSACTION_ID))
+                                                                      .parentTransactionId(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_PARENT_TRANSACTION_ID))
+                                                                      .layer(null) // not in baggage, must be set separately
+                                                                      .actionName(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_ACTION))
+                                                                      .applicationName(applicationName)
+                                                                      .artifactName(artifactName)
+                                                                      .channel(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_CHANNEL))
+                                                                      .flow(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_FLOW))
+                                                                      .criticality(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_CRITICALITY))
+                                                                      //TODO: Map from set attributes
+                                                                      .context(null) // not in baggage, must be set via request attributes
+                                                                      .build();
         
         payload.setMetadata(metadata);
         
