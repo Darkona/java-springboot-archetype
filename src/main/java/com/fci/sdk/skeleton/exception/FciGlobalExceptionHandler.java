@@ -1,9 +1,9 @@
 package com.fci.sdk.skeleton.exception;
 
-import com.dummy.sdk.fci.facade.FciFacade;
-import com.dummy.sdk.skeleton.request.SkeletonBaggageConstants;
-import com.dummy.skeleton.api.advice.RequestContext;
-import com.dummy.skeleton.api.advice.ShortRequestContext;
+import com.fci.sdk.api.advice.RequestContext;
+import com.fci.sdk.api.advice.ShortRequestContext;
+import com.fci.sdk.facade.FciFacade;
+import com.fci.sdk.skeleton.request.SkeletonBaggageConstants;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.context.Context;
 import lombok.RequiredArgsConstructor;
@@ -120,13 +120,13 @@ public class FciGlobalExceptionHandler {
     //TODO: set sensible defaults for this values
     return ShortRequestContext.builder().actionName(
             Optional.ofNullable(baggage.getEntryValue(SkeletonBaggageConstants.BAGGAGE_ACTION)).orElse("error.missing.action"))
-        .criticality(Optional.ofNullable(baggage.getEntryValue(
+                              .criticality(Optional.ofNullable(baggage.getEntryValue(
             SkeletonBaggageConstants.BAGGAGE_CRITICALITY)).orElse("10"))
-        .transactionId(baggage.getEntryValue(
+                              .transactionId(baggage.getEntryValue(
             SkeletonBaggageConstants.BAGGAGE_TRANSACTION_ID))
-        .parentTransactionId(baggage.getEntryValue(
+                              .parentTransactionId(baggage.getEntryValue(
             SkeletonBaggageConstants.BAGGAGE_PARENT_TRANSACTION_ID))
-        .build();
+                              .build();
   }
 
   /**

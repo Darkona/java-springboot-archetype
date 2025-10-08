@@ -1,6 +1,6 @@
 package com.fci.sdk.skeleton.request;
 
-import com.dummy.sdk.skeleton.exception.SkeletonRequestValidationException;
+import com.fci.sdk.skeleton.exception.SkeletonRequestValidationException;
 import io.opentelemetry.api.baggage.Baggage;
 import org.apache.logging.log4j.util.Strings;
 
@@ -9,9 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static com.dummy.sdk.skeleton.request.SkeletonBaggageConstants.MAX_ENTITY_STRING_LENGTH;
-import static com.dummy.sdk.skeleton.request.SkeletonBaggageConstants.MIN_ENTITY_STRING_LENGTH;
-import static com.dummy.sdk.skeleton.request.SkeletonBaggageConstants.UID_STRING_LENGTH;
+import static com.fci.sdk.skeleton.request.SkeletonBaggageConstants.MAX_ENTITY_STRING_LENGTH;
+import static com.fci.sdk.skeleton.request.SkeletonBaggageConstants.MIN_ENTITY_STRING_LENGTH;
+import static com.fci.sdk.skeleton.request.SkeletonBaggageConstants.UID_STRING_LENGTH;
+
 
 /**
  * Utility class for validating FCI baggage fields from OpenTelemetry context.

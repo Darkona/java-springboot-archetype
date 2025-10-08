@@ -1,6 +1,6 @@
 package com.fci.sdk.skeleton.config;
 
-import com.dummy.sdk.skeleton.exception.SkeletonSecurityException;
+import com.fci.sdk.skeleton.exception.SkeletonSecurityException;
 import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

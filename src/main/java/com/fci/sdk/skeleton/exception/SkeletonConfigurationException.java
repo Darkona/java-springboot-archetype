@@ -1,5 +1,7 @@
 package com.fci.sdk.skeleton.exception;
 
+import java.io.Serial;
+
 /**
  * Base Exception for configuration related topics.
  * May be instantiated for very generic use cases like missing required properties
@@ -8,6 +10,7 @@ package com.fci.sdk.skeleton.exception;
  */
 public class SkeletonConfigurationException extends GenericSkeletonException {
 
+    @Serial
     private static final long serialVersionUID = 8577542572153995431L;
     
     /**

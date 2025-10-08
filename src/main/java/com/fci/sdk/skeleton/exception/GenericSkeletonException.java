@@ -1,11 +1,14 @@
 package com.fci.sdk.skeleton.exception;
 
+import java.io.Serial;
+
 /**
  * Generic exception class for the Skeleton SDK.
  * All skeleton-specific exceptions should inherit from this class.
  */
 public abstract class GenericSkeletonException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 8577542572153995450L;
 
     /**

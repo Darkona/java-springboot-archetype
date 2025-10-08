@@ -1,6 +1,6 @@
 package com.fci.sdk.skeleton.request;
 
-import com.dummy.sdk.skeleton.exception.SkeletonRequestValidationException;
+import com.fci.sdk.skeleton.exception.SkeletonRequestValidationException;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.context.Context;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import static com.dummy.sdk.skeleton.request.SkeletonBaggageConstants.*;
+import static com.fci.sdk.skeleton.request.SkeletonBaggageConstants.*;
 
 
 /**
