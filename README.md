@@ -269,40 +269,44 @@ See [`AGENTS.md`](AGENTS.md) for detailed implementation guidance.
 
 ## 📚 Architectural Decision Records (ADRs)
 
-This archetype includes 17 ADRs organized by theme for better navigation and AI-friendly structure:
+This directory contains all architectural decisions for the Java Spring Boot archetype, organized by theme with independent numbering per category.
 
 ### 📁 Foundation - Core Standards
 | ADR | Title | Key Decisions |
 |-----|-------|---------------|
-| [foundation/0001](docs/adr/foundation/0001-build-and-dependency-standards.md) | Build Standards | Gradle, Java 21, dependency policy |
-| [foundation/0002](docs/adr/foundation/0002-java-21-language-features.md) | Java 21 Features | Records, switch expressions, modern patterns |
-| [foundation/0003](docs/adr/foundation/0003-constructor-injection.md) | Constructor Injection | Mandatory constructor injection for dependencies |
-| [foundation/0004](docs/adr/foundation/0004-gradle-version-catalog.md) | Version Management | Gradle version catalogs |
+| [foundation/found-001](docs/adr/foundation/found-001-build-and-dependency-standards.md) | Build and Dependency Standards | Gradle, Java 21, dependency policy |
+| [foundation/found-002](docs/adr/foundation/found-002-java-21-language-features.md) | Java 21 language features and modern coding practices | Records, switch expressions, modern patterns |
+| [foundation/found-003](docs/adr/foundation/found-003-constructor-injection.md) | Prefer constructor injection (Lombok @RequiredArgsConstructor) over field injection (@Autowired) | Constructor injection preferred; use Lombok where available |
+| [foundation/found-004](docs/adr/foundation/found-004-gradle-version-catalog.md) | Use Gradle Version Catalog (TOML) for Centralized Dependency Management | Gradle version catalogs / centralized dependency management |
 
 ### 🏗️ Architecture - Domain Design & Cross-cutting Patterns
 | ADR | Title | Key Decisions |
 |-----|-------|---------------|
-| [architecture/0001](docs/adr/architecture/0001-domain-separation-and-mapping.md) | Domain Separation | Layer separation with MapStruct mapping |
-| [architecture/0002](docs/adr/architecture/0002-domain-validation-strategy.md) | Domain Validation | Validation strategies and error handling |
-| [architecture/0003](docs/adr/architecture/0003-testing-strategy-and-tdd.md) | Testing & TDD | Testing pyramid and TDD practices |
-| [architecture/0004](docs/adr/architecture/0004-openfeign-http-clients.md) | HTTP Clients | OpenFeign for external service integration |
-| [architecture/0005](docs/adr/architecture/0005-spring-annotations-over-responseentity.md) | Controller Design | Spring annotations over ResponseEntity |
-| [architecture/0006](docs/adr/architecture/0006-exception-handling-strategy.md) | Exception Handling | RFC 9457 compliant error responses with i18n |
+| [architecture/arch-001](docs/adr/architecture/arch-001-domain-separation-and-mapping.md) | Domain separation and mapping | Layer separation with MapStruct mapping |
+| [architecture/arch-002](docs/adr/architecture/arch-002-domain-validation-strategy.md) | Domain Validation Strategy | Validation strategies and domain exceptions |
+| [architecture/arch-003](docs/adr/architecture/arch-003-testing-strategy-and-tdd.md) | Domain testing standards: 100% unit coverage, mutation testing, and TDD | Testing & mutation testing requirements |
+| [architecture/arch-004](docs/adr/architecture/arch-004-openfeign-http-clients.md) | Use Spring Cloud OpenFeign for synchronous HTTP clients | OpenFeign for external service integration |
+| [architecture/arch-005](docs/adr/architecture/arch-005-spring-annotations-over-responseentity.md) | Prefer Spring annotations over ResponseEntity in controllers | Controller design: annotations preferred |
+| [architecture/arch-006](docs/adr/architecture/arch-006-exception-handling-strategy.md) | Exception handling strategy with RFC 9457 compliance | RFC 9457 Problem Details, i18n, domain exceptions |
 
 ### ⚙️ Implementation - Tool Configurations & Conventions
 | ADR | Title | Key Decisions |
 |-----|-------|---------------|
-| [implementation/0001](docs/adr/implementation/0001-logging-standards-and-obfuscation.md) | Logging Standards | Structured logging with obfuscation |
-| [implementation/0002](docs/adr/implementation/0002-observability-with-opentelemetry.md) | Observability | OpenTelemetry integration |
-| [implementation/0003](docs/adr/implementation/0003-openapi-documentation-standards.md) | API Documentation | OpenAPI 3 documentation standards |
-| [implementation/0004](docs/adr/implementation/0004-architecture-testing-strategy.md) | Architecture Testing | ArchUnit testing strategy |
-| [implementation/0005](docs/adr/implementation/0005-aspectj-weaving-configuration.md) | AOP Configuration | AspectJ for cross-cutting concerns |
-| [implementation/0006](docs/adr/implementation/0006-test-naming-conventions.md) | Test Naming | Readable test names |
+| [implementation/impl-001](docs/adr/implementation/impl-001-logging-standards-and-obfuscation.md) | Use Logged for local development and enforce sensitive-data obfuscation | Local dev logging and redaction rules |
+| [implementation/impl-002](docs/adr/implementation/impl-002-observability-with-opentelemetry.md) | Observability with OpenTelemetry | OpenTelemetry integration guidance |
+| [implementation/impl-003](docs/adr/implementation/impl-003-openapi-documentation-standards.md) | OpenAPI documentation standards | API documentation and OpenAPI 3 standards |
+| [implementation/impl-004](docs/adr/implementation/impl-004-architecture-testing-strategy.md) | Architecture testing strategy | ArchUnit testing strategy |
+| [implementation/impl-005](docs/adr/implementation/impl-005-aspectj-weaving-configuration.md) | AspectJ weaving configuration | AOP weaving configuration |
+| [implementation/impl-006](docs/adr/implementation/impl-006-test-naming-conventions.md) | Test naming conventions | Readable test naming guidance |
 
 ### 🎯 Patterns - Architecture-Specific Guidance
 | ADR | Title | Key Decisions |
 |-----|-------|---------------|
-| [patterns/0001](docs/adr/patterns/0001-layered-architecture-package-structure.md) | Package Structure | Layered architecture organization |
+| [patterns/pattern-001](docs/adr/patterns/pattern-001-layered-architecture-package-structure.md) | Layered architecture package structure | Layered architecture organization |
+| [patterns/pattern-002](docs/adr/patterns/pattern-002-hexagonal-architecture-package-structure.md) | Hexagonal architecture package structure | Ports & Adapters organization |
+| [patterns/pattern-003](docs/adr/patterns/pattern-003-onion-architecture-package-structure.md) | Onion architecture package structure | Dependency inversion and layering |
+| [patterns/pattern-004](docs/adr/patterns/pattern-004-classical-mvc-package-structure.md) | Classical MVC package structure | Server-side rendered app patterns |
+| [patterns/pattern-005](docs/adr/patterns/pattern-005-cqrs-architecture-package-structure.md) | CQRS architecture package structure | CQRS guidance and structure |
 
 See [docs/adr/README.md](docs/adr/README.md) for complete navigation guide.
 

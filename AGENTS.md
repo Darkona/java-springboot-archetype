@@ -94,7 +94,38 @@ How to handle examples vs production code
 
 Files and sections an agent should pay attention to
 --------------------------------------------------
-- docs/adr/ — architecture & conventions (17 ADRs organized by theme: foundation/ for core standards, architecture/ for domain design patterns, implementation/ for tool configurations, and patterns/ for architecture-specific guidance)
+- docs/adr/ — architecture & conventions (organized by theme). Current ADRs are grouped with independent numbering per directory:
+
+  - foundation/
+    - found-001-build-and-dependency-standards.md
+    - found-002-java-21-language-features.md
+    - found-003-constructor-injection.md
+    - found-004-gradle-version-catalog.md
+
+  - architecture/
+    - arch-001-domain-separation-and-mapping.md
+    - arch-002-domain-validation-strategy.md
+    - arch-003-testing-strategy-and-tdd.md
+    - arch-004-openfeign-http-clients.md
+    - arch-005-spring-annotations-over-responseentity.md
+    - arch-006-exception-handling-strategy.md
+
+  - implementation/
+    - impl-001-logging-standards-and-obfuscation.md
+    - impl-002-observability-with-opentelemetry.md
+    - impl-003-openapi-documentation-standards.md
+    - impl-004-architecture-testing-strategy.md
+    - impl-005-aspectj-weaving-configuration.md
+    - impl-006-test-naming-conventions.md
+
+  - patterns/
+    - pattern-001-layered-architecture-package-structure.md
+    - pattern-002-hexagonal-architecture-package-structure.md
+    - pattern-003-onion-architecture-package-structure.md
+    - pattern-004-classical-mvc-package-structure.md
+    - pattern-005-cqrs-architecture-package-structure.md
+
+  See `docs/adr/README.md` for the human-friendly navigation guide and links.
 - build.gradle and gradle/*.gradle — dependency and source-set patterns
 - src/architectureTest — ArchUnit examples and how architectureTest source-set is configured
 - src/main/java/com/archetype/* — example modules (layer, onion, hexagonal, mvc)

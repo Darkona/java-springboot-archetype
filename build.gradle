@@ -1,13 +1,14 @@
 import org.gradle.util.internal.VersionNumber
 
 plugins {
-    id 'groovy'
+
     id 'java'
+    id 'groovy'
+    id 'jacoco'
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.pitest)
     alias(libs.plugins.spotless)
-    id 'jacoco'
 }
 
 // ===== Project Configuration =====
@@ -111,6 +112,7 @@ dependencyManagement {
 
 // ===== Dependencies =====
 dependencies {
+    
     // --- Spring Boot Core ---
     implementation libs.spring.boot.starter.web
     implementation libs.spring.boot.starter.actuator

@@ -34,9 +34,7 @@ public class LayerArchitectureTests {
     void controllers_should_not_depend_on_persistence() {
         noClasses()
                 .that().resideInAPackage(base + ".controller..")
-                .should().dependOnClassesThat().resideInAnyPackage(
-                        base + ".persistence.."
-                )
+                .should().dependOnClassesThat().resideInAnyPackage(base + ".persistence..")
                 .check(classes);
     }
 
@@ -54,9 +52,7 @@ public class LayerArchitectureTests {
     void services_should_not_depend_on_controllers() {
         noClasses()
                 .that().resideInAPackage(base + ".service..")
-                .should().dependOnClassesThat().resideInAnyPackage(
-                        base + ".controller.."
-                )
+                .should().dependOnClassesThat().resideInAnyPackage(base + ".controller..")
                 .check(classes);
     }
 
