@@ -4,43 +4,13 @@
     <!-- Bring the default spring configuration for the console appender -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <!-- LOKI push URL (override with -DLOKI_URL=... or env LOKI_URL) -->
-
-
     <!-- Local / docker profile: console + optional Loki when containerized -->
     <springProfile name="local">
-        <property name="LOKI_URL" value="${LOKI_HOST:-http://localhost:9999}/loki/api/v1/push"/>
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
-        </appender>
-
-        <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
-            <labels>
-                app = archetype
-                env = local
-                host=${HOST:-localhost}
-            </labels>
-
-            <message>
-                <pattern>%-5level [%thread] %logger{20} - %msg%n</pattern>
-            </message>
-
-            <http>
-                <url>${LOKI_URL}</url>
-                <useProtobufApi>true</useProtobufApi>
-                <requestTimeoutMs>10000</requestTimeoutMs>
-                <maxRetries>3</maxRetries>
-            </http>
-
-            <batch>
-                <maxItems>100</maxItems>
-                <timeoutMs>5000</timeoutMs>
-            </batch>
-
-            <verbose>false</verbose>
         </appender>
 
         <!-- Async wrappers to avoid blocking application threads -->
@@ -51,53 +21,19 @@
             <neverBlock>true</neverBlock>
         </appender>
 
-        <appender name="ASYNC_LOKI" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="LOKI"/>
-            <queueSize>8192</queueSize>
-            <discardingThreshold>0</discardingThreshold>
-            <neverBlock>true</neverBlock>
-        </appender>
-
         <root level="INFO">
             <appender-ref ref="ASYNC_CONSOLE"/>
-            <appender-ref ref="ASYNC_LOKI"/>
         </root>
     </springProfile>
 
     <!-- Container / integration profile (explicit) -->
     <springProfile name="container, testInt">
-        <property name="LOKI_URL" value="${LOKI_HOST:-http://alloy:9999}/loki/api/v1/push"/>
+
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
-        </appender>
-
-        <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
-            <labels>
-                app = archetype
-                env = container
-                host=${HOST:-container}
-            </labels>
-
-            <message>
-                <pattern>%-5level [%thread] %logger{20} - %msg%n</pattern>
-            </message>
-
-            <http>
-                <url>${LOKI_URL}</url>
-                <useProtobufApi>true</useProtobufApi>
-                <requestTimeoutMs>10000</requestTimeoutMs>
-                <maxRetries>3</maxRetries>
-            </http>
-
-            <batch>
-                <maxItems>100</maxItems>
-                <timeoutMs>5000</timeoutMs>
-            </batch>
-
-            <verbose>false</verbose>
         </appender>
 
         <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
@@ -107,16 +43,8 @@
             <neverBlock>true</neverBlock>
         </appender>
 
-        <appender name="ASYNC_LOKI" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="LOKI"/>
-            <queueSize>8192</queueSize>
-            <discardingThreshold>0</discardingThreshold>
-            <neverBlock>true</neverBlock>
-        </appender>
-
         <root level="INFO">
             <appender-ref ref="ASYNC_CONSOLE"/>
-            <appender-ref ref="ASYNC_LOKI"/>
         </root>
     </springProfile>
 

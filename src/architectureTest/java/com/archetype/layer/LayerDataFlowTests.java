@@ -79,7 +79,7 @@ public class LayerDataFlowTests {
     @Test
     @DisplayName("Controllers should not use domain models directly in public APIs")
     void controllers_should_use_dtos_not_domain_models() {
-        // Controllers should primarily work with DTOs, not domain models
+        // Controllers should work with DTOs, not domain models
         // This is a design guideline - domain models can be used internally but not exposed
         noClasses().that().resideInAPackage(base + ".controller..")
                            .should().dependOnClassesThat()

@@ -2,8 +2,8 @@
 
 sourceSets {
     architectureTest {
-        java.srcDir 'src/architectureTest/java'
-        resources.srcDir 'src/architectureTest/resources'
+        java.srcDirs 'src/architectureTest/java', 'src/test/java', 'src/integrationTest/java','src/main/java'
+        resources.srcDirs 'src/architectureTest/resources', 'src/test/resources','src/integrationTest/resources','src/main/resources'
         compileClasspath += sourceSets.main.output
         runtimeClasspath += output + compileClasspath
     }

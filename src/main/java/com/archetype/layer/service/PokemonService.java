@@ -1,13 +1,16 @@
 package com.archetype.layer.service;
 
+import com.archetype.layer.client.pokeapi.PokeApiAdapter;
 import com.archetype.layer.domain.dto.request.PokemonCreate;
 import com.archetype.layer.domain.dto.response.PokemonDetails;
+import com.archetype.layer.domain.dto.response.SpeciesResponse;
 import com.archetype.layer.domain.model.Pokemon;
 import com.archetype.layer.domain.model.Species;
 import com.archetype.layer.exception.PokemonAlreadyExistsException;
 import com.archetype.layer.exception.PokemonNotFoundException;
 import com.archetype.layer.exception.PokemonServiceException;
 import com.archetype.layer.mapper.dto.PokemonDtoMapper;
+import com.archetype.layer.mapper.dto.SpeciesDtoMapper;
 import com.archetype.layer.persistence.PokemonDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +32,8 @@ import java.util.UUID;
 public class PokemonService {
 
     private final PokemonDataRepository repository;
-    private final PokeApiDataService pokeApiDataService;
+    private final SpeciesDtoMapper speciesMapper;
+    private final PokeApiAdapter pokeApiAdapter;
     private final PokemonDtoMapper dtoMapper;
 
         public PokemonDetails createPokemon(PokemonCreate pokemonCreate) {
@@ -106,14 +110,14 @@ public class PokemonService {
         return repository.getAllPokemonOfNationalId(nationalId);
     }
 
-    public List<Species> loadSpecies() {
-        List<Species> species = pokeApiDataService.getFirstGenerationSpecies();
+    public List<SpeciesResponse> loadSpecies() {
+        List<Species> species = pokeApiAdapter.getFirstGenerationSpecies();
         repository.saveAll(species);
-        return species;
+        return speciesMapper.toDto(species);
     }
 
-    public List<Species> listAllSpecies() {
-        return repository.getAllSpecies();
+    public List<SpeciesResponse> listAllSpecies() {
+        return speciesMapper.toDto(repository.getAllSpecies());
     }
 
 

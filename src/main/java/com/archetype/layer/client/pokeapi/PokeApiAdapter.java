@@ -1,6 +1,5 @@
-package com.archetype.layer.service;
+package com.archetype.layer.client.pokeapi;
 
-import com.archetype.layer.client.pokeapi.PokeApiClient;
 import com.archetype.layer.client.pokeapi.dto.PokeApiPokemon;
 import com.archetype.layer.domain.model.Ability;
 import com.archetype.layer.domain.model.Element;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PokeApiDataService {
+public class PokeApiAdapter {
 
     final PokeApiClient client;
 

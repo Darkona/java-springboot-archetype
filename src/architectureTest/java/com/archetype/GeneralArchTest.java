@@ -3,17 +3,17 @@ package com.archetype;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.archetype.ArchitectureConditions.implementMatchingInfoInterface;
+import static com.archetype.ArchConditions.implementMatchingInfoInterface;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
 
 @AnalyzeClasses(packages = {"com.archetype.."})
-public class ArchitectureTests {
+public class GeneralArchTest {
 
 
     @ArchTest
@@ -37,14 +37,21 @@ public class ArchitectureTests {
                  .check(classes);
     }
 
-    @ArchTest
-    @DisplayName("\"Info\" controller interfaces should be annotated with springdoc @Tag")
-    void controller_info_impl(JavaClasses classes) {
 
-        classes().that()
-                 .areInterfaces().and().haveNameMatching(".*Info")
-                 .should().beAnnotatedWith(Tag.class)
-                 .because("ADR 0009: Controller OpenAPI annotations through interface-based \"Info\" classes")
+
+
+
+    @ArchTest
+    @DisplayName("Test classes should have @DisplayName annotation for human readable description.")
+    void tests_with_display(JavaClasses classes) {
+
+        methods().that().areAnnotatedWith(org.junit.jupiter.api.Test.class)
+                 .or().areAnnotatedWith(com.tngtech.archunit.junit.ArchTest.class)
+                 .should().beAnnotatedWith(org.junit.jupiter.api.DisplayName.class)
+                 .because("ADR 0010: Display annotations with @DisplayName methods")
                  .check(classes);
     }
+
+
+
 }

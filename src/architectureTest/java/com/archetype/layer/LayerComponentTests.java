@@ -21,7 +21,7 @@ public class LayerComponentTests {
     void all_mappers_should_be_in_centralized_package() {
         classes()
                 .that().haveSimpleNameEndingWith("Mapper")
-                .should().resideInAnyPackage(base + ".mapper..")
+                .should().resideInAnyPackage(base + "..mapper..")
                 .because("ADR 0002: All mappers should be centralized under mapper package")
                 .check(classes);
     }

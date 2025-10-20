@@ -4,6 +4,7 @@ import com.archetype.hexagonal.application.port.out.EventPublisherPort;
 import com.archetype.hexagonal.application.port.out.PokemonRepositoryPort;
 import com.archetype.hexagonal.domain.model.PokemonPet;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -21,16 +22,18 @@ class PokemonPetShopServiceTest {
 
     private PokemonRepositoryPort repository;
     private EventPublisherPort publisher;
-    private PokemonPetShopService service;
+
+    private PokemonPetShopService unit;
 
     @BeforeEach
     void setUp() {
         repository = mock(PokemonRepositoryPort.class);
         publisher = mock(EventPublisherPort.class);
-        service = new PokemonPetShopService(repository, publisher);
+        unit = new PokemonPetShopService(repository, publisher);
     }
 
     @Test
+    @DisplayName("Deberia publicar un evento cuando se agrega un pokemon")
     void register_shouldSaveAndPublishEvent() {
         // Arrange
         String name = "Pikachu";
@@ -40,7 +43,7 @@ class PokemonPetShopServiceTest {
         when(repository.save(any(PokemonPet.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        PokemonPet created = service.register(name, types);
+        PokemonPet created = unit.register(name, types);
 
         // Assert
         assertNotNull(created);
@@ -59,6 +62,7 @@ class PokemonPetShopServiceTest {
     }
 
     @Test
+    @DisplayName("Adopting a pokemon should change the availability")
     void adopt_shouldChangeAvailabilityAndPublishEvent() {
         // Arrange
         PokemonPet original = PokemonPet.register("Bulbasaur", List.of("Grass", "Poison"));
@@ -71,7 +75,7 @@ class PokemonPetShopServiceTest {
         String ownerId = "trainer-ash";
 
         // Act
-        PokemonPet adopted = service.adopt(id, ownerId);
+        PokemonPet adopted = unit.adopt(id, ownerId);
 
         // Assert
         assertNotNull(adopted);
@@ -86,6 +90,7 @@ class PokemonPetShopServiceTest {
     }
 
     @Test
+    @DisplayName("ListAvailable should return a list of available pokemon")
     void listAvailable_shouldReturnRepositoryResults() {
         // Arrange
         PokemonPet p1 = PokemonPet.register("Pidgey", List.of("Flying"));
@@ -93,7 +98,7 @@ class PokemonPetShopServiceTest {
         when(repository.findAvailable()).thenReturn(List.of(p1, p2));
 
         // Act
-        List<PokemonPet> available = service.listAvailable();
+        List<PokemonPet> available = unit.listAvailable();
 
         // Assert
         assertNotNull(available);
@@ -105,13 +110,14 @@ class PokemonPetShopServiceTest {
     }
 
     @Test
+    @DisplayName("Attempting to adopt a pet pokemon which doesnt exist should throw NonSuchElementException")
     void adopt_nonExisting_shouldThrow() {
         // Arrange
         UUID missing = UUID.randomUUID();
         when(repository.findById(missing)).thenReturn(Optional.empty());
 
         // Act + Assert
-        assertThrows(java.util.NoSuchElementException.class, () -> service.adopt(missing, "owner"));
+        assertThrows(java.util.NoSuchElementException.class, () -> unit.adopt(missing, "owner"));
         verify(repository, times(1)).findById(missing);
         verify(repository, never()).save(any());
         verify(publisher, never()).publishPokemonAdopted(any());

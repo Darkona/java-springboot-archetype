@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Reusable architecture conditions for testing.
  * Following ADR 0014 - Architecture Testing Strategy.
  */
-public class ArchitectureConditions {
+public class ArchConditions {
 
     public static final ArchCondition<JavaClass> implementMatchingInfoInterface =
             new ArchCondition<>("implement interface named <ClassName>Info") {

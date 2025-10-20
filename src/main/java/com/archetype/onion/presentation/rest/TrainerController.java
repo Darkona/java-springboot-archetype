@@ -7,8 +7,6 @@ import com.archetype.onion.presentation.dto.PokemonOwnershipDTO;
 import com.archetype.onion.presentation.dto.TrainerDTO;
 import com.archetype.onion.presentation.mapper.TrainerMapper;
 import io.github.darkona.logged.Logged;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,15 +23,15 @@ import java.util.List;
 @RequestMapping("/api/trainers")
 @RequiredArgsConstructor
 @Logged
-@Tag(name = "Trainer", description = "Pokemon Trainer management API")
-public class TrainerController {
+public class TrainerController implements TrainerControllerInfo {
+
 
     private final TrainerUseCase trainerUseCase;
     private final TrainerMapper mapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a new trainer")
+    @Override
     public TrainerDTO createTrainer(@RequestBody TrainerDTO trainerDTO) {
         try {
             Trainer trainer = mapper.toDomain(trainerDTO);
@@ -44,8 +42,8 @@ public class TrainerController {
         }
     }
 
+    @Override
     @PostMapping("/{trainerId}/pokemon")
-    @Operation(summary = "Add a Pokemon to a trainer's collection")
     public TrainerDTO addPokemon(
             @PathVariable String trainerId,
             @RequestBody PokemonOwnershipDTO ownershipDTO) {
@@ -60,24 +58,24 @@ public class TrainerController {
         }
     }
 
+    @Override
     @GetMapping("/{trainerId}")
-    @Operation(summary = "Get a trainer by ID")
     public TrainerDTO getTrainer(@PathVariable String trainerId) {
         return trainerUseCase.getTrainer(trainerId)
                              .map(mapper::toDTO)
                              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trainer not found: " + trainerId));
     }
 
+    @Override
     @GetMapping
-    @Operation(summary = "List all trainers")
     public List<TrainerDTO> listTrainers() {
         List<Trainer> trainers = trainerUseCase.listTrainers();
         return mapper.toDTOList(trainers);
     }
 
+    @Override
     @DeleteMapping("/{trainerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete a trainer")
     public void deleteTrainer(@PathVariable String trainerId) {
         boolean deleted = trainerUseCase.deleteTrainer(trainerId);
         if (!deleted) {
